@@ -18,7 +18,9 @@ jobs:
           python-version: '3.12'
       - name: Fetch and index recent headlines
         run: python scripts/update_statements.py
-      - name: Translate all new or changed statements
+      - name: Discover corroborated vessel attack reports near Romania and Bulgaria
+        run: python scripts/discover_incidents.py
+      - name: Translate new statements and incident cards
         env:
           DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
           DEEPL_API_URL: ${{ vars.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate' }}
@@ -27,7 +29,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/statements.json data/statements.bg.json data/statements.ro.json data/translation_usage.json data/statement_candidates.json
+          git add data/statements.json data/statements.bg.json data/statements.ro.json data/incidents.json data/incidents.bg.json data/incidents.ro.json data/incident_candidates.json data/translation_usage.json data/statement_candidates.json
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update Black Sea news feed"
             git push
