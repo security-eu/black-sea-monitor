@@ -24,3 +24,18 @@ To test locally, run `python -m http.server 8000` in this directory and open `ht
 ## Technology
 
 HTML, CSS, JavaScript, Leaflet and OpenStreetMap tiles; no server or account database required. An internet connection is required to load Leaflet and map tiles.
+
+
+## Political statements feed (new)
+
+The **Statements** button opens a reverse-chronological feed from `data/statements.json`, with region and year filters. Seed entries link directly to official sources. No Romania-specific entry has been added without a verified official source.
+
+### Automatic discovery (every six hours)
+
+`.github/workflows/statement-monitor.yml` runs `scripts/update_statements.py` on a schedule (GitHub Actions cron can be delayed). It discovers possible Bulgaria/Romania/EU statements via Google News RSS search, writes `data/statement_candidates.json`, and opens a review pull request. **It does not automatically publish candidate claims**. Verify source, speaker, event date and summary, then add approved records to `data/statements.json`. Merge to publish via GitHub Pages.
+
+In GitHub Settings → Actions → General, allow workflows to create pull requests if needed. GitHub Pages must be configured to deploy from main. Google News RSS is a discovery service, not an authoritative source; results may be missing or unavailable.
+
+## Expanded political archive
+
+The political statements archive contains 17 sourced records, including Romania-specific statements from AGERPRES and the Romanian Ministry of Internal Affairs, plus EU institutional releases. Entries are summaries, not verbatim quotations. The RSS workflow generates review candidates, not automatic publication. Editorial verification remains required.
