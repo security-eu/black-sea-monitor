@@ -22,7 +22,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "claimed",
+    "attribution_details": "A cited BGNES article reports a claim concerning responsibility. This is a reported claim, not an independently confirmed determination.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "betul-8-2026",
@@ -47,7 +54,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "evia-petrol-v-2026",
@@ -72,7 +86,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "ali-najafov-2026",
@@ -97,7 +118,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "marsol-2026",
@@ -122,7 +150,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "larissa-1-2026",
@@ -147,7 +182,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "contship-jet-2026",
@@ -172,7 +214,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "khoryv-2026",
@@ -197,7 +246,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "wine-trader-2026",
@@ -222,7 +278,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "yara-j-2026",
@@ -247,7 +310,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "chelsea-3-2026",
@@ -272,7 +342,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "hs-dignity-2026",
@@ -297,7 +374,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "alfa-watan-2026",
@@ -322,7 +406,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "able-2026",
@@ -347,7 +438,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "royad-mammadov-2026",
@@ -372,7 +470,14 @@
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "orinda-2025",
@@ -397,7 +502,39 @@
         "label": "The Maritime Executive",
         "url": "https://maritime-executive.com/article/fire-extinguished-on-lpg-carrier-hit-during-russian-attack-on-ukraine"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Port-level approximate marker; river port, not open sea",
+    "reviewed": true,
+    "position_status": "approximate"
+  },
+  {
+    "id": "mcm-romania-command-2025-07-09",
+    "date": "2025-07-09",
+    "country": "Romania",
+    "vessel": "MCM Black Sea — Romania assumes command",
+    "category": "mine_action",
+    "event_kind": "response",
+    "type": "Multinational mine countermeasures",
+    "method": "Rotational command",
+    "summary": "Romania took command of the MCM Black Sea Task Group on 9 July 2025, following Bulgaria’s term. This is an operational milestone, not an attack.",
+    "location": "Port of Constanța",
+    "lat": 44.17,
+    "lon": 28.64,
+    "position_status": "approximate",
+    "locationPrecision": "Port-level approximate location for the command ceremony",
+    "attribution_status": "undetermined",
+    "attribution_details": "No attacker attribution applies: this is a security response milestone.",
+    "sources": [
+      {
+        "label": "Romanian Ministry of Defence",
+        "url": "https://english.mapn.ro/cpresa/6542_Romania-has-taken-over-command-of-the-MCM-Black-Sea-Task-Group"
+      }
+    ],
+    "reviewed": true
   },
   {
     "id": "optima-2024-10-14",
@@ -418,7 +555,14 @@
         "label": "Reuters via gCaptain",
         "url": "https://gcaptain.com/new-russian-attack-damages-civilian-vessels-in-ukraines-odesa/"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "claimed",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Port-level approximate marker",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "ns-moon-2024",
@@ -443,7 +587,14 @@
         "label": "Reuters via gCaptain",
         "url": "https://gcaptain.com/new-russian-attack-damages-civilian-vessels-in-ukraines-odesa/"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Port-level approximate marker",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "shui-spirit-2024",
@@ -464,7 +615,14 @@
         "label": "Reuters",
         "url": "https://www.investing.com/news/commodities-news/russian-missile-attack-on-ukraines-odesa-port-region-kills-six-governor-says-3656430"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Port-level approximate marker",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "optima-2024-10-07",
@@ -489,7 +647,14 @@
         "label": "Financial Times",
         "url": "https://www.ft.com/content/241de013-2398-43f5-863c-d3352de004a8"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Port-level approximate marker",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "paresa-2024",
@@ -514,7 +679,14 @@
         "label": "Neptune P2P maritime report",
         "url": "https://neptunep2pgroup.com/wp-content/uploads/2024/11/20241101-NeptuneP2P-Monthly-Maritime-Incident-Report-October-2024.pdf"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Port-level approximate marker",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "golden-lion-2024",
@@ -535,7 +707,14 @@
         "label": "Reuters via gCaptain",
         "url": "https://gcaptain.com/antigua-flagged-vessel-damaged-in-russian-attack-on-odesa-port/"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No independently verified actor attribution is recorded in the dataset.",
+    "location_precision": "Port-level approximate marker",
+    "reviewed": true,
+    "position_status": "approximate"
   },
   {
     "id": "aya-2024",
@@ -560,6 +739,238 @@
         "label": "Naval News",
         "url": "https://www.navalnews.com/naval-news/2024/09/civilian-grain-ship-hit-by-russian-kh-22-missile-in-black-sea/"
       }
-    ]
+    ],
+    "category": "vessel_strike",
+    "event_kind": "incident",
+    "attribution_status": "claimed",
+    "attribution_details": "Ukraine attributed this strike to Russia; cited sources should be consulted for the exact claim.",
+    "location_precision": "Approximate offshore area; not the verified impact coordinates",
+    "reviewed": true,
+    "position_status": "approximate"
+  },
+  {
+    "id": "mcm-black-sea-2024-07-01",
+    "date": "2024-07-01",
+    "country": "Bulgaria",
+    "vessel": "MCM Black Sea task group operational",
+    "category": "mine_action",
+    "event_kind": "response",
+    "type": "Multinational mine countermeasures",
+    "method": "Task group activation",
+    "summary": "Bulgaria, Romania and Türkiye launched operations of their multinational mine-countermeasures task group on 1 July 2024. This is a security response milestone, not an attack.",
+    "location": "Western Black Sea — multinational operating area",
+    "lat": 42.65,
+    "lon": 27.92,
+    "position_status": "schematic",
+    "locationPrecision": "Symbolic Bulgarian coastal marker for a multinational operation; not the site of an incident",
+    "attribution_status": "undetermined",
+    "attribution_details": "No attacker attribution applies: this is a maritime-security operation.",
+    "sources": [
+      {
+        "label": "Romanian Ministry of Defence",
+        "url": "https://english.mapn.ro/cpresa/6290_The-Bulgarian%2C-Romanian-and-Turkish-Naval-Forces-work-together-to-counter-the-mine-threat-in-the-Black-Sea-"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "mine-pasha-dere-2024-05-14",
+    "date": "2024-05-14",
+    "country": "Bulgaria",
+    "vessel": "Naval mine — Pasha Dere",
+    "category": "mine",
+    "event_kind": "incident",
+    "type": "Moored naval mine",
+    "method": "Mine neutralisation",
+    "summary": "Bulgarian sailors found a mine-like object two nautical miles east of Pasha Dere; a minehunter crew classified it as a KPM-type mine and destroyed it in a controlled explosion.",
+    "location": "Off Pasha Dere, Bulgaria",
+    "lat": 43.11,
+    "lon": 28.13,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate coastal position from the stated area, not exact coordinates",
+    "attribution_status": "undetermined",
+    "attribution_details": "The responsible actor for this mine was not determined in the cited account.",
+    "sources": [
+      {
+        "label": "Bulgarian National Television, 14 May 2024",
+        "url": "https://bnt.bg/news/bulgarian-navy-defused-naval-mine-off-the-bulgarian-black-sea-coast-328940news.html"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "drone-plauru-2023-09-05",
+    "date": "2023-09-05",
+    "country": "Romania",
+    "vessel": "Drone fragments — Plauru",
+    "category": "drone_debris",
+    "event_kind": "incident",
+    "type": "Aerial drone debris",
+    "method": "Debris discovery",
+    "summary": "Romanian investigators discovered elements potentially associated with drone fragments near Plauru on the evening of 5 September; later government statements discussed this incident.",
+    "location": "Plauru vicinity, Tulcea County",
+    "lat": 45.31,
+    "lon": 28.92,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate locality marker on the Danube, NOT a maritime strike coordinate",
+    "attribution_status": "undetermined",
+    "attribution_details": "The Romanian Ministry of Defence initially described potentially drone-associated fragments; this record does not independently determine the origin of the object.",
+    "sources": [
+      {
+        "label": "Romanian Ministry of Defence, 6 Sep 2023",
+        "url": "https://english.mapn.ro/cpresa/6041_press-information"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "mine-sf-gheorghe-2023-01-26",
+    "date": "2023-01-26",
+    "country": "Romania",
+    "vessel": "Sea mine — Sfântu Gheorghe",
+    "category": "mine",
+    "event_kind": "incident",
+    "type": "Mine washed ashore",
+    "method": "Mine neutralisation",
+    "summary": "Romanian military personnel conducted a dangerous intervention to neutralise a sea mine washed ashore at Sfântu Gheorghe.",
+    "location": "Sfântu Gheorghe beach",
+    "lat": 44.89,
+    "lon": 29.62,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate beach area, not the EOD detonation point",
+    "attribution_status": "undetermined",
+    "attribution_details": "Mine origin is not confirmed by the cited statement.",
+    "sources": [
+      {
+        "label": "Romanian Naval Forces",
+        "url": "https://www.navy.ro/comunicat.php?id=679"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "mine-kochan-2023-01-24",
+    "date": "2023-01-24",
+    "country": "Bulgaria",
+    "vessel": "Drifting sea mine — Cape Kochan",
+    "category": "mine",
+    "event_kind": "incident",
+    "type": "Drifting naval mine",
+    "method": "Mine neutralisation",
+    "summary": "Bulgarian military specialists neutralised a floating moored-type mine after a sighting near Cape Kochan. A separate mine was reported at Tyulenovo during the same period.",
+    "location": "Cape Kochan coastal area, Bulgaria",
+    "lat": 43.53,
+    "lon": 28.58,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate coast-area marker from media reporting; location must not be used for navigation",
+    "attribution_status": "undetermined",
+    "attribution_details": "The source describes the mine type and response but does not confirm who laid this particular mine.",
+    "sources": [
+      {
+        "label": "Bulgarian National Radio, 24 Jan 2023",
+        "url": "https://old-news.bnr.bg/horizont/post/101769244/voenni-ot-vms-otnovo-unishtojiha-mina-plavashti-krai-balgarskia-brag"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "mine-constanta-2022-12-10",
+    "date": "2022-12-10",
+    "country": "Romania",
+    "vessel": "Drifting sea mine — Constanța",
+    "category": "mine",
+    "event_kind": "incident",
+    "type": "Drifting naval mine",
+    "method": "Mine sighting / response",
+    "summary": "A Turkish-flagged cargo vessel reported a drifting sea mine around 2.5 nautical miles from Constanța port’s northern breakwater.",
+    "location": "Off Constanța port",
+    "lat": 44.18,
+    "lon": 28.76,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate offshore location from relative distance reported by the navy",
+    "attribution_status": "undetermined",
+    "attribution_details": "Origin of the mine was not established in the cited release.",
+    "sources": [
+      {
+        "label": "Romanian Naval Forces",
+        "url": "https://www.navy.ro/comunicat.php?id=670"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "mine-eforie-2022-07-31",
+    "date": "2022-07-31",
+    "country": "Romania",
+    "vessel": "Drifting sea mine — Eforie",
+    "category": "mine",
+    "event_kind": "incident",
+    "type": "Drifting naval mine",
+    "method": "Mine neutralisation",
+    "summary": "EOD divers neutralised a mine drifting roughly two nautical miles off the Eforie coast.",
+    "location": "Off Eforie",
+    "lat": 44.05,
+    "lon": 28.72,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate area, source gives distance but no impact coordinates",
+    "attribution_status": "undetermined",
+    "attribution_details": "Mine provenance not established in the cited account.",
+    "sources": [
+      {
+        "label": "Romanian Naval Forces",
+        "url": "https://www.navy.ro/comunicat.php?id=622"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "mine-varna-2022-06-30",
+    "date": "2022-06-30",
+    "country": "Bulgaria",
+    "vessel": "Drifting sea mine — Varna offshore",
+    "category": "mine",
+    "event_kind": "incident",
+    "type": "Drifting naval mine",
+    "method": "Bulgarian Navy mine neutralisation",
+    "summary": "Bulgarian Navy specialists destroyed a floating sea mine sighted on 30 June 2022 some 27 nautical miles east of the Kamchia river mouth, in the vicinity of Varna.",
+    "location": "Off Varna / Kamchia river offshore area",
+    "lat": 43.03,
+    "lon": 28.51,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate regional map marker only, not reported exact mine position",
+    "attribution_status": "undetermined",
+    "attribution_details": "No responsible actor for this particular mine was established in the cited report.",
+    "sources": [
+      {
+        "label": "Bulgarian News Agency, 1 Jul 2022",
+        "url": "https://www.bta.bg/en/news/bulgaria/290913-bisspetsialisti-ot-vms-sa-unishtozhili-plavashta-mina"
+      }
+    ],
+    "reviewed": true
+  },
+  {
+    "id": "mine-capu-midia-2022-03-28",
+    "date": "2022-03-28",
+    "country": "Romania",
+    "vessel": "Drifting sea mine — Capu Midia",
+    "category": "mine",
+    "event_kind": "incident",
+    "type": "Drifting naval mine",
+    "method": "Mine neutralisation",
+    "summary": "Romanian Naval Forces located and neutralised a drifting mine approximately 39 nautical miles off Capu Midia.",
+    "location": "Off Capu Midia, offshore area",
+    "lat": 44.47,
+    "lon": 29.87,
+    "position_status": "approximate",
+    "locationPrecision": "Approximate offshore zone based on reported distance; not an exact mine coordinate",
+    "attribution_status": "undetermined",
+    "attribution_details": "The origin of this specific mine was not established in the cited release.",
+    "sources": [
+      {
+        "label": "Romanian Naval Forces (28 Mar 2022)",
+        "url": "https://www.navy.ro/comunicat.php?id=567"
+      }
+    ],
+    "reviewed": true
   }
 ]

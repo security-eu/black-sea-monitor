@@ -1,12 +1,104 @@
 {
-  "checked_at": "2026-11-20T13:12:04.561242+00:00",
+  "checked_at": "2026-11-20T14:50:22.930834+00:00",
   "candidates": [
     {
       "region": "EU",
       "title": "President von der Leyen travels to the Black Sea region - European Commission",
       "discovery_url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9CNWtQX1dnWE5LelVMTFcxbi0yQllLNWJhYXFpS1ZHTk10cWxPUGdaem1FeHg0RHZxTWkzS19GOTYzLUNUaWN5MVpveHl2d1E4WHgxc3lNdHVBc2twQXpuOWx5RUl4TEFLaVB4VVBQNERyUQ?oc=5",
-      "published_raw": "Tue, 10 Nov 2026 08:00:00 GMT",
-      "status": "Needs source and date verification"
+      "publisher": "European Commission",
+      "date_reported": "2026-11-10",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "Romania",
+      "title": "President Dan: Black Sea under major attack; Romania is acting correctly, strengthening its response capabilities - Agerpres",
+      "discovery_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOSy1JaEVMQkZGb1NWWllwaWt2b3ZyWUtEUWU1Qk1UNGE5Z2xHLTR4YkZyM2R4Vk5OQlZzYTZSUXFiazJnUFFzdWRaWFd2alE4RWJudldFQ2JwQVU1bFpUM2JoSXltdk1rSlU4SUk1cmhPYVMxdWxFVHJRZW1fVGhaMTIyUFlDaDFYOGZJNlg2ZW9RZFE2MkNXME5SaWlhdUpxdU9KWHcyWk1oVFlZRkxncmZBMGZZVlAyOWhqQkJzWmp3aVktUTVvQzhnVndNdlBjb2ZaMC03a3J1UE9rSm5hUmp3?oc=5",
+      "publisher": "Agerpres",
+      "date_reported": "2026-11-19",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "EU",
+      "title": "Meeting at WFP – Impact of the escalation in the Black Sea - EEAS",
+      "discovery_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNS0E5b1RTM1pNdGpGeG9XbnlqWnRhWlgzNEdSc1RGWjBQYnNoOFRxWWZrX1FCRWtYXzg3NnhISWNZMXg0T2NTejlyNjBQcHpIUllPMGJtd3AwR00wajJIbzRkaWFEZ0dTYVU3NlMtMDhGN0wzSXotMXBJVFlXZC02YXBzcWpvMExINnZhUXI4dU15blJKbnVBdHlB?oc=5",
+      "publisher": "EEAS",
+      "date_reported": "2026-11-17",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "Romania",
+      "title": "Romanian Navy postpones mission to assess drifting drone debris in Black Sea due to bad weather - Agerpres",
+      "discovery_url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxONVloc2Z1LTlONW9EU3EyRDBhWTR5RXFyemc5Z3pVazlkbThxaWc1ZlBpT3BYSFZqblZZaGI3RjIzaEc3M1JfdkMzYjNFejNmUG1OUXpRYzFFVTFuWUZiZ1A3MWJjVkhtQTZIMlJGYXNkMUdadXE1U0JJTFgwLW5sendXdWFQSzdJbVVidmZFRlVJdnI4MTJwXzR1Skl4VGo3R1NIT01qUlJoTTF3SUljZGxKQ1NRN2ZVbkw0VTFFUmhyRXpCbkVOeWhZbFdyZW5OMUtMS28wb1JOdkk?oc=5",
+      "publisher": "Agerpres",
+      "date_reported": "2026-11-16",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "Romania",
+      "title": "Defence Minister Oprea to raise Black Sea security situation at Brussels meeting with NATO counterparts - Agerpres",
+      "discovery_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNS24wZ1V6ejByYmpkY0FCTVpBVmNodnI5YlZ1NlBtUUNlQkdzbjQwc0N5RHgyZDVsWFVhbmEyc3hwNVNLU1hyZW5lVE5QdHBySmJtaWxUc3FOb0sxZTdWZFJtWmtQWlkxWkUxVkxGbVlMeldHblRtY2thY21KdzNMX0dxb2huU2tnN01QUnU0d1RNaHo0X0RfQW5NMVVFV1V0dm11Q3JBM2dsN1JyTE0tZWlqQ3U2bTZDWWtGLTFfRlNIckZJQmVlY0FVNk50MVJ0ekVGemI2a080ZURoNlNzMnZn?oc=5",
+      "publisher": "Agerpres",
+      "date_reported": "2026-11-16",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "EU",
+      "title": "Ministers from EU, Black Sea, South Caucasus and Central Asia advance cooperation on cross-regional security and connectivity - Enlargement and Eastern Neighbourhood",
+      "discovery_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNYWh0M21GOTN6b3d0T3ZVaWtYU0lHNnFyZTVfeXhMOUlPbi1rM2M0bzVrNVdOOTduZXdQb0tpcTh5OWlhVlRXTDY4akNzeFhmekplOE1Hb1NNYkpwRXBrTDkyVXJFWVpKT0d2VHFiS2UtTE9lYnhnQWc2LV96YXVhbWJVR1dsT09RQ2VQbnJvQUFpOGx3aWpRblVjU1k3SThjTjBKd1N3RHJOcHlTNUxWV0Jod0pSTE04ZXlGTldkbzItWkhEN1pITFl2aTZmeGNRMURoZUlCZnBibGgtLXozRXlRV20?oc=5",
+      "publisher": "Enlargement and Eastern Neighbourhood",
+      "date_reported": "2026-11-16",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "Bulgaria",
+      "title": "Bulgaria, Romania Discuss Closer Cooperation after Black Sea Ship Attacks - БТА",
+      "discovery_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQV1g1RE9ISjYtVlhtOUZQbkxhZWxwbzdIeFl6eFQtbzIwbFhUenBzWm9QTGtEUkdMSXIyaGwtdGNrd0VPb0t6djJjNHN6bWNHMG5sRzNkenZzZkt3UnZ4WkZVemlWZ3NuaW5xclFwWEdkZW5LeFBnMjNkSU91Y2RkWjN6MUlFcWViNF9pdGdEd2pkdmQ5c3dPdS1aS29DbFdYWThKQjdkaTVxM25xNGdlRklBMnV3NWs?oc=5",
+      "publisher": "БТА",
+      "date_reported": "2026-11-14",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "Romania",
+      "title": "EU Black Sea maritime security hub to have headquarters in Romania, Bulgaria, former foreign minister says - Agerpres",
+      "discovery_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPME9QNFJQTHpoNlh0cm13Z1dHLVl5ZXJKNHNRNU5qWWpfdGJmUnQwQ1M1dWNQaFQ0TWZzN0NCS3g3TjRQT1M5dDVpb3NJNDZwdGlHV0dDRGIxRkJHYWhSWWliVVFEOEFOM1ZUVlFaNER2TDRjLWpCdHdESXBHeGVrRF9OWkZEYWFqaFZlaHlySHBCUlNLVkpDcmFCZ0RSdzdnZ250LXpwSVIwU3AxWFhkUE8yNVZkc1VyTzVmWTVIa000N2Y2bFZJLW9ldXdFTlN2dlZBeE5RcnZhdGlNLVc2RU5R?oc=5",
+      "publisher": "Agerpres",
+      "date_reported": "2026-11-10",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct source URL, date and official-source verification"
+    },
+    {
+      "region": "Romania",
+      "title": "Black Sea security, EU enlargement on agenda of President Dan's meeting with EC President von der Leyen - Agerpres",
+      "discovery_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPaWRaZlZ0U2Z4OXVmWHpyQzg5M29lcEV3YXhOa3JacmJQRTRRYWJqQnlxUHhrMC11SjZhRG9YZks5VWZldm94TXZ5NnhlMFRoSGtaajk1SHEtMWdrLWF2UlZqVEZGTHdpUTdobllLQmtwTEhFTm9ma3BJclJVbXI2MnhSRTlxYXFXQ1cxVVZwMFd3ZGdneHNqd3hpZ3I5QTh2bE5zRkhkY1kzbVEwSzZZdE9ZNDhqX0RhVks0T1JaT2xpUlNPM2RVckVONjhiRFU0eGRIVDhYS0laamNQOS1zRkZR?oc=5",
+      "publisher": "Agerpres",
+      "date_reported": "2026-11-06",
+      "kind": "auto",
+      "reviewed": false,
+      "direct_url": null,
+      "status": "Needs direct original publisher URL and source verification"
     }
   ]
 }
