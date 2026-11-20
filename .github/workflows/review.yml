@@ -1,0 +1,50 @@
+name: Publish reviewed record
+# Adding the label "approve" (publish) or "reject" (discard) to a review issue runs this.
+on:
+  issues:
+    types: [labeled]
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: black-sea-single-update
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.event.label.name == 'approve' || github.event.label.name == 'reject'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install schema validator
+        run: python -m pip install --disable-pip-version-check 'jsonschema==4.23.0'
+      - name: Apply the editor's decision
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL: ${{ github.event.label.name }}
+        run: python scripts/apply_review.py
+      - name: Validate published data
+        run: python scripts/validate_data.py
+      - name: Translate the new record
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+          DEEPL_API_URL: ${{ vars.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate' }}
+        run: python scripts/translate_statements.py
+      - name: Generate feeds
+        run: python scripts/generate_feeds.py
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/ rss.xml
+          if git diff --cached --quiet; then
+            echo 'No changes'
+          else
+            git commit -m "Publish reviewed record from issue #${{ github.event.issue.number }}"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  issues: write
 concurrency:
   group: black-sea-single-update
   cancel-in-progress: false
@@ -21,10 +22,12 @@ jobs:
         run: python -m pip install --disable-pip-version-check 'jsonschema==4.23.0'
       - name: Prepare and retain historical data
         run: python scripts/migrate_and_enrich.py
-      - name: Discover new news and statement leads
-        run: python scripts/update_statements.py
-      - name: Discover incident leads
-        run: python scripts/discover_incidents.py
+      - name: Apply editorial corrections
+        run: python scripts/apply_corrections.py
+      - name: Publish official statements, open review issues for press and incidents
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/discover.py
       - name: Validate all published data
         run: python scripts/validate_data.py
       - name: Translate published records with existing shared DeepL budget
