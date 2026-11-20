@@ -1,4 +1,4 @@
-"""Incremental DeepL translation with a 500-char item cap and 90-day lifetime pacing."""
+"""Cached DeepL translation: Romanian priority, 500-char items, one 90-day shared budget."""
 import hashlib
 import json
 import os
@@ -83,95 +83,107 @@ def translate(texts, target):
             time.sleep(2 ** attempt)
     return None
 
-# Process each publication across all languages before moving to the next.
-# This prevents Bulgarian/Romanian from consuming the entire daily allowance
-# before Ukrainian gets a chance to translate anything.
-LANGUAGES = [('bg', 'BG'), ('ro', 'RO')]
-previous_by_lang = {}
-results_by_lang = {lang: [] for lang, _ in LANGUAGES}
-new_by_lang = {lang: 0 for lang, _ in LANGUAGES}
-for lang, _ in LANGUAGES:
-    path = DATA / f'statements.{lang}.json'
-    try:
-        previous = json.loads(path.read_text(encoding='utf-8'))
-    except (FileNotFoundError, ValueError):
-        previous = []
-    previous_by_lang[lang] = {row['url']: row for row in previous if row.get('url')}
+# Cache by source identity, not translated title. Romanian is processed first so
+# a tight daily budget cannot be consumed entirely by Bulgarian beforehand.
+LANGUAGES = [('ro', 'RO'), ('bg', 'BG')]
 
-# Incidents share the SAME usage counter and DeepL key as the news feed.
-# Priority is given to new maritime incident cards, whose translations can be
-# displayed on the map and in the archive. English originals remain canonical.
-incident_source = json.loads((DATA / 'incidents.json').read_text(encoding='utf-8'))
-incident_fields = ('type','method','location','summary','locationPrecision')
-incident_results = {lang: [] for lang,_ in LANGUAGES}
-incident_cache = {}
-for lang,_ in LANGUAGES:
+def load_rows(name):
     try:
-        old_incidents=json.loads((DATA / f'incidents.{lang}.json').read_text(encoding='utf-8'))
-    except (FileNotFoundError, ValueError):
-        old_incidents=[]
-    incident_cache[lang]={row['id']:row for row in old_incidents if row.get('id')}
-for row in incident_source:
-    # Each incident has at most 500 source characters translated per target.
-    trimmed={}
-    remaining=MAX_ITEM_CHARS
-    for field in incident_fields:
-        value=str(row.get(field) or '').strip()
-        trimmed[field]=value[:remaining]
-        remaining-=len(trimmed[field])
-    original=[trimmed[f] for f in incident_fields if trimmed[f]]
-    cost=sum(map(len,original))
-    signature=hashlib.sha256(json.dumps(trimmed,sort_keys=True,ensure_ascii=False).encode('utf-8')).hexdigest()
-    for lang,target in LANGUAGES:
-        prior=incident_cache[lang].get(row.get('id'))
-        if prior and prior.get('_source_hash')==signature and prior.get('_translated'):
-            incident_results[lang].append(prior)
-            continue
-        translated=None
-        if KEY and cost and usage['characters_reserved']+cost<=allowed_today:
-            usage['characters_reserved']+=cost
-            save_usage()
-            translated=translate(original,target)
-        translated_fields=dict(trimmed)
-        if translated:
-            translated_fields.update(zip([f for f in incident_fields if trimmed[f]],translated))
-        # Never show a partially translated synopsis as a complete translation.
-        incident_results[lang].append({'id':row['id'],**translated_fields,
-          '_source_hash':signature,'_translated':bool(translated)})
-for lang,_ in LANGUAGES:
-    (DATA / f'incidents.{lang}.json').write_text(
-        json.dumps(incident_results[lang],ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    print(f'{lang}: translated incident cards {sum(bool(x["_translated"]) for x in incident_results[lang])}/{len(incident_results[lang])}')
+        value = json.loads((DATA / name).read_text(encoding='utf-8'))
+        return value if isinstance(value, list) else []
+    except (FileNotFoundError, ValueError, TypeError):
+        return []
 
-for row in SOURCE:
-    title, summary = trimmed_fields(row)
-    signature = hashlib.sha256((title + '\0' + summary).encode('utf-8')).hexdigest()
-    text_parts = [x for x in (title, summary) if x]
-    cost = sum(map(len, text_parts))
-    for lang, target in LANGUAGES:
-        prior = previous_by_lang[lang].get(row.get('url'))
+incident_source = [r for r in load_rows('incidents.json')
+                   if r.get('country') in ('Romania', 'Bulgaria')]
+incident_fields = ('summary', 'attribution_details', 'type', 'method', 'location', 'locationPrecision')
+
+# Preserve existing translated objects across temporary API outages and
+# no-key runs. Never claim the English fallback is translated.
+def available(cost):
+    return bool(KEY and cost > 0 and
+                usage['characters_reserved'] + cost <= allowed_today)
+
+def reserved_translate(parts, target):
+    cost = sum(len(p) for p in parts)
+    if not available(cost):
+        return None
+    usage['characters_reserved'] += cost
+    save_usage()   # pessimistically reserve before making any external request
+    return translate(parts, target)
+
+for lang, target in LANGUAGES:
+    print(f'Processing language {lang} ({target}), usage reserved '
+          f'{usage["characters_reserved"]:,}/{allowed_today:,} allowed so far')
+
+    prior_incidents = {r['id']: r for r in load_rows(f'incidents.{lang}.json')
+                       if r.get('id')}
+    new_incidents = []
+    translated_incidents = 0
+    for row in incident_source:
+        remaining = MAX_ITEM_CHARS
+        trimmed = {}
+        for field in incident_fields:
+            trimmed[field] = str(row.get(field) or '').strip()[:remaining]
+            remaining -= len(trimmed[field])
+        signature = hashlib.sha256(json.dumps(trimmed, sort_keys=True,
+                   ensure_ascii=False).encode('utf-8')).hexdigest()
+        prior = prior_incidents.get(row.get('id'))
         if prior and prior.get('_source_hash') == signature and prior.get('_translated'):
-            results_by_lang[lang].append({**row, 'title': prior['title'],
-                'summary': prior['summary'], '_source_hash': signature, '_translated': True})
+            new_incidents.append(prior)
+            translated_incidents += 1
             continue
-        translated = None
-        if KEY and cost and usage['characters_reserved'] + cost <= allowed_today:
-            usage['characters_reserved'] += cost
-            save_usage()
-            translated = translate(text_parts, target)
-        if translated:
-            results_by_lang[lang].append({**row, 'title': translated[0],
-                'summary': translated[1] if len(translated) > 1 else '',
-                '_source_hash': signature, '_translated': True})
-            new_by_lang[lang] += 1
+        parts = [trimmed[k] for k in incident_fields if trimmed[k]]
+        answer = reserved_translate(parts, target)
+        if answer:
+            translated = dict(trimmed)
+            translated.update(zip([k for k in incident_fields if trimmed[k]], answer))
+            new_incidents.append({'id':row['id'], **translated,
+                                  '_source_hash':signature,'_translated':True})
+            translated_incidents += 1
         else:
-            results_by_lang[lang].append({**row, 'title': title,
-                'summary': summary, '_source_hash': signature, '_translated': False})
+            new_incidents.append({'id':row['id'], **trimmed,
+                                  '_source_hash':signature,'_translated':False})
+    path = DATA / f'incidents.{lang}.json'
+    serialized = json.dumps(new_incidents, ensure_ascii=False, indent=2)+'\n'
+    if not path.exists() or path.read_text(encoding='utf-8') != serialized:
+        path.write_text(serialized, encoding='utf-8')
 
-for lang, _ in LANGUAGES:
-    (DATA / f'statements.{lang}.json').write_text(
-        json.dumps(results_by_lang[lang], ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(f'{lang}: {new_by_lang[lang]} new translations, {len(results_by_lang[lang])} total records')
-print(f'90-day pacing: day {elapsed + 1}, reserved {usage["characters_reserved"]:,} / {allowed_today:,} currently allowed; lifetime cap {TOTAL_BUDGET:,}')
+    prior_news = {r['url']:r for r in load_rows(f'statements.{lang}.json')
+                  if r.get('url')}
+    new_news = []
+    translated_news = 0
+    # Newest news first: current source file is usually sorted, but do not rely on it.
+    for row in sorted(SOURCE, key=lambda r:r.get('date',''), reverse=True):
+        title, summary = trimmed_fields(row)
+        signature = hashlib.sha256((title+'\0'+summary).encode('utf-8')).hexdigest()
+        prior = prior_news.get(row.get('url'))
+        if prior and prior.get('_source_hash') == signature and prior.get('_translated'):
+            new_news.append({**row, 'title':prior['title'], 'summary':prior['summary'],
+                             '_source_hash':signature,'_translated':True})
+            translated_news += 1
+            continue
+        parts = [t for t in (title,summary) if t]
+        answer = reserved_translate(parts, target)
+        if answer:
+            new_news.append({**row,'title':answer[0],
+                             'summary':answer[1] if len(answer)>1 else '',
+                             '_source_hash':signature,'_translated':True})
+            translated_news += 1
+        else:
+            new_news.append({**row, 'title':title,'summary':summary,
+                             '_source_hash':signature,'_translated':False})
+    path = DATA / f'statements.{lang}.json'
+    serialized = json.dumps(new_news,ensure_ascii=False,indent=2)+'\n'
+    if not path.exists() or path.read_text(encoding='utf-8') != serialized:
+        path.write_text(serialized,encoding='utf-8')
+    print(f'{lang}: translated {translated_incidents}/{len(new_incidents)} visible incident cards; '
+          f'{translated_news}/{len(new_news)} news items')
+
+print(f'90-day pacing: day {elapsed+1}, reserved '
+      f'{usage["characters_reserved"]:,}/{allowed_today:,} allowed today; '
+      f'lifetime hard cap {TOTAL_BUDGET:,}')
 if not KEY:
-    print('DEEPL_API_KEY is missing; untranslated originals are retained')
+    print('DEEPL_API_KEY missing: cannot create new translations; caches preserved')
+if usage['characters_reserved'] >= allowed_today:
+    print('Pacing allowance exhausted today: new translations resume as cumulative allowance grows')

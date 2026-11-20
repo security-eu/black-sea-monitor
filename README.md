@@ -1,106 +1,72 @@
-# Black Sea Maritime Security Monitor
+# EU Black Sea / Maritime Security Monitor
 
-Static English-language Leaflet map of **selected, sourced civilian-vessel incidents**, with date filters and a searchable archive. This is an **initial sample**, not an exhaustive or live feed. Last editorial update: 20 November 2026.
+Independent maritime-security reference site focusing on Romania and Bulgaria. This repository publishes a single-page EN/BG/RO interface, a sourced incident archive, interactive map, provenance-tagged political/institutional records, dated trends and machine-readable feeds.
 
-## Publish with GitHub Pages
+## Publication model
 
-1. Sign in at https://github.com/new and create a **public** repository, for example `black-sea-monitor`.
-2. Upload `index.html`, `data/incidents.json`, and this `README.md` into the repository, preserving the `data/` folder. Alternatively upload the ZIP's *contents*, not the ZIP itself.
-3. Go to **Settings → Pages → Build and deployment**. Choose **Deploy from a branch**, branch **main**, folder **/(root)**, then **Save**.
-4. Wait for the deployment. The site URL will normally be `https://YOUR-USERNAME.github.io/black-sea-monitor/`.
-5. To add records, edit `data/incidents.json` in GitHub and commit; Pages will redeploy automatically.
+- **Published** incident records: `data/incidents.json`. Published statements: `data/statements.json`. Sources and dates are displayed, but the site is **not a government or EU institution**.
+- **Automatically stored discovery leads (not shown as verified statements or mapped incidents)**: `data/incident_candidates.json` and `data/statement_candidates.json`; these files are intentionally **not read by the public frontend**.
+- `.github/workflows/statement-monitor.yml` checks feeds approximately every 6 hours and commits validated published datasets and discovery-candidate files directly to `main`, **without Pull Requests**. The separate `translate-after-merge.yml` workflow uses DeepL **after a published dataset changes**, immediately writing cached translations and cumulative usage into main to avoid re-spending on repeated scheduled checks. Scheduled GitHub Actions can be delayed or suspended.
+- For news: `kind` is `official` (direct institutional source), `news` (media account) or `auto` (unverified discovery). The default list includes **only official records flagged `reviewed`**. Never convert a Google News discovery URL into an official citation.
+- Any direct source link must resolve to the **publisher's original article or institutional release**. Google News RSS links remain in *candidate* files only. These candidates are stored automatically but do not appear as verified official statements or mapped attacks. An editor must separately verify event/statement dates, authors and identities before they can be promoted to verified status.
 
-To test locally, run `python -m http.server 8000` in this directory and open `http://localhost:8000`. Opening `index.html` directly with `file://` may block JSON loading.
+## Attribution standard
 
-## Editorial policy
+`attribution_status` is independent of the existence of an incident:
 
-- Record dates and vessel identities as reported by cited sources. Where sources disagree, explain the discrepancy.
-- `confirmed` means credible reports identify a Russian strike; it does **not** mean a court has established legal responsibility. `reported` indicates contested or not independently verified attribution or vessel identity.
-- Map points are **illustrative locations** (port centres or approximate maritime areas), **not verified strike coordinates**. Do not use for navigation or operational decisions.
-- The coastal-area filter refers to the **location of the incident**, not the vessel's flag. Izmail is a Ukrainian Danube port near Romania.
-- A separate row for a second strike on the same vessel is intentional.
-- Data is manually curated; no automatic verification or live updates.
+- `claimed`: a specifically identifiable party makes an allegation; the field `attribution_details` should name that party and explain its claim.
+- `authority_confirmed`: responsible authorities have publicly confirmed attribution. The source of that confirmation **must** be identified (not merely a media headline).
+- `undetermined`: attribution is not established by the available evidence.
 
-## Technology
+Existing records inherited from the previous site are **not retrospectively certified**; check the original linked evidence. Inherited 2026 records require an additional audit before treating them as verified. Claims of responsibility and independent establishment of responsibility are distinct.
 
-HTML, CSS, JavaScript, Leaflet and OpenStreetMap tiles; no server or account database required. An internet connection is required to load Leaflet and map tiles.
+## Map / data methodology
 
+- Categories: `vessel_strike`, `mine`, `drone_debris`, `port_attack`, `mine_action`.
+- Records with `event_kind=response` (e.g. MCM Black Sea activations) are **not attacks** and are excluded from incident trend counts.
+- Map markers can be approximate administrative/offshore anchors. They are **not validated impact locations**. Unlocated automatic leads are never mapped, and report publication dates must **not** be substituted for dates of incidents.
+- Historical source-linked entries were added for Romanian drifting mines in March, July and December 2022, Bulgarian mines near Varna in June 2022, Cape Kochan in January 2023 and Pasha Dere in May 2024; a mine washed ashore in Romania in January 2023; drone fragments reported near Plauru in September 2023; the multinational MCM group's launch in July 2024; and Romania's MCM group command in July 2025. Official sources appear on each card. The map is intentionally restricted to Romanian and Bulgarian relevance; seven inherited Ukrainian vessel records remain in the dataset as an archival reference but do not display on the EU-coast map.
+- Data is incomplete; apparent trends reflect published records and the editorial selection, not exhaustive incident totals.
 
-## Political statements feed (new)
+## Structure
 
-The **Statements** button opens a reverse-chronological feed from `data/statements.json`, with region and year filters. Seed entries link directly to official sources. No Romania-specific entry has been added without a verified official source.
+- `index.html`: **single application** for EN, BG and RO, language by `?lang=en|bg|ro` without page navigation. Language switching preserves active screen and open incident.
+- `bg.html`, `ro.html`: minimal backwards-compatibility redirects only, not independent site copies.
+- `about.html`: user-visible methodological/editorial policy (and a declared, not invented, responsible editor status).
+- `assets/style.css`: a single stylesheet; `js/app.js`: single application module.
+- `i18n/en.json`, `i18n/bg.json`, `i18n/ro.json`: interface dictionaries.
+- `data/incidents.{ro,bg}.json`, `data/statements.{ro,bg}.json`: cached DeepL translations; DO NOT delete these on upgrades.
+- `data/translation_usage.json`: **shared cumulative DeepL budget**. DO NOT reset it. 900,000-character lifetime cap paced at 10,000/day across 90 days; DeepL's provider-reported quota is authoritative, and other uses of the API key are not visible to this site.
+- `scripts/migrate_and_enrich.py`: idempotent structured data migration/curated historical records; preserves other live source records.
+- `scripts/validate_data.py` and `schemas/*.json`: publication schema checks.
+- `scripts/generate_feeds.py`: RSS/CSV and last-updated metadata. Run after editing the datasets.
+- `rss.xml`, `data/incidents.csv`, `sitemap.xml`, Open Graph image, small favicon are included.
 
-### Automatic discovery (every six hours)
+## GitHub deployment procedure
 
-`.github/workflows/statement-monitor.yml` runs `scripts/update_statements.py` on a schedule (GitHub Actions cron can be delayed). It discovers possible Bulgaria/Romania/EU statements via Google News RSS search, writes `data/statement_candidates.json`, and opens a review pull request. **It does not automatically publish candidate claims**. Verify source, speaker, event date and summary, then add approved records to `data/statements.json`. Merge to publish via GitHub Pages.
+1. Back up current `data/` and `.github/workflows/` before changing anything.
+2. Upload site code, `i18n/`, `assets/`, `scripts/`, `schemas/`, `.github/workflows/`, `about.html`, SEO and feed files to the GitHub Pages publishing branch. **Do not overwrite your current live `data/` with the sample/preview data in the full ZIP.**
+3. In the repository root, run `python scripts/migrate_and_enrich.py`, `python scripts/generate_feeds.py`, and `python scripts/validate_data.py` after `python -m pip install jsonschema==4.23.0`; commit the resulting merged data. The scheduled workflow performs migration and validation automatically before committing changes. The sample full ZIP already contains the migrated preview data for local demonstrations.
+4. Preserve the existing GitHub Actions secret `DEEPL_API_KEY`; the URL defaults to DeepL's Free API. Set workflow permissions to **Read and write** .
+5. Run `Auto-update Black Sea news and incident leads` manually. It validates and commits changes to `main` directly. The separate `Translate published Black Sea records` workflow then translates changed published records, using the shared lifetime budget.
+6. Configure `config.json` > `corrections_email` with a real, publicly monitored contact. Until you do, the methodology page transparently says that contact has not been configured.
 
-In GitHub Settings → Actions → General, allow workflows to create pull requests if needed. GitHub Pages must be configured to deploy from main. Google News RSS is a discovery service, not an authoritative source; results may be missing or unavailable.
+### Third-party map assets
 
-## Expanded political archive
+The map uses OpenStreetMap tiles and **Leaflet 1.9.4 with pinned Subresource Integrity (SRI)** on the CDN. The CSS/JS files are not yet locally vendored because they could not be downloaded in the build environment. This is the remaining dependency to eliminate if offline resilience is required. A future vendor update should also package the default Leaflet control marker images. OSM usage is subject to its tile-use policy; large traffic should use a suitable tile provider or self-hosting.
 
-The political statements archive contains 17 sourced records, including Romania-specific statements from AGERPRES and the Romanian Ministry of Internal Affairs, plus EU institutional releases. Entries are summaries, not verbatim quotations. The RSS workflow generates review candidates, not automatic publication. Editorial verification remains required.
+### Test and translation limitations
 
-## Always-visible political statements
+Browser tests and JSON-schema checks are included. Some legacy cached translations are English fallback (`_translated:false`) until DeepL next runs with a valid secret and available budget. Do **not** show them as translated. Machine translations are clearly separate from verified quotations. During edits, protect against duplicating a presidential statement from the same date; identical URLs and titles are deduplicated by migration, while semantically similar but different titles still need human review.
 
-Desktop: statements occupy a fixed right-hand column next to the interactive map. Mobile: statements appear directly below the map in a permanently visible scrollable feed. Existing scheduled review workflow is unchanged.
+## Dates and scope
 
+This build uses the currently available dataset snapshot, which may lag your active GitHub repository. A full ZIP is a local **preview**, not a safe direct overwrite of the live data. The `update` package intentionally excludes data to avoid losing new live rows, translations, and budget history.
 
-## Mobile design
-On screens up to 750px, the Map and Statements tabs show one panel at a time, avoiding stacked overlays. The archive remains a collapsed drawer over the map. Desktop retains a persistent left news column.
+### Current preview snapshot
 
-## Automated updates: what actually happens
-The included GitHub Actions workflow runs every 6 hours (UTC, subject to GitHub scheduling delays), or manually via Actions → Discover Black Sea official statements → Run workflow. It searches Google News RSS for candidates, saves `data/statement_candidates.json`, and opens/updates a pull request for review. **It does not publish candidates to `data/statements.json` automatically.** After reviewing a candidate against its original source, manually add it to `data/statements.json` and commit. GitHub Pages then rebuilds.
+The bundled preview has **33 historical/current dataset rows** (26 relevant to Romanian/Bulgarian coastal security, plus 7 retained but hidden Ukrainian records) and **17 statement rows**. Exactly five institutional statement links were checked against the original pages in this revision; other inherited institutional entries remain labelled as awaiting editorial verification and are excluded from the default statement view. This preview is not guaranteed to match your latest GitHub repository, which may contain additional automatically indexed headlines.
 
-To enable: repository Settings → Actions → General → Workflow permissions → Read and write permissions; allow GitHub Actions to create and approve pull requests (if the setting is available). In Settings → Pages select Deploy from a branch, main, /(root). Check Actions runs for errors; some repositories restrict PR creation by the built-in token. Public feeds are not guaranteed complete or available.
+## Automatic publishing policy
 
-## Fully automatic news updates
-The workflow `.github/workflows/statement-monitor.yml` runs approximately every 6 hours and directly commits new indexed RSS headlines into `data/statements.json`. GitHub Pages then deploys the change. GitHub Actions requires repository Settings → Actions → General → Workflow permissions → Read and write.
-
-**Editorial distinction:** Automated entries are marked "automated news index" and contain headline and source link only; they are NOT verified political quotations or independently verified statements. Previously curated summaries remain unchanged. Google News RSS can return aggregator links and may miss news; the pipeline has no paid API dependency. Scheduled runs may be delayed or paused by GitHub. RSS availability and third-party coverage are not guaranteed.
-
-## Languages
-
-The site has four interface languages: English (`index.html`), Bulgarian (`bg.html`), Romanian (`ro.html`), and Ukrainian (`uk.html`). Switcher appears in the header. Filters retain their original underlying data values. Existing source summaries and automatically indexed news headlines remain in their original English/source language; the interface and dynamic UI messages are translated. Future editorial translation of content requires a separate multilingual data pipeline. Upload all four HTML pages to the GitHub Pages repository root.
-
-## Automatic translations (DeepL)
-The workflow fetches news, then runs `scripts/translate_statements.py` to translate titles and summaries into Bulgarian, Romanian and Ukrainian. English remains the source feed. The translation job caches by original title+summary+URL and only re-translates changed or new records. The originals and source links remain in the JSON.
-
-**Required setup:** GitHub repository → Settings → Secrets and variables → Actions → New repository secret → name `DEEPL_API_KEY`, value your DeepL API key. Free DeepL API accounts use the default endpoint. For paid API accounts, set Actions repository variable `DEEPL_API_URL` to `https://api.deepl.com/v2/translate`. Then go to Actions → Auto-update Black Sea news → Run workflow. Keep Actions Workflow permissions = Read and write. Never commit your API key.
-
-Without a valid API key, the workflow still updates news but displays the original text with a translation-unavailable note. New records are automatically translated on the next run after a key is added. DeepL usage may incur charges/quotas; translation API support for the chosen languages depends on your DeepL account. Machine translations are not editorially verified quotations.
-
-## Translation cost safeguards
-
-- Translates only the headline and short description, at most **500 source characters total per news item per language**. The full article remains available via the original source link.
-- Translation is **cached by source URL and hash of the capped source text**; unchanged entries are not translated again.
-- Monthly local budget is **400,000 source characters** across Bulgarian, Romanian and Ukrainian, leaving a 100,000-character buffer relative to DeepL API Free's commonly advertised 500,000-character monthly quota.
-- The file `data/translation_usage.json` tracks characters reserved before API calls and is committed by GitHub Actions. Do not delete or reset it during a billing month. DeepL's billing month may differ from the UTC calendar month; this local budget is an approximation, not a guarantee against hitting the provider limit. If DeepL rejects requests, the site displays the source text and retries on a later run.
-- The source headline and summary remain in `data/statements.json`; translations are stored in `data/statements.bg.json`, `data/statements.ro.json`, and `data/statements.uk.json`.
-- DeepL does not automatically translate full linked articles. Existing translations may be refreshed once because the cache signature now reflects the capped source text.
-
-## One-time Developer credit: 90-day pacing
-
-This version caps DeepL calls to **900,000 source characters total** and releases a cumulative allowance of **10,000 characters per UTC day**, measured from the first deployment of this version. The remaining 100,000 characters of the advertised one-time 1,000,000 credit are kept as a reserve. Unused daily allowance rolls forward, but the lifetime cap **does not reset after 90 days**. Existing translation cache is reused and no more than 500 characters of title+summary are sent per news item, per target language. If the daily or total limit is reached, the source-language text remains visible and translations resume when pacing allows.
-
-**Important:** This does not ensure the DeepL provider credit will last 90 days if the same key is used elsewhere, if provider billing counts characters differently, or if prior API use is not recorded in `data/translation_usage.json`. The start date is established from the committed usage file; do not delete or reset that file. DeepL API usage dashboard is authoritative.
-
-## November 2026 update
-- Site title: EU BLACK SEA / MARITIME SECURITY MONITOR.
-- News section heading on every language page: EU Black Sea · Political statements.
-- Translation scheduling now processes BG, RO, UK for each news item before moving to the next, to prevent the Ukrainian language being starved by the cumulative daily DeepL budget. DeepL language code for Ukrainian is UK; site code remains UA. Cached translations are preserved.
-- The 900,000-character lifetime cap and 90-day pacing remain unchanged. Existing reservations are not reset.
-
-## EU-coast minimal map (November 2026)
-- Public site languages: English, Bulgarian, Romanian. Ukrainian translation removed from workflow and deployment.
-- Map and incident archive show **only records with country Romania or Bulgaria**. The underlying source `data/incidents.json` is retained for provenance, but other countries are not displayed.
-- CARTO Positron basemap with Natural Earth administrative boundary overlay for Romania and Bulgaria (requires access to the public GeoJSON CDN); country outlines may not appear when offline.
-- Original news records and source URLs remain unchanged. DeepL lifetime budget and cached BG/RO translations remain in place.
-
-## Map tiles fix
-Replaced CARTO tile layers that displayed API KEY REQUIRED with the standard OpenStreetMap tile endpoint. OSM standard tiles do not require a key for reasonable use; comply with its tile usage policy (attribution, caching, no bulk downloads). Country highlight overlays still use external GeoJSON CDN.
-
-## Map borders fix
-Romania and Bulgaria country boundaries are bundled in `data/eu-coast-borders.geojson` (Natural Earth low-resolution country geometry, via the pyogrio test fixture). No third-party borders API is needed. The GeoJSON file must be uploaded alongside the HTML pages. Clear browser cache after deployment.
-
-## Map change
-Removed all custom country boundary polygons, country fills and boundary GeoJSON. The standard OpenStreetMap base layer and incident markers remain.
+There is **no editorial Pull Request gate**: every scheduled check writes valid data/candidate updates directly to `main` when changes exist, and the separate translation workflow runs on changes to published datasets. JSON schema validation blocks malformed published data before any push. Discovery candidates, by design, **are not public official statements or incident markers**; promoting them requires reliable direct sources, an actual event date and justified location. This prevents the automatic workflow from inventing attack coordinates or falsely asserting official status.

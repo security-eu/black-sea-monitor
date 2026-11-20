@@ -1,0 +1,1 @@
+SAFE UPGRADE: This archive intentionally EXCLUDES data/*.json and other live data. Upload files preserving folders. Run Actions > Discover Black Sea updates (review PR) and review changes before merging. See README.md.
