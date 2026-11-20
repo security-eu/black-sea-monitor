@@ -1,0 +1,232 @@
+[
+  {
+    "id": "gas-husky-2026",
+    "type": "Navă de transport GPL",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul coastelor Bulgariei (poziție schematică)",
+    "summary": "S-a semnalat scufundarea unei nave la est de Byala; cauza nu a fost stabilită în mod definitiv.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "add0d7f614a02b4e37e127f4d0878ca89700223f0c4366584c1bb8e6f429dcca",
+    "_translated": true
+  },
+  {
+    "id": "betul-8-2026",
+    "type": "Navă de transport marfă în vrac",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul coastelor Bulgariei (poziție schematică)",
+    "summary": "S-a semnalat scufundarea unei nave în largul Capului Kaliakra; echipajul a fost salvat.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "1d396e7abacbf37fb8c241e9cef4e5a20343b94a460034560d9b6593e72f08ef",
+    "_translated": true
+  },
+  {
+    "id": "evia-petrol-v-2026",
+    "type": "Gânduri",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "S-a semnalat un atac cu dronă în apropierea localității Sulina; echipajul a stins incendiul.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU este o coordonată verificată a loviturii",
+    "_source_hash": "e94d4e3b721fac099f1d20ffa81ae854e09b993414d0d64b3008cf21f46aefb4",
+    "_translated": true
+  },
+  {
+    "id": "ali-najafov-2026",
+    "type": "Gânduri",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "A fost semnalat un incident cu o dronă în apropierea localității Sulina; data variază în funcție de sursă.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU este o coordonată verificată a loviturii",
+    "_source_hash": "4dce3e3bceef9fec7d113efe80862b5c747082310171d1c06a5c212ec33032a4",
+    "_translated": true
+  },
+  {
+    "id": "marsol-2026",
+    "type": "Navă de transport marfă în vrac",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "S-a semnalat o explozie în apropiere de Sulina; incendiul a fost stins.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU este o coordonată verificată a loviturii",
+    "_source_hash": "9d8573441f2990fa7d292e87f652c8b902c30f67d5a51bf0f4cffa1d118aa72a",
+    "_translated": true
+  },
+  {
+    "id": "larissa-1-2026",
+    "type": "Navă de marfă",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "S-au semnalat pagube în apropierea orașului Sfântu Gheorghe.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "ace9fefa097da906fe0c9ee98bc94a9eb77e6745a9d3a2239ef8eb2f9cf1e9f2",
+    "_translated": true
+  },
+  {
+    "id": "contship-jet-2026",
+    "type": "Navă de transport containere",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul coastelor Bulgariei (poziție schematică)",
+    "summary": "S-a raportat un atac cu drone navale și scufundarea unei nave în larg.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "807af68499dd2c6178fcdd3f51fbdc4ffba9226b5e3c70cd5e6c0fdd753a5df9",
+    "_translated": true
+  },
+  {
+    "id": "khoryv-2026",
+    "type": "Navă de marfă",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "S-a semnalat că a fost lovit în largul Constanței.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "ac59c49e160c18e1b1e655517e14f69325f1a8d30d9b361d9f423a8e2c77f94e",
+    "_translated": true
+  },
+  {
+    "id": "wine-trader-2026",
+    "type": "Gânduri",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "S-a semnalat un atac în largul mării, în apropiere de Sulina.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "379e75b3a348388e11cf29aa2be08dac1a37cab7402f4d3ebc97d751990e909d",
+    "_translated": true
+  },
+  {
+    "id": "yara-j-2026",
+    "type": "Gânduri",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "S-a semnalat un incendiu în urma unui incident petrecut în apropierea localității Sulina.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "fdfa7db6deeb2f0bc6c523915f12e3ddb3369d056ff0378f0c9bea5fe976a5b0",
+    "_translated": true
+  },
+  {
+    "id": "chelsea-3-2026",
+    "type": "Navă de transport cereale",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul coastelor Bulgariei (poziție schematică)",
+    "summary": "S-a raportat că a fost lovită de mai multe drone; echipajul a fost salvat.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "36764db7578b47662566695f58dd46a939af1854aec5932d403126fa977b9013",
+    "_translated": true
+  },
+  {
+    "id": "hs-dignity-2026",
+    "type": "Navă de marfă",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul coastelor Bulgariei (poziție schematică)",
+    "summary": "S-a semnalat scufundarea unei nave în largul coastelor din apropierea localităților Shabla și Krapets.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU este o coordonată verificată a loviturii",
+    "_source_hash": "1ca4d20a018eb505c0882ac528b48d48a10edc5a3650b73bd48af2e086108a52",
+    "_translated": true
+  },
+  {
+    "id": "alfa-watan-2026",
+    "type": "Navă de marfă",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul coastelor Bulgariei (poziție schematică)",
+    "summary": "S-a raportat un atac cu dronă la est de Byala; nava s-a scufundat.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU reprezintă o coordonată verificată a locului de impact",
+    "_source_hash": "37eae88b2979a77856d8afe400f64215d10375cf5d174a1a12a7289733bee81a",
+    "_translated": true
+  },
+  {
+    "id": "able-2026",
+    "type": "Navă de marfă",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul coastelor Bulgariei (poziție schematică)",
+    "summary": "A fost avariat în urma unui atac semnalat în apropierea localității Alfa Watan.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU este o coordonată verificată a loviturii",
+    "_source_hash": "49a219a06a996026bccfdb56f32af149ea855408b19495f3d28113984d082055",
+    "_translated": true
+  },
+  {
+    "id": "royad-mammadov-2026",
+    "type": "Navă de marfă",
+    "method": "Incident raportat implicând o dronă / incident maritim",
+    "location": "În largul României (poziție schematică)",
+    "summary": "Accident în larg; se raportează că doi membri ai echipajului au decedat.",
+    "locationPrecision": "Marcaj ilustrativ al zonei — NU este o coordonată verificată a loviturii",
+    "_source_hash": "7246fe05ec34e45f910320d9525cc0e22d06fb60f6beeb99c99288a6de9af291",
+    "_translated": true
+  },
+  {
+    "id": "orinda-2025",
+    "type": "Navă de transport GPL",
+    "method": "Atac cu dronă",
+    "location": "Portul Izmail, Dunărea",
+    "summary": "Un tanc de GPL sub pavilion turc a fost lovit în timp ce descărca la Izmail; a izbucnit un incendiu, iar toți cei 16 membri ai echipajului au fost evacuați. Satele românești din apropiere au fost evacuate din motive de precauție.",
+    "locationPrecision": "Indicator aproximativ la nivel de port; port fluvial, nu în largul mării",
+    "_source_hash": "6e3dab0088dafa2cad852229b90ced2f998e4ac7e5734416ad51c2d3d83a2a8c",
+    "_translated": true
+  },
+  {
+    "id": "optima-2024-10-14",
+    "type": "Navă de marfă",
+    "method": "Atac cu rachete",
+    "location": "Portul din Odesa",
+    "summary": "Nava OPTIMA a fost avariată pentru a doua oară într-o săptămână, în timpul unui alt atac asupra portului din Odesa. Victimele semnalate în urma atacului mai amplu nu ar trebui atribuite exclusiv acestei nave.",
+    "locationPrecision": "Marker aproximativ la nivel de port",
+    "_source_hash": "de3c55be886b7a97195a20094c84f56884305aa43578a749cd703d3e1fd0f042",
+    "_translated": true
+  },
+  {
+    "id": "ns-moon-2024",
+    "type": "Navă de marfă",
+    "method": "Atac cu rachete",
+    "location": "Portul din Odesa",
+    "summary": "O navă de marfă sub pavilionul Belize a fost avariată lângă nava OPTIMA în timpul atacului asupra portului din Odesa.",
+    "locationPrecision": "Marker aproximativ la nivel de port",
+    "_source_hash": "76d4fa1e79d8005b4725834f34ff276e94ffd6ba69bcccdcd07d0b2f4c0431b7",
+    "_translated": true
+  },
+  {
+    "id": "shui-spirit-2024",
+    "type": "Navă de transport containere",
+    "method": "Rachetă balistică",
+    "location": "Portul Chornomorsk",
+    "summary": "O navă de transport containere a fost avariată în urma unui atac cu rachete rusești asupra portului Chornomorsk, potrivit oficialilor ucraineni. S-a raportat că șase persoane au murit în urma atacului asupra portului în ansamblu; nu neapărat la bordul navei.",
+    "locationPrecision": "Marker aproximativ la nivel de port",
+    "_source_hash": "c73e353143ea0a98b8c4bc4b651d754a877c7044fbde49bc5201f5e407695a44",
+    "_translated": true
+  },
+  {
+    "id": "optima-2024-10-07",
+    "type": "Navă de marfă",
+    "method": "Rachetă balistică",
+    "location": "Portul din Odesa",
+    "summary": "O navă a lovit un obiect în portul din Odesa; un muncitor portuar ucrainean a murit, iar cinci membri ai echipajului străin au fost răniți, potrivit autorităților ucrainene.",
+    "locationPrecision": "Marker aproximativ la nivel de port",
+    "_source_hash": "6e3ec3e1b45b04450e46e5e6dd30a6e89c00d88aed330a54a3ce88f0fe30438d",
+    "_translated": true
+  },
+  {
+    "id": "paresa-2024",
+    "type": "Navă de transport marfă în vrac",
+    "method": "Atac cu rachete",
+    "location": "Portul Pivdennyi",
+    "summary": "O navă civilă care transporta porumb a fost avariată în urma unui atac rusesc asupra portului Pivdennyi. Unele surse maritime datează incidentul pe 5 octombrie, în timp ce Reuters îl menționează pe 6 octombrie.",
+    "locationPrecision": "Marcator aproximativ la nivel de port",
+    "_source_hash": "52b011e464a188141799886e7e34299e1f7583924b1434888fafd087eed2079d",
+    "_translated": true
+  },
+  {
+    "id": "golden-lion-2024",
+    "type": "Navă de marfă",
+    "method": "Atac cu rachete / resturi",
+    "location": "Portul din Odesa",
+    "summary": "Autoritățile regionale au semnalat că o navă civilă sub pavilionul Antigua a suferit avarii în Odesa. Agenția Reuters a identificat nava „Golden Lion” ca fiind una dintre navele aflate în port, dar nu a confirmat că aceasta ar fi nava avariată.",
+    "locationPrecision": "Marker aproximativ la nivel de port",
+    "_source_hash": "4014508b47819a75b95961b248f60a9c83c9072a1e2760e36adcdbe9ad2511ef",
+    "_translated": true
+  },
+  {
+    "id": "aya-2024",
+    "type": "Navă de transport marfă în vrac",
+    "method": "Rachetă lansată din aer",
+    "location": "ZEE a României, partea vestică a Mării Negre",
+    "summary": "O navă de transport cereale a fost avariată în zona economică exclusivă a României. Ucraina a atribuit atacul Rusiei; nu s-au înregistrat victime. Data corespunde momentului impactului, conform informațiilor disponibile (anunțat public pe 12 septembrie).",
+    "locationPrecision": "Zonă aproximativă în larg; nu sunt coordonatele verificate ale impactului",
+    "_source_hash": "cf5d53d05b54ac2d19a5d0a2210c12e709b3ab079f89397ff41e45f6a15eaf95",
+    "_translated": true
+  }
+]
