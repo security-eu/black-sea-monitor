@@ -14,6 +14,21 @@
     "_translated": true
   },
   {
+    "id": "statement-a0e3cad1d6",
+    "date": "2026-11-17",
+    "region": "EU",
+    "source": "EEAS",
+    "title": "Reuniune la PAM – Impactul escaladării conflictului din Marea Neagră",
+    "summary": "Peste 300 de atacuri cu rachete și drone au provocat moartea a peste 30 de marinari și dispariția a mai mult de 20 în Marea Neagră încă din vară, transformând acest coridor maritim crucial într-unul dintre cele mai mortale din lume.",
+    "url": "https://www.eeas.europa.eu/delegations/un-rome/meeting-wfp-impact-escalation-black-sea_en",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "645d17e3bf8d2716ea0dc130cbc4fe5f27a517c79af2c4fbd91018f8cb5aa30e",
+    "_translated": true
+  },
+  {
     "date": "2026-11-16",
     "region": "EU",
     "source": "Council of the European Union",
@@ -25,6 +40,36 @@
     "source_type": "institution",
     "id": "statement-2646e78d2dbb",
     "_source_hash": "a2009c89444ffe8fff73acc10ea8fae1d1bfce9470b960cf3d70fdd45e019eee",
+    "_translated": true
+  },
+  {
+    "id": "statement-fb94616c96",
+    "date": "2026-11-16",
+    "region": "EU",
+    "source": "Enlargement and Eastern Neighbourhood",
+    "title": "Miniștrii din UE, din regiunea Mării Negre, din Caucazul de Sud și din Asia Centrală promovează cooperarea în domeniul securității și al conectivității interregionale",
+    "summary": "Astăzi, Înaltul Reprezentant pentru afaceri externe și politica de securitate/vicepreședintele Comisiei Europene, Kaja Kallas, comisarul pentru extindere, Marta Kos, și comisarul pentru parteneriate internaționale, Jozef Síkela, au primit reprezentanți ai…",
+    "url": "https://enlargement.ec.europa.eu/news/ministers-eu-black-sea-south-caucasus-and-central-asia-advance-cooperation-cross-regional-security-2026-11-16_en",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "cce197f5e7fe6358ece4cca7b4275a7359d0c471efb7ef91b5f88f3cbd4df7ae",
+    "_translated": true
+  },
+  {
+    "id": "statement-1894284df7",
+    "date": "2026-11-10",
+    "region": "EU",
+    "source": "European Commission",
+    "title": "Președinta von der Leyen se deplasează în regiunea Mării Negre",
+    "summary": "\\nPreședinta Comisiei, Ursula von der Leyen, s-a aflat în România și Bulgaria în zilele de 9 și 10 noiembrie, în cadrul unei vizite în regiunea Mării Negre, pentru a reafirma poziția Comisiei\\",
+    "url": "https://ec.europa.eu/commission/presscorner/detail/en/ac_26_2416",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "6c2432202c36b635fae1495b842fd453c414c2d0862f6c3c91cc9b2afe73b71e",
     "_translated": true
   },
   {

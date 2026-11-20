@@ -12,6 +12,19 @@
     "id": "statement-d92ca03127d4"
   },
   {
+    "id": "statement-a0e3cad1d6",
+    "date": "2026-11-17",
+    "region": "EU",
+    "source": "EEAS",
+    "title": "Meeting at WFP – Impact of the escalation in the Black Sea",
+    "summary": "More than 300 attacks with missiles and drones left over 30 seafarers dead and more than 20 missing in the Black Sea since summer and have made this crucial maritime corridor one of the deadliest in the world.",
+    "url": "https://www.eeas.europa.eu/delegations/un-rome/meeting-wfp-impact-escalation-black-sea_en",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true
+  },
+  {
     "date": "2026-11-16",
     "region": "EU",
     "source": "Council of the European Union",
@@ -22,6 +35,32 @@
     "reviewed": true,
     "source_type": "institution",
     "id": "statement-2646e78d2dbb"
+  },
+  {
+    "id": "statement-fb94616c96",
+    "date": "2026-11-16",
+    "region": "EU",
+    "source": "Enlargement and Eastern Neighbourhood",
+    "title": "Ministers from EU, Black Sea, South Caucasus and Central Asia advance cooperation on cross-regional security and connectivity",
+    "summary": "Today, the High Representative for Foreign Affairs and Security Policy/Vice-President of the European Commission Kaja Kallas, Commissioner for Enlargement Marta Kos, and Commissioner for International Partnerships Jozef Síkela hosted representatives from the…",
+    "url": "https://enlargement.ec.europa.eu/news/ministers-eu-black-sea-south-caucasus-and-central-asia-advance-cooperation-cross-regional-security-2026-11-16_en",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true
+  },
+  {
+    "id": "statement-1894284df7",
+    "date": "2026-11-10",
+    "region": "EU",
+    "source": "European Commission",
+    "title": "President von der Leyen travels to the Black Sea region",
+    "summary": "\\nPresident of the Commission Ursula von der Leyen was in Romania and Bulgaria on 9 and 10 November on a visit to the Black Sea region to reiterate the Commission\\",
+    "url": "https://ec.europa.eu/commission/presscorner/detail/en/ac_26_2416",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true
   },
   {
     "date": "2026-11-09",

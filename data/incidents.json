@@ -5,14 +5,14 @@
     "date": "2026-11-17",
     "country": "Bulgaria",
     "attribution": "unknown",
-    "flag": "See source",
+    "flag": "Liberia",
     "type": "LPG carrier",
     "method": "Reported drone / maritime incident",
-    "summary": "Reported sinking east of Byala; cause not conclusively established.",
-    "location": "Offshore Bulgaria (schematic position)",
+    "summary": "Liberian-flagged LPG carrier struck on the night of 16–17 November. Not sunk as of 19 November: semi-submerged with a 45° list and drifting south-east of Cape Kaliakra. All 19 crew were rescued by Bulgarian authorities after a night in a life raft.",
+    "location": "South-east of Cape Kaliakra, Bulgaria (drifting)",
     "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
-    "lat": 42.8,
-    "lon": 29.5,
+    "lat": 43.25,
+    "lon": 28.75,
     "sources": [
       {
         "label": "Reuters factbox",
@@ -21,6 +21,10 @@
       {
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      },
+      {
+        "label": "24 Chasa, 20 Nov 2026",
+        "url": "https://www.24chasa.bg/bulgaria/article/23962953"
       }
     ],
     "category": "vessel_strike",
@@ -37,11 +41,11 @@
     "date": "2026-11-16",
     "country": "Bulgaria",
     "attribution": "unknown",
-    "flag": "See source",
-    "type": "Bulk carrier",
+    "flag": "Somalia",
+    "type": "General cargo ship",
     "method": "Reported drone / maritime incident",
-    "summary": "Reported sinking off Cape Kaliakra; crew rescued.",
-    "location": "Offshore Bulgaria (schematic position)",
+    "summary": "Somali-flagged general cargo ship struck on 16 November. As of 19 November it was capsized on its side and drifting, about 20 nautical miles south of where it was hit. All 12 crew were rescued by the Bulgarian Air Force and Navy.",
+    "location": "Off Cape Kaliakra, Bulgaria (drifting)",
     "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
     "lat": 43.1,
     "lon": 29.1,
@@ -53,6 +57,10 @@
       {
         "label": "BGNES",
         "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      },
+      {
+        "label": "24 Chasa, 20 Nov 2026",
+        "url": "https://www.24chasa.bg/bulgaria/article/23962953"
       }
     ],
     "category": "vessel_strike",

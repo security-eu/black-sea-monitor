@@ -14,6 +14,21 @@
     "_translated": true
   },
   {
+    "id": "statement-a0e3cad1d6",
+    "date": "2026-11-17",
+    "region": "EU",
+    "source": "EEAS",
+    "title": "Среща в Световната програма за прехрана (WFP) – Последици от ескалацията на напрежението в Черно море",
+    "summary": "От лятото насам над 300 атаки с ракети и дронове в Черно море отнеха живота на над 30 моряци, а повече от 20 са в неизвестност, което превърна този ключов морски коридор в един от най-смъртоносните в света.",
+    "url": "https://www.eeas.europa.eu/delegations/un-rome/meeting-wfp-impact-escalation-black-sea_en",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "645d17e3bf8d2716ea0dc130cbc4fe5f27a517c79af2c4fbd91018f8cb5aa30e",
+    "_translated": true
+  },
+  {
     "date": "2026-11-16",
     "region": "EU",
     "source": "Council of the European Union",
@@ -25,6 +40,36 @@
     "source_type": "institution",
     "id": "statement-2646e78d2dbb",
     "_source_hash": "a2009c89444ffe8fff73acc10ea8fae1d1bfce9470b960cf3d70fdd45e019eee",
+    "_translated": true
+  },
+  {
+    "id": "statement-fb94616c96",
+    "date": "2026-11-16",
+    "region": "EU",
+    "source": "Enlargement and Eastern Neighbourhood",
+    "title": "Министри от ЕС, Черноморието, Южния Кавказ и Централна Азия засилват сътрудничеството в областта на междурегионалната сигурност и свързаността",
+    "summary": "Днес върховният представител по въпросите на външните работи и политиката на сигурност и заместник-председател на Европейската комисия Кая Калас, комисарката по разширяването Марта Кос и комисарят по международните партньорства Йозеф Сикела приеха представители от…",
+    "url": "https://enlargement.ec.europa.eu/news/ministers-eu-black-sea-south-caucasus-and-central-asia-advance-cooperation-cross-regional-security-2026-11-16_en",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "cce197f5e7fe6358ece4cca7b4275a7359d0c471efb7ef91b5f88f3cbd4df7ae",
+    "_translated": true
+  },
+  {
+    "id": "statement-1894284df7",
+    "date": "2026-11-10",
+    "region": "EU",
+    "source": "European Commission",
+    "title": "Председателят фон дер Лайен посещава региона на Черно море",
+    "summary": "\\nПредседателката на Комисията Урсула фон дер Лайен посети Румъния и България на 9 и 10 ноември в рамките на посещение в Черноморския регион, за да потвърди отново, че Комисията\\",
+    "url": "https://ec.europa.eu/commission/presscorner/detail/en/ac_26_2416",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "6c2432202c36b635fae1495b842fd453c414c2d0862f6c3c91cc9b2afe73b71e",
     "_translated": true
   },
   {
