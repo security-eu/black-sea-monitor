@@ -137,7 +137,7 @@ function incidentCard(x){
 
 
 function isMobileIncidentView(){return window.matchMedia('(max-width:750px)').matches}
-function openIncidentDialog(x){
+function openIncidentDialog(x){window.activeIncidentId=x.id;
  const dialog=document.getElementById('incidentDialog');
  document.getElementById('incidentDialogContent').innerHTML=incidentCard(x);
  document.getElementById('incidentDialogContent').scrollTop=0;
@@ -145,7 +145,7 @@ function openIncidentDialog(x){
  document.getElementById('incidentDialogClose').focus({preventScroll:true});
 }
 function closeIncidentDialog(){const dialog=document.getElementById('incidentDialog');if(dialog.open)dialog.close()}
-document.getElementById('incidentDialogClose').addEventListener('click',closeIncidentDialog);
+document.getElementById('incidentDialogClose').addEventListener('click',closeIncidentDialog);document.getElementById('incidentDialog').addEventListener('close',()=>{window.activeIncidentId=null});
 document.getElementById('incidentDialog').addEventListener('click',event=>{
  if(event.target===event.currentTarget)closeIncidentDialog();
 });
@@ -155,17 +155,18 @@ window.addEventListener('resize',()=>{
  if(mobile!==lastMobileIncidentView){lastMobileIncidentView=mobile;closeIncidentDialog();render();}
 });
 
-function render(){markers.forEach(m=>map.removeLayer(m));markers=[];const c=$('country').value,a=$('attribution').value,q=$('search').value.toLocaleLowerCase(),t=$('outcome').value;const now=new Date(),start=periodStart(period,now),selectedMonth=$('archiveMonth').value,selectedQuarter=$('archiveQuarter').value;const filtered=incidents.filter(x=>{const date=/^\d{4}-\d{2}-\d{2}$/.test(x.date||'')?new Date(x.date+'T12:00:00'):null;return (!c||x.country===c)&&(!t||(x.type||'').toLowerCase().includes(t.toLowerCase()))&&(!a||x.attribution===a)&&(!q||JSON.stringify(x).toLocaleLowerCase().includes(q))&&(!start||(date&&date>=start&&date<=now))&&(!selectedMonth||x.date.startsWith(selectedMonth))&&(!selectedQuarter||(x.date.slice(0,4)+'-Q'+(Math.floor((Number(x.date.slice(5,7))-1)/3)+1))===selectedQuarter)});$('count').textContent=filtered.length;window.visibleIncidents=filtered;$('archiveCount').textContent='('+filtered.length+')';$('periodLabel').textContent=labels[period];const list=$('records');list.replaceChildren();if(!filtered.length){const p=document.createElement('p');p.className='empty';p.textContent=translateUI('No records in the database for this period. This does not mean no incidents occurred.');list.appendChild(p)}filtered.forEach(x=>{const item=document.createElement('div');item.className='record';item.tabIndex=0;item.setAttribute('role','button');item.innerHTML='<b>'+safe(x.vessel)+'</b><p>'+safe(x.date)+' · '+safe(x.country)+' · '+safe(x.flag)+'</p><span class="tag">'+safe(x.attribution)+'</span><p>'+safe(x.summary)+'</p><small>'+safe(x.locationPrecision)+'</small><p>'+((x.sources||[]).map(src=>'<a href="'+safe(src.url)+'" target="_blank" rel="noopener noreferrer">'+safe(src.label)+' ↗</a>').join(' · '))+'</p>'; list.appendChild(item);item.onkeydown=e=>{if(e.key==='Enter')item.click()};if(Number.isFinite(x.lat)&&Number.isFinite(x.lon)){const color=x.country==='Romania'?'#087C9A':'#D3A24C';const m=L.circleMarker([x.lat,x.lon],{radius:6,color:'#ffffff',weight:2,fillColor:color,fillOpacity:.95}).addTo(map);if(isMobileIncidentView()){
+function render(){markers.forEach(m=>map.removeLayer(m));markers=[];const c=$('country').value,a=$('attribution').value,q=$('search').value.toLocaleLowerCase(),t=$('outcome').value;const now=new Date(),start=periodStart(period,now),selectedMonth=$('archiveMonth').value,selectedQuarter=$('archiveQuarter').value;const filtered=incidents.filter(x=>{const date=/^\d{4}-\d{2}-\d{2}$/.test(x.date||'')?new Date(x.date+'T12:00:00'):null;return (!c||x.country===c)&&(!t||(x.type||'').toLowerCase().includes(t.toLowerCase()))&&(!a||x.attribution===a)&&(!q||JSON.stringify(x).toLocaleLowerCase().includes(q))&&(!start||(date&&date>=start&&date<=now))&&(!selectedMonth||x.date.startsWith(selectedMonth))&&(!selectedQuarter||(x.date.slice(0,4)+'-Q'+(Math.floor((Number(x.date.slice(5,7))-1)/3)+1))===selectedQuarter)});$('count').textContent=filtered.length;window.visibleIncidents=filtered;$('archiveCount').textContent='('+filtered.length+')';$('periodLabel').textContent=labels[period];const list=$('records');list.replaceChildren();if(!filtered.length){const p=document.createElement('p');p.className='empty';p.textContent=translateUI('No records in the database for this period. This does not mean no incidents occurred.');list.appendChild(p)}filtered.forEach(x=>{const item=document.createElement('div');item.className='record';item.dataset.incidentId=x.id;item.tabIndex=0;item.setAttribute('role','button');item.innerHTML='<b>'+safe(x.vessel)+'</b><p>'+safe(x.date)+' · '+safe(x.country)+' · '+safe(x.flag)+'</p><span class="tag">'+safe(x.attribution)+'</span><p>'+safe(x.summary)+'</p><small>'+safe(x.locationPrecision)+'</small><p>'+((x.sources||[]).map(src=>'<a href="'+safe(src.url)+'" target="_blank" rel="noopener noreferrer">'+safe(src.label)+' ↗</a>').join(' · '))+'</p>'; list.appendChild(item);item.onkeydown=e=>{if(e.key==='Enter')item.click()};if(Number.isFinite(x.lat)&&Number.isFinite(x.lon)){const color=x.country==='Romania'?'#087C9A':'#D3A24C';const m=L.circleMarker([x.lat,x.lon],{radius:6,color:'#ffffff',weight:2,fillColor:color,fillOpacity:.95}).addTo(map);if(isMobileIncidentView()){
   m.on('click',()=>openIncidentDialog(x));
  }else{
+  m.on('popupopen',()=>{window.activeIncidentId=x.id});m.on('popupclose',()=>{if(window.activeIncidentId===x.id)window.activeIncidentId=null});
   m.bindPopup(incidentCard(x),{className:'incident-popup',maxWidth:350,autoPanPaddingTopLeft:[24,24],autoPanPaddingBottomRight:[24,24]});
  }
- item.onclick=()=>{
+ item.onclick=()=>{window.activeIncidentId=x.id;
   if(isMobileIncidentView()){openIncidentDialog(x)}
   else{map.flyTo([x.lat,x.lon],9,{duration:.65});m.openPopup()}
  };
  markers.push(m)}})}
-function setDrawer(open){$('drawer').classList.toggle('open',open);$('overlay').classList.toggle('visible',open);$('drawer').setAttribute('aria-hidden',String(!open));$('filterButton').setAttribute('aria-expanded',String(open));if(!open)$('filterButton').focus()}$('filterButton').onclick=()=>setDrawer(!$('drawer').classList.contains('open'));$('closeFilters').onclick=()=>setDrawer(false);$('overlay').onclick=()=>setDrawer(false);document.addEventListener('keydown',e=>{if(e.key==='Escape')setDrawer(false)});document.querySelectorAll('[data-period]').forEach(btn=>btn.onclick=()=>{$('archiveMonth').value='';$('archiveQuarter').value='';period=btn.dataset.period;document.querySelectorAll('[data-period]').forEach(b=>b.classList.toggle('active',b===btn));render()});$('archiveMonth').onchange=()=>{if($('archiveMonth').value){$('archiveQuarter').value='';period='all';document.querySelectorAll('[data-period]').forEach(b=>b.classList.toggle('active',b.dataset.period==='all'))}render()};$('archiveQuarter').onchange=()=>{if($('archiveQuarter').value){$('archiveMonth').value='';period='all';document.querySelectorAll('[data-period]').forEach(b=>b.classList.toggle('active',b.dataset.period==='all'))}render()};['country','attribution','search','outcome'].forEach(id=>$(id).addEventListener('input',render));$('reset').onclick=()=>{$('country').value='';$('attribution').value='';$('search').value='';$('outcome').value='';render()};$('archiveToggle').onclick=()=>{const collapsed=$('archive').classList.toggle('collapsed');$('archiveToggle').setAttribute('aria-expanded',String(!collapsed));$('archiveArrow').textContent=collapsed?'▴ '+translateUI('Expand'):'▾ '+translateUI('Collapse')};Promise.all([fetch('./data/incidents.json?rev=3',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}),fetch('./data/incidents.ro.json?rev=3',{cache:'no-store'}).then(r=>r.ok?r.json():[]).catch(()=>[])]).then(([data,translations])=>{const byId=new Map(translations.filter(x=>x._translated).map(x=>[x.id,x]));incidents=data.filter(x=>x.country==='Romania'||x.country==='Bulgaria').map(x=>{const tr=byId.get(x.id);return tr?{...x,type:tr.type,method:tr.method,summary:tr.summary,location:tr.location,locationPrecision:tr.locationPrecision}:x});const months=[...new Set(incidents.map(x=>x.date.slice(0,7)))].sort().reverse();const quarters=[...new Set(incidents.map(x=>x.date.slice(0,4)+'-Q'+(Math.floor((Number(x.date.slice(5,7))-1)/3)+1)))].sort().reverse();months.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=new Date(m+'-01T12:00:00').toLocaleDateString('ro',{month:'long',year:'numeric'});$('archiveMonth').appendChild(o)});quarters.forEach(q=>{const o=document.createElement('option');o.value=q;o.textContent=q.replace('-Q',' · Q');$('archiveQuarter').appendChild(o)});render();setTimeout(()=>map.invalidateSize(),100)}).catch(()=>{$('records').innerHTML='<p class="empty">Unable to load incident data. Please use a web server (e.g. GitHub Pages), not a local file:// URL.</p>'});render();
+function setDrawer(open){$('drawer').classList.toggle('open',open);$('overlay').classList.toggle('visible',open);$('drawer').setAttribute('aria-hidden',String(!open));$('filterButton').setAttribute('aria-expanded',String(open));if(!open)$('filterButton').focus()}$('filterButton').onclick=()=>setDrawer(!$('drawer').classList.contains('open'));$('closeFilters').onclick=()=>setDrawer(false);$('overlay').onclick=()=>setDrawer(false);document.addEventListener('keydown',e=>{if(e.key==='Escape')setDrawer(false)});document.querySelectorAll('[data-period]').forEach(btn=>btn.onclick=()=>{$('archiveMonth').value='';$('archiveQuarter').value='';period=btn.dataset.period;document.querySelectorAll('[data-period]').forEach(b=>b.classList.toggle('active',b===btn));render()});$('archiveMonth').onchange=()=>{if($('archiveMonth').value){$('archiveQuarter').value='';period='all';document.querySelectorAll('[data-period]').forEach(b=>b.classList.toggle('active',b.dataset.period==='all'))}render()};$('archiveQuarter').onchange=()=>{if($('archiveQuarter').value){$('archiveMonth').value='';period='all';document.querySelectorAll('[data-period]').forEach(b=>b.classList.toggle('active',b.dataset.period==='all'))}render()};['country','attribution','search','outcome'].forEach(id=>$(id).addEventListener('input',render));$('reset').onclick=()=>{$('country').value='';$('attribution').value='';$('search').value='';$('outcome').value='';render()};$('archiveToggle').onclick=()=>{const collapsed=$('archive').classList.toggle('collapsed');$('archiveToggle').setAttribute('aria-expanded',String(!collapsed));$('archiveArrow').textContent=collapsed?'▴ '+translateUI('Expand'):'▾ '+translateUI('Collapse')};Promise.all([fetch('./data/incidents.json?rev=3',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}),fetch('./data/incidents.ro.json?rev=3',{cache:'no-store'}).then(r=>r.ok?r.json():[]).catch(()=>[])]).then(([data,translations])=>{const byId=new Map(translations.filter(x=>x._translated).map(x=>[x.id,x]));incidents=data.filter(x=>x.country==='Romania'||x.country==='Bulgaria').map(x=>{const tr=byId.get(x.id);return tr?{...x,type:tr.type,method:tr.method,summary:tr.summary,location:tr.location,locationPrecision:tr.locationPrecision}:x});const months=[...new Set(incidents.map(x=>x.date.slice(0,7)))].sort().reverse();const quarters=[...new Set(incidents.map(x=>x.date.slice(0,4)+'-Q'+(Math.floor((Number(x.date.slice(5,7))-1)/3)+1)))].sort().reverse();months.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=new Date(m+'-01T12:00:00').toLocaleDateString('ro',{month:'long',year:'numeric'});$('archiveMonth').appendChild(o)});quarters.forEach(q=>{const o=document.createElement('option');o.value=q;o.textContent=q.replace('-Q',' · Q');$('archiveQuarter').appendChild(o)});render();window.dispatchEvent(new Event('incidentDataReady'));setTimeout(()=>map.invalidateSize(),100)}).catch(()=>{$('records').innerHTML='<p class="empty">Unable to load incident data. Please use a web server (e.g. GitHub Pages), not a local file:// URL.</p>'});render();
 function setMobileTab(tab){const news=tab==='news';document.querySelector('.app').classList.toggle('mobile-news',news);document.querySelector('.app').classList.toggle('mobile-map',!news);document.getElementById('tabMap').classList.toggle('active',!news);document.getElementById('tabNews').classList.toggle('active',news);document.getElementById('tabMap').setAttribute('aria-pressed',String(!news));document.getElementById('tabNews').setAttribute('aria-pressed',String(news));if(!news)setTimeout(()=>map.invalidateSize(),90)}
 document.getElementById('tabMap').onclick=()=>setMobileTab('map');document.getElementById('tabNews').onclick=()=>setMobileTab('news');
 document.getElementById('fitAll').onclick=()=>{const pts=(window.visibleIncidents||[]).filter(x=>Number.isFinite(x.lat)&&Number.isFinite(x.lon)).map(x=>[x.lat,x.lon]);if(pts.length)map.fitBounds(pts,{padding:[55,55],maxZoom:9});};document.getElementById('focusWest').onclick=()=>map.flyTo([43.4,28.7],7,{duration:.8});</script><script>
@@ -174,6 +175,67 @@ const $n=id=>document.getElementById(id),escapeNews=s=>String(s??'').replace(/[&
 function renderNews(){let region=$n('newsRegion').value,year=$n('newsYear').value;let filtered=items.filter(x=>(!region||x.region===region)&&(!year||x.date.startsWith(year))).sort((a,b)=>b.date.localeCompare(a.date));$n('newsList').innerHTML=filtered.length?filtered.map(x=>`<article class="news-item"><div class="news-meta"><span class="news-country">${escapeNews(x.region)}</span><time datetime="${escapeNews(x.date)}">${escapeNews(x.date)}</time><span>${escapeNews(x.source)}</span></div><h3>${escapeNews(x.title)}</h3><p>${escapeNews(x.summary)}</p><a href="${escapeNews(x.url)}" target="_blank" rel="noopener noreferrer">${escapeNews(translateUI("Read original statement"))} ↗</a></article>`).join(''):'<div class="news-empty">'+translateUI('No statements found for this period.')+'</div>'}
 function openNews(v){if(window.matchMedia('(max-width:750px)').matches)document.getElementById('tabNews').click();}
 $n('newsButton').onclick=()=>openNews(!$n('newsPanel').classList.contains('open'));$n('newsRegion').onchange=renderNews;$n('newsYear').onchange=renderNews;
-fetch('data/statements.ro.json?rev=2',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Failed');return r.json()}).then(data=>{items=Array.isArray(data)?data:[];[...new Set(items.map(x=>x.date.slice(0,4)))].sort().reverse().forEach(y=>{let o=document.createElement('option');o.value=y;o.textContent=y;$n('newsYear').appendChild(o)});$n('newsBadge').textContent=items.length;$n('newsBadge').className='news-badge';renderNews()}).catch(()=>$n('newsList').textContent=translateUI('Statements unavailable. Please retry later.'));
+fetch('data/statements.ro.json?rev=2',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Failed');return r.json()}).then(data=>{items=Array.isArray(data)?data:[];[...new Set(items.map(x=>x.date.slice(0,4)))].sort().reverse().forEach(y=>{let o=document.createElement('option');o.value=y;o.textContent=y;$n('newsYear').appendChild(o)});$n('newsBadge').textContent=items.length;$n('newsBadge').className='news-badge';renderNews();window.dispatchEvent(new Event('statementsDataReady'))}).catch(()=>$n('newsList').textContent=translateUI('Statements unavailable. Please retry later.'));
+})();
+</script><script id="language-navigation-state">
+/* Preserve view, filters, map position and selected incident across language changes.
+   Query parameters are portable between index.html, bg.html and ro.html. */
+(()=>{
+ const qs=new URLSearchParams(location.search);
+ const el=id=>document.getElementById(id);
+ const known=['today','week','month','quarter','year','all'];
+ const get=(key)=>qs.get(key)||'';
+ const put=(url,key,value)=>{if(value!==null&&value!==undefined&&String(value)!=='') url.searchParams.set(key,String(value))};
+ let pendingIncident=get('incident');
+ function snapshot(event){
+   const href=event.currentTarget.getAttribute('href');
+   if(!href)return;
+   const dest=new URL(href,location.href);
+   const mode=document.querySelector('.app.mobile-news')?'news':'map';
+   put(dest,'view',mode);
+   const active=document.querySelector('[data-period].active');
+   put(dest,'period',active?.dataset.period||'all');
+   for(const [id,key] of [['archiveMonth','month'],['archiveQuarter','quarter'],['country','country'],['outcome','type'],['attribution','attribution'],['search','q'],['newsRegion','region'],['newsYear','year']])put(dest,key,el(id)?.value);
+   if(!el('archive')?.classList.contains('collapsed'))put(dest,'archive','open');
+   if(typeof map!=='undefined'&&map?.getCenter){const pos=map.getCenter();put(dest,'lat',pos.lat.toFixed(5));put(dest,'lon',pos.lng.toFixed(5));put(dest,'zoom',map.getZoom())}
+   const list=el('newsList');if(list)put(dest,'newsScroll',Math.round(list.scrollTop));
+   const chosen=window.activeIncidentId;
+   if(chosen)put(dest,'incident',chosen);
+   event.preventDefault();
+   location.assign(dest.toString());
+ }
+ document.querySelectorAll('.language-switch a').forEach(link=>link.addEventListener('click',snapshot));
+ // Restore the active mobile tab immediately, before network requests complete.
+ if(get('view')==='news'&&typeof setMobileTab==='function')setMobileTab('news');
+ // Restore selections; period + map changes only after month and quarter options exist.
+ if(el('newsRegion'))el('newsRegion').value=get('region');
+ function restoreIncident(){
+   if(!pendingIncident)return;
+   const record=[...document.querySelectorAll('#records .record')].find(node=>node.dataset.incidentId===pendingIncident);
+   if(record){pendingIncident='';record.click()}
+ }
+ let restoredIncidents=false;
+ function restoreMap(){
+   if(restoredIncidents)return;restoredIncidents=true;
+   for(const [id,key] of [['archiveMonth','month'],['archiveQuarter','quarter'],['country','country'],['outcome','type'],['attribution','attribution'],['search','q']])if(el(id))el(id).value=get(key);
+   const p=get('period');if(known.includes(p)){
+     period=p;
+     document.querySelectorAll('[data-period]').forEach(b=>b.classList.toggle('active',b.dataset.period===period));
+   }
+   if(get('archive')==='open'){
+     el('archive')?.classList.remove('collapsed');el('archiveToggle')?.setAttribute('aria-expanded','true');
+   }
+   if(typeof render==='function')render();
+   const lat=Number(get('lat')),lon=Number(get('lon')),zoom=Number(get('zoom'));
+   if(get('lat')&&get('lon')&&Number.isFinite(lat)&&Number.isFinite(lon)&&Number.isFinite(zoom)&&typeof map!=='undefined')map.setView([lat,lon],Math.max(3,Math.min(14,zoom)),{animate:false});
+   restoreIncident();
+ }
+ window.addEventListener('incidentDataReady',restoreMap,{once:true});
+ if(get('year')){const yr=get('year');
+   window.addEventListener('statementsDataReady',()=>{if(el('newsYear')){el('newsYear').value=yr;el('newsYear').dispatchEvent(new Event('change'))}},{once:true});
+ }
+ window.addEventListener('statementsDataReady',()=>{
+   const list=el('newsList'),scroll=Number(get('newsScroll'));if(list&&Number.isFinite(scroll))list.scrollTop=scroll;
+ },{once:true});
 })();
 </script></body></html>
