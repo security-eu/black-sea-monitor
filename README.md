@@ -83,3 +83,15 @@ Without a valid API key, the workflow still updates news but displays the origin
 This version caps DeepL calls to **900,000 source characters total** and releases a cumulative allowance of **10,000 characters per UTC day**, measured from the first deployment of this version. The remaining 100,000 characters of the advertised one-time 1,000,000 credit are kept as a reserve. Unused daily allowance rolls forward, but the lifetime cap **does not reset after 90 days**. Existing translation cache is reused and no more than 500 characters of title+summary are sent per news item, per target language. If the daily or total limit is reached, the source-language text remains visible and translations resume when pacing allows.
 
 **Important:** This does not ensure the DeepL provider credit will last 90 days if the same key is used elsewhere, if provider billing counts characters differently, or if prior API use is not recorded in `data/translation_usage.json`. The start date is established from the committed usage file; do not delete or reset that file. DeepL API usage dashboard is authoritative.
+
+## November 2026 update
+- Site title: EU BLACK SEA / MARITIME SECURITY MONITOR.
+- News section heading on every language page: EU Black Sea · Political statements.
+- Translation scheduling now processes BG, RO, UK for each news item before moving to the next, to prevent the Ukrainian language being starved by the cumulative daily DeepL budget. DeepL language code for Ukrainian is UK; site code remains UA. Cached translations are preserved.
+- The 900,000-character lifetime cap and 90-day pacing remain unchanged. Existing reservations are not reset.
+
+## EU-coast minimal map (November 2026)
+- Public site languages: English, Bulgarian, Romanian. Ukrainian translation removed from workflow and deployment.
+- Map and incident archive show **only records with country Romania or Bulgaria**. The underlying source `data/incidents.json` is retained for provenance, but other countries are not displayed.
+- CARTO Positron basemap with Natural Earth administrative boundary overlay for Romania and Bulgaria (requires access to the public GeoJSON CDN); country outlines may not appear when offline.
+- Original news records and source URLs remain unchanged. DeepL lifetime budget and cached BG/RO translations remain in place.

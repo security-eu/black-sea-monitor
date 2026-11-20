@@ -83,42 +83,50 @@ def translate(texts, target):
             time.sleep(2 ** attempt)
     return None
 
-for lang, target in [('bg', 'BG'), ('ro', 'RO'), ('uk', 'UK')]:
+# Process each publication across all languages before moving to the next.
+# This prevents Bulgarian/Romanian from consuming the entire daily allowance
+# before Ukrainian gets a chance to translate anything.
+LANGUAGES = [('bg', 'BG'), ('ro', 'RO')]
+previous_by_lang = {}
+results_by_lang = {lang: [] for lang, _ in LANGUAGES}
+new_by_lang = {lang: 0 for lang, _ in LANGUAGES}
+for lang, _ in LANGUAGES:
     path = DATA / f'statements.{lang}.json'
     try:
         previous = json.loads(path.read_text(encoding='utf-8'))
     except (FileNotFoundError, ValueError):
         previous = []
-    cache = {row['url']: row for row in previous if row.get('url')}
-    result_rows = []
-    newly_translated = 0
-    for row in SOURCE:
-        title, summary = trimmed_fields(row)
-        signature = hashlib.sha256((title + '\0' + summary).encode('utf-8')).hexdigest()
-        prior = cache.get(row.get('url'))
+    previous_by_lang[lang] = {row['url']: row for row in previous if row.get('url')}
+
+for row in SOURCE:
+    title, summary = trimmed_fields(row)
+    signature = hashlib.sha256((title + '\0' + summary).encode('utf-8')).hexdigest()
+    text_parts = [x for x in (title, summary) if x]
+    cost = sum(map(len, text_parts))
+    for lang, target in LANGUAGES:
+        prior = previous_by_lang[lang].get(row.get('url'))
         if prior and prior.get('_source_hash') == signature and prior.get('_translated'):
-            result_rows.append({**row, 'title': prior['title'], 'summary': prior['summary'],
-                                '_source_hash': signature, '_translated': True})
+            results_by_lang[lang].append({**row, 'title': prior['title'],
+                'summary': prior['summary'], '_source_hash': signature, '_translated': True})
             continue
-        text_parts = [x for x in (title, summary) if x]
-        cost = sum(map(len, text_parts))
         translated = None
         if KEY and cost and usage['characters_reserved'] + cost <= allowed_today:
-            # Reserve before the call. A timeout might still have been billed by DeepL.
             usage['characters_reserved'] += cost
             save_usage()
             translated = translate(text_parts, target)
         if translated:
-            result_rows.append({**row, 'title': translated[0],
-                                'summary': translated[1] if len(translated) > 1 else '',
-                                '_source_hash': signature, '_translated': True})
-            newly_translated += 1
+            results_by_lang[lang].append({**row, 'title': translated[0],
+                'summary': translated[1] if len(translated) > 1 else '',
+                '_source_hash': signature, '_translated': True})
+            new_by_lang[lang] += 1
         else:
-            # Preserve the original content, without falsely claiming translation.
-            result_rows.append({**row, 'title': title, 'summary': summary,
-                                '_source_hash': signature, '_translated': False})
-    path.write_text(json.dumps(result_rows, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(f'{lang}: {newly_translated} new translations, {len(result_rows)} total records')
+            results_by_lang[lang].append({**row, 'title': title,
+                'summary': summary, '_source_hash': signature, '_translated': False})
+
+for lang, _ in LANGUAGES:
+    (DATA / f'statements.{lang}.json').write_text(
+        json.dumps(results_by_lang[lang], ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    print(f'{lang}: {new_by_lang[lang]} new translations, {len(results_by_lang[lang])} total records')
 print(f'90-day pacing: day {elapsed + 1}, reserved {usage["characters_reserved"]:,} / {allowed_today:,} currently allowed; lifetime cap {TOTAL_BUDGET:,}')
 if not KEY:
     print('DEEPL_API_KEY is missing; untranslated originals are retained')
