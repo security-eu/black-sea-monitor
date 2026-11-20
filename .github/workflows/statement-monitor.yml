@@ -27,7 +27,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/statements.json data/statements.bg.json data/statements.ro.json data/statements.uk.json data/translation_usage.json data/statement_candidates.json
+          git add data/statements.json data/statements.bg.json data/statements.ro.json data/translation_usage.json data/statement_candidates.json
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update Black Sea news feed"
             git push
