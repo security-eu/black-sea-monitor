@@ -1,4 +1,4 @@
-# EU Black Sea / Maritime Security Monitor
+# EU Black Sea Security Monitor
 
 Independent maritime-security reference site focusing on Romania and Bulgaria. This repository publishes a single-page EN/BG/RO interface, a sourced incident archive, interactive map, provenance-tagged political/institutional records, dated trends and machine-readable feeds.
 
@@ -50,6 +50,17 @@ Existing records inherited from the previous site are **not retrospectively cert
 4. Preserve the existing GitHub Actions secret `DEEPL_API_KEY`; the URL defaults to DeepL's Free API. Set workflow permissions to **Read and write** .
 5. Run `Auto-update Black Sea news and incident leads` manually. It validates and commits changes to `main` directly. The separate `Translate published Black Sea records` workflow then translates changed published records, using the shared lifetime budget.
 6. Configure `config.json` > `corrections_email` with a real, publicly monitored contact. Until you do, the methodology page transparently says that contact has not been configured.
+
+## Updates and editorial review (November 2026)
+
+The scheduled workflow (`statement-monitor.yml`, every 6 hours) runs `scripts/discover.py`:
+
+- **Official statements** found on first-party institutional sites (EU Council, Commission, EEAS; Bulgarian and Romanian government, presidency, foreign, defence and interior ministries, navies) are **published automatically** with a direct link, short summary and translations. They are marked as not yet editorially reviewed.
+- **Press reports** (Agerpres, BTA) and **possible new incidents** (searched in English, Bulgarian and Romanian) become **GitHub Issues** labelled `review`. Reports about vessels already on the map, market commentary and single-outlet reports about unnamed ships are skipped; reports about the same vessel are merged into one issue.
+- To publish, check the sources, edit the fields in the issue's `review` block if needed and add the label **approve**. `review.yml` then publishes the record (incident markers are placed by `place`, or `lat`/`lon` if given, otherwise off the country's coast), translates it and closes the issue. Add **reject** to discard.
+- `data/review_state.json` remembers which reports were already handled. `scripts/apply_corrections.py` holds editorial fixes to existing incidents and re-applies them on every run.
+
+Requirements: Issues enabled (Settings → General → Features) and Actions with read and write permissions (Settings → Actions → General).
 
 ### Third-party map assets
 
