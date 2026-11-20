@@ -43,3 +43,12 @@ The political statements archive contains 17 sourced records, including Romania-
 ## Always-visible political statements
 
 Desktop: statements occupy a fixed right-hand column next to the interactive map. Mobile: statements appear directly below the map in a permanently visible scrollable feed. Existing scheduled review workflow is unchanged.
+
+
+## Mobile design
+On screens up to 750px, the Map and Statements tabs show one panel at a time, avoiding stacked overlays. The archive remains a collapsed drawer over the map. Desktop retains a persistent left news column.
+
+## Automated updates: what actually happens
+The included GitHub Actions workflow runs every 6 hours (UTC, subject to GitHub scheduling delays), or manually via Actions → Discover Black Sea official statements → Run workflow. It searches Google News RSS for candidates, saves `data/statement_candidates.json`, and opens/updates a pull request for review. **It does not publish candidates to `data/statements.json` automatically.** After reviewing a candidate against its original source, manually add it to `data/statements.json` and commit. GitHub Pages then rebuilds.
+
+To enable: repository Settings → Actions → General → Workflow permissions → Read and write permissions; allow GitHub Actions to create and approve pull requests (if the setting is available). In Settings → Pages select Deploy from a branch, main, /(root). Check Actions runs for errors; some repositories restrict PR creation by the built-in token. Public feeds are not guaranteed complete or available.
