@@ -52,3 +52,34 @@ On screens up to 750px, the Map and Statements tabs show one panel at a time, av
 The included GitHub Actions workflow runs every 6 hours (UTC, subject to GitHub scheduling delays), or manually via Actions → Discover Black Sea official statements → Run workflow. It searches Google News RSS for candidates, saves `data/statement_candidates.json`, and opens/updates a pull request for review. **It does not publish candidates to `data/statements.json` automatically.** After reviewing a candidate against its original source, manually add it to `data/statements.json` and commit. GitHub Pages then rebuilds.
 
 To enable: repository Settings → Actions → General → Workflow permissions → Read and write permissions; allow GitHub Actions to create and approve pull requests (if the setting is available). In Settings → Pages select Deploy from a branch, main, /(root). Check Actions runs for errors; some repositories restrict PR creation by the built-in token. Public feeds are not guaranteed complete or available.
+
+## Fully automatic news updates
+The workflow `.github/workflows/statement-monitor.yml` runs approximately every 6 hours and directly commits new indexed RSS headlines into `data/statements.json`. GitHub Pages then deploys the change. GitHub Actions requires repository Settings → Actions → General → Workflow permissions → Read and write.
+
+**Editorial distinction:** Automated entries are marked "automated news index" and contain headline and source link only; they are NOT verified political quotations or independently verified statements. Previously curated summaries remain unchanged. Google News RSS can return aggregator links and may miss news; the pipeline has no paid API dependency. Scheduled runs may be delayed or paused by GitHub. RSS availability and third-party coverage are not guaranteed.
+
+## Languages
+
+The site has four interface languages: English (`index.html`), Bulgarian (`bg.html`), Romanian (`ro.html`), and Ukrainian (`uk.html`). Switcher appears in the header. Filters retain their original underlying data values. Existing source summaries and automatically indexed news headlines remain in their original English/source language; the interface and dynamic UI messages are translated. Future editorial translation of content requires a separate multilingual data pipeline. Upload all four HTML pages to the GitHub Pages repository root.
+
+## Automatic translations (DeepL)
+The workflow fetches news, then runs `scripts/translate_statements.py` to translate titles and summaries into Bulgarian, Romanian and Ukrainian. English remains the source feed. The translation job caches by original title+summary+URL and only re-translates changed or new records. The originals and source links remain in the JSON.
+
+**Required setup:** GitHub repository → Settings → Secrets and variables → Actions → New repository secret → name `DEEPL_API_KEY`, value your DeepL API key. Free DeepL API accounts use the default endpoint. For paid API accounts, set Actions repository variable `DEEPL_API_URL` to `https://api.deepl.com/v2/translate`. Then go to Actions → Auto-update Black Sea news → Run workflow. Keep Actions Workflow permissions = Read and write. Never commit your API key.
+
+Without a valid API key, the workflow still updates news but displays the original text with a translation-unavailable note. New records are automatically translated on the next run after a key is added. DeepL usage may incur charges/quotas; translation API support for the chosen languages depends on your DeepL account. Machine translations are not editorially verified quotations.
+
+## Translation cost safeguards
+
+- Translates only the headline and short description, at most **500 source characters total per news item per language**. The full article remains available via the original source link.
+- Translation is **cached by source URL and hash of the capped source text**; unchanged entries are not translated again.
+- Monthly local budget is **400,000 source characters** across Bulgarian, Romanian and Ukrainian, leaving a 100,000-character buffer relative to DeepL API Free's commonly advertised 500,000-character monthly quota.
+- The file `data/translation_usage.json` tracks characters reserved before API calls and is committed by GitHub Actions. Do not delete or reset it during a billing month. DeepL's billing month may differ from the UTC calendar month; this local budget is an approximation, not a guarantee against hitting the provider limit. If DeepL rejects requests, the site displays the source text and retries on a later run.
+- The source headline and summary remain in `data/statements.json`; translations are stored in `data/statements.bg.json`, `data/statements.ro.json`, and `data/statements.uk.json`.
+- DeepL does not automatically translate full linked articles. Existing translations may be refreshed once because the cache signature now reflects the capped source text.
+
+## One-time Developer credit: 90-day pacing
+
+This version caps DeepL calls to **900,000 source characters total** and releases a cumulative allowance of **10,000 characters per UTC day**, measured from the first deployment of this version. The remaining 100,000 characters of the advertised one-time 1,000,000 credit are kept as a reserve. Unused daily allowance rolls forward, but the lifetime cap **does not reset after 90 days**. Existing translation cache is reused and no more than 500 characters of title+summary are sent per news item, per target language. If the daily or total limit is reached, the source-language text remains visible and translations resume when pacing allows.
+
+**Important:** This does not ensure the DeepL provider credit will last 90 days if the same key is used elsewhere, if provider billing counts characters differently, or if prior API use is not recorded in `data/translation_usage.json`. The start date is established from the committed usage file; do not delete or reset that file. DeepL API usage dashboard is authoritative.

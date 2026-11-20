@@ -2,6 +2,7 @@
 import json, re, urllib.parse, urllib.request, xml.etree.ElementTree as ET
 from pathlib import Path
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 BASE = Path(__file__).resolve().parents[1]
 QUERIES = {
   "Bulgaria": '(site:mfa.bg OR site:government.bg OR site:bta.bg) ("Black Sea" OR "Черно море") (security OR maritime OR сигурност)',
@@ -11,6 +12,9 @@ QUERIES = {
 existing = json.loads((BASE/'data/statements.json').read_text())
 known = {x['url'].split('?')[0].rstrip('/') for x in existing}
 queue=[]
+seen_titles={(x.get('region',''),x.get('title','').lower()) for x in existing}
+added=0
+now=datetime.now(timezone.utc)
 for region, query in QUERIES.items():
     url='https://news.google.com/rss/search?'+urllib.parse.urlencode({'q':query,'hl':'en','gl':'US','ceid':'US:en'})
     try:
@@ -22,12 +26,35 @@ for region, query in QUERIES.items():
             link=(item.findtext('link') or '').strip()
             if not link or link.split('?')[0].rstrip('/') in known: continue
             if not re.search(r'black sea|marea neagr|черно море|maritime|shipping|морск',title,re.I): continue
+            try:
+                published=parsedate_to_datetime(item.findtext('pubDate')).astimezone(timezone.utc)
+            except (TypeError, ValueError, IndexError):
+                continue
+            if published>now or (now-published).days>14: continue
+            source_node=item.find('source')
+            publisher=(source_node.text or '').strip() if source_node is not None else ''
+            if not publisher: continue
+            # Automatically published entries are explicitly labeled as indexed news
+            # headlines, NOT verified quotations or independently established facts.
+            normalized=(region,title.lower())
+            if normalized in seen_titles: continue
+            seen_titles.add(normalized)
+            existing.append({'date':published.date().isoformat(),'region':region,
+              'source':publisher,
+              'title':title[:220],
+              'summary':'News headline from the linked source. Open the original report for details and context.',
+              'url':link})
+            known.add(link.split('?')[0].rstrip('/'))
+            added+=1
             queue.append({'region':region,'title':title,'discovery_url':link,'published_raw':item.findtext('pubDate'),'status':'Needs source and date verification'})
     except Exception as exc:
         print(f'{region}: RSS retrieval unavailable: {exc}')
 # Google News links are discovery leads, not evidence of official publication.
 # Avoid duplicate candidate headlines; review each original official statement manually.
 unique={ (x['region'],x['title'].lower()):x for x in queue }
+existing.sort(key=lambda x:x.get('date',''),reverse=True)
+(BASE/'data/statements.json').write_text(json.dumps(existing,ensure_ascii=False,indent=2)+'\n')
+print('New automatically indexed headlines:',added)
 path=BASE/'data/statement_candidates.json'
 path.write_text(json.dumps({'checked_at':datetime.now(timezone.utc).isoformat(),'candidates':list(unique.values())[:80]},ensure_ascii=False,indent=2)+'\n')
 print('Candidate statements:',len(unique))
