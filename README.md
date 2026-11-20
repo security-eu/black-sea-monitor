@@ -95,3 +95,6 @@ This version caps DeepL calls to **900,000 source characters total** and release
 - Map and incident archive show **only records with country Romania or Bulgaria**. The underlying source `data/incidents.json` is retained for provenance, but other countries are not displayed.
 - CARTO Positron basemap with Natural Earth administrative boundary overlay for Romania and Bulgaria (requires access to the public GeoJSON CDN); country outlines may not appear when offline.
 - Original news records and source URLs remain unchanged. DeepL lifetime budget and cached BG/RO translations remain in place.
+
+## Map tiles fix
+Replaced CARTO tile layers that displayed API KEY REQUIRED with the standard OpenStreetMap tile endpoint. OSM standard tiles do not require a key for reasonable use; comply with its tile usage policy (attribution, caching, no bulk downloads). Country highlight overlays still use external GeoJSON CDN.
