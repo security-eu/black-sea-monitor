@@ -98,6 +98,51 @@ for lang, _ in LANGUAGES:
         previous = []
     previous_by_lang[lang] = {row['url']: row for row in previous if row.get('url')}
 
+# Incidents share the SAME usage counter and DeepL key as the news feed.
+# Priority is given to new maritime incident cards, whose translations can be
+# displayed on the map and in the archive. English originals remain canonical.
+incident_source = json.loads((DATA / 'incidents.json').read_text(encoding='utf-8'))
+incident_fields = ('type','method','location','summary','locationPrecision')
+incident_results = {lang: [] for lang,_ in LANGUAGES}
+incident_cache = {}
+for lang,_ in LANGUAGES:
+    try:
+        old_incidents=json.loads((DATA / f'incidents.{lang}.json').read_text(encoding='utf-8'))
+    except (FileNotFoundError, ValueError):
+        old_incidents=[]
+    incident_cache[lang]={row['id']:row for row in old_incidents if row.get('id')}
+for row in incident_source:
+    # Each incident has at most 500 source characters translated per target.
+    trimmed={}
+    remaining=MAX_ITEM_CHARS
+    for field in incident_fields:
+        value=str(row.get(field) or '').strip()
+        trimmed[field]=value[:remaining]
+        remaining-=len(trimmed[field])
+    original=[trimmed[f] for f in incident_fields if trimmed[f]]
+    cost=sum(map(len,original))
+    signature=hashlib.sha256(json.dumps(trimmed,sort_keys=True,ensure_ascii=False).encode('utf-8')).hexdigest()
+    for lang,target in LANGUAGES:
+        prior=incident_cache[lang].get(row.get('id'))
+        if prior and prior.get('_source_hash')==signature and prior.get('_translated'):
+            incident_results[lang].append(prior)
+            continue
+        translated=None
+        if KEY and cost and usage['characters_reserved']+cost<=allowed_today:
+            usage['characters_reserved']+=cost
+            save_usage()
+            translated=translate(original,target)
+        translated_fields=dict(trimmed)
+        if translated:
+            translated_fields.update(zip([f for f in incident_fields if trimmed[f]],translated))
+        # Never show a partially translated synopsis as a complete translation.
+        incident_results[lang].append({'id':row['id'],**translated_fields,
+          '_source_hash':signature,'_translated':bool(translated)})
+for lang,_ in LANGUAGES:
+    (DATA / f'incidents.{lang}.json').write_text(
+        json.dumps(incident_results[lang],ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    print(f'{lang}: translated incident cards {sum(bool(x["_translated"]) for x in incident_results[lang])}/{len(incident_results[lang])}')
+
 for row in SOURCE:
     title, summary = trimmed_fields(row)
     signature = hashlib.sha256((title + '\0' + summary).encode('utf-8')).hexdigest()
