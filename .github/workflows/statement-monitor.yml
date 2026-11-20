@@ -1,0 +1,28 @@
+name: Discover Black Sea official statements
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Discover candidate statements
+        run: python scripts/update_statements.py
+      - name: Open review pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/statement-candidates
+          delete-branch: true
+          commit-message: 'Update statement discovery candidates'
+          title: 'Review newly discovered Black Sea statements'
+          body: 'Discovery leads only. Verify each original official source, exact date, speaker and summary before adding it to data/statements.json. The public feed is not auto-edited.'
+          add-paths: data/statement_candidates.json
