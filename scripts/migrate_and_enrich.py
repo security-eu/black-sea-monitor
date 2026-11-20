@@ -54,13 +54,14 @@ put('statements.json',unique)
 i=get('incidents.json')
 for r in i:
  r['category']=r.get('category') or 'vessel_strike'
- r['event_kind']='incident'
+ r['event_kind']=r.get('event_kind') or 'incident'
  old=r.get('attribution','unknown')
- r['attribution_status']='claimed' if old in ('reported','confirmed') and 'attributed' in (r.get('summary') or '').lower() else 'undetermined'
+ if not r.get('attribution_status'):
+  r['attribution_status']='claimed' if old in ('reported','confirmed') and 'attributed' in (r.get('summary') or '').lower() else 'undetermined'
  r['attribution_details']=r.get('attribution_details') or ("Ukraine attributed this strike to Russia; cited sources should be consulted for the exact claim." if r['id']=='aya-2024' else "No independently verified actor attribution is recorded in the dataset.")
  r['location_precision']=r.get('locationPrecision','')
  r['reviewed']=not r.get('auto_discovered',False)
- r['position_status']='approximate' if r.get('lat') and r.get('lon') else 'unlocated'
+ r['position_status']=r.get('position_status') or ('approximate' if r.get('lat') is not None and r.get('lon') is not None else 'unlocated')
 # Distinguish gas husky: source wording does not itself establish verified actor attribution.
 for r in i:
  if r['id']=='gas-husky-2026':

@@ -142,8 +142,11 @@ for lang, target in LANGUAGES:
                                   '_source_hash':signature,'_translated':True})
             translated_incidents += 1
         else:
-            new_incidents.append({'id':row['id'], **trimmed,
-                                  '_source_hash':signature,'_translated':False})
+            if prior and prior.get('_source_hash') == signature:
+                new_incidents.append(prior)
+            else:
+                new_incidents.append({'id':row['id'], **trimmed,
+                                      '_source_hash':signature,'_translated':False})
     path = DATA / f'incidents.{lang}.json'
     serialized = json.dumps(new_incidents, ensure_ascii=False, indent=2)+'\n'
     if not path.exists() or path.read_text(encoding='utf-8') != serialized:
@@ -171,8 +174,11 @@ for lang, target in LANGUAGES:
                              '_source_hash':signature,'_translated':True})
             translated_news += 1
         else:
-            new_news.append({**row, 'title':title,'summary':summary,
-                             '_source_hash':signature,'_translated':False})
+            if prior and prior.get('_source_hash') == signature:
+                new_news.append(prior)
+            else:
+                new_news.append({**row, 'title':title,'summary':summary,
+                                 '_source_hash':signature,'_translated':False})
     path = DATA / f'statements.{lang}.json'
     serialized = json.dumps(new_news,ensure_ascii=False,indent=2)+'\n'
     if not path.exists() or path.read_text(encoding='utf-8') != serialized:

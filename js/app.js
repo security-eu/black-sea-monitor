@@ -17,7 +17,7 @@ function fmtCategory(x){return t(({vessel_strike:'vesselStrike',mine:'mines',dro
 function fmtStatus(x){return t(({claimed:'claimed',authority_confirmed:'confirmed',undetermined:'undetermined'})[x]||'undetermined')}
 async function getJson(path,fallback){try{let r=await fetch(path+'?v=3',{cache:'no-cache'});if(!r.ok)throw Error(r.status);return await r.json()}catch(e){console.warn('Data load',path,e);return fallback}}
 function translatedIncident(row){const saved=translations.incidents[state.lang]?.get(row.id);if(!saved||!saved._translated)return row;return {...row,...Object.fromEntries(['type','method','location','summary','locationPrecision','attribution_details'].filter(k=>saved[k]).map(k=>[k,saved[k]]))}}
-function translatedStatement(row){const saved=translations.statements[state.lang]?.get(row.url);return saved&&saved._translated?{...row,title:saved.title||row.title,summary:saved.summary||row.summary}:row}
+function translatedStatement(row){const saved=translations.statements[state.lang]?.get(row.url)||translations.statements[state.lang]?.get(row.id);return saved&&saved._translated?{...row,title:saved.title||row.title,summary:saved.summary||row.summary}:row}
 function updateURL(){let url=new URL(location.href);url.searchParams.set('lang',state.lang);if(state.incident)url.hash=encodeURIComponent(state.incident);else url.hash='';history.replaceState(null,'',url)}
 async function applyLanguage(lang){if(!allowed.includes(lang))return;const oldScroll=$('newsList').scrollTop;state.lang=lang;localStorage.setItem('eu-black-sea-lang',lang);const dict=await getJson(`i18n/${lang}.json`,{});i18n=dict;document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});document.querySelectorAll('[data-switch]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.switch===lang)));document.title='EU Black Sea / Maritime Security Monitor';renderNews();renderMapData();renderChart();renderArchive();renderAbout();if(state.incident)openIncident(state.incident,false);setTab(state.tab);$('newsList').scrollTop=oldScroll;updateURL()}
 function selectOptions(){const k=$('kindFilter');const r=$('regionFilter');k.value=state.kind;r.value=state.region;$('categoryFilter').value=state.category;$('countryFilter').value=state.country;$('attributionFilter').value=state.attribution;$('searchInput').value=state.search}
@@ -36,7 +36,7 @@ function isMappable(r){
 }
 function markerColor(r){if(r.category==='mine_action')return '#7b8391';if(r.category==='mine')return '#a16e37';if(r.category==='drone_debris')return '#985e98';return r.country==='Romania'?'#1683a4':'#d2a149'}
 function renderMapData(){if(!state.map)return;state.markers.forEach(m=>state.map.removeLayer(m));state.markers=[];const rows=filterIncidents(),mappable=rows.filter(isMappable);for(const r of mappable){const marker=L.circleMarker([Number(r.lat),Number(r.lon)],{radius:r.category==='mine_action'?6:7,fillColor:markerColor(r),color:'#ffffff',weight:2.2,fillOpacity:.94,interactive:true});marker.addTo(state.map).on('click',()=>openIncident(r.id));marker.bindTooltip(E(r.vessel||r.title||r.id),{direction:'top'});state.markers.push(marker)}
- if(!mappable.length){console.warn('No mappable incidents. Check data/incidents.json, coordinates, and map filters.');}
+ if(!mappable.length){console.warn('No mappable incidents. Data rows:',incidents.length,'matched:',rows.length,'country values:',[...new Set(incidents.map(x=>x.country))]);}
  $('mapCount').textContent=`${rows.filter(r=>r.event_kind!=='response').length} ${t('pressCount')}`;renderArchive();selectOptions()}
 function zoomMarkers(){if(!state.map)return;const pts=filterIncidents().filter(isMappable);if(!pts.length){state.map.setView([43.25,29.2],7);return}const b=L.latLngBounds(pts.map(r=>[r.lat,r.lon]));state.map.fitBounds(b.pad(.14),{maxZoom:9,animate:true})}
 function normalizeStatement(r){if(r.kind)return r;let host='';try{host=new URL(r.url).hostname}catch{};
@@ -64,9 +64,20 @@ async function init(){const initialHash=decodeURIComponent(location.hash.substri
    let lat=r.lat??r.latitude??r.coordinates?.lat;
    let lon=r.lon??r.lng??r.longitude??r.coordinates?.lon??r.coordinates?.lng;
    if(Array.isArray(r.coordinates)&&r.coordinates.length>=2){lon??=r.coordinates[0];lat??=r.coordinates[1]}
-   return {...r,lat,lon};
+   if(Array.isArray(r.geometry?.coordinates)&&r.geometry.coordinates.length>=2){lon??=r.geometry.coordinates[0];lat??=r.geometry.coordinates[1]}
+   if(typeof lat==='string') lat=Number(lat.trim().replace(',','.'));
+   if(typeof lon==='string') lon=Number(lon.trim().replace(',','.'));
+   let country=r.country;
+   if(['RO','ROU','România','Румъния'].includes(country))country='Romania';
+   if(['BG','BGR','България'].includes(country))country='Bulgaria';
+   return {...r,country,lat,lon,category:r.category||'vessel_strike',event_kind:r.event_kind||'incident',attribution_status:r.attribution_status||'undetermined',position_status:r.position_status||'approximate'};
  });
- news=news.map(normalizeStatement);translations.incidents.bg=new Map(data[2].map(r=>[r.id,r]));translations.incidents.ro=new Map(data[3].map(r=>[r.id,r]));translations.statements.bg=new Map(data[4].map(r=>[r.url,r]));translations.statements.ro=new Map(data[5].map(r=>[r.url,r]));updated=data[6];
+ news=news.map(normalizeStatement);const rows=v=>Array.isArray(v)?v:Array.isArray(v?.items)?v.items:[];
+ translations.incidents.bg=new Map(rows(data[2]).filter(r=>r?.id).map(r=>[r.id,r]));
+ translations.incidents.ro=new Map(rows(data[3]).filter(r=>r?.id).map(r=>[r.id,r]));
+ translations.statements.bg=new Map(rows(data[4]).filter(r=>r?.url||r?.id).flatMap(r=>[[r.url,r],[r.id,r]].filter(x=>x[0])));
+ translations.statements.ro=new Map(rows(data[5]).filter(r=>r?.url||r?.id).flatMap(r=>[[r.url,r],[r.id,r]].filter(x=>x[0])));
+ updated=data[6]||{};
  document.querySelectorAll('[data-switch]').forEach(btn=>btn.onclick=()=>applyLanguage(btn.dataset.switch));document.querySelectorAll('[data-tab]').forEach(btn=>btn.onclick=()=>setTab(btn.dataset.tab));$('filterButton').onclick=()=>{$('filtersDialog').showModal()};$('aboutButton').onclick=()=>{location.href='about.html?lang='+state.lang};$('footerMethod').onclick=e=>{e.preventDefault();location.href='about.html?lang='+state.lang};$('contactLink').onclick=e=>{e.preventDefault();location.href='about.html?lang='+state.lang};$('archiveToggle').onclick=()=>{state.showArchive=!state.showArchive;renderArchive()};$('fitMap').onclick=zoomMarkers;document.querySelectorAll('[data-period]').forEach(btn=>btn.onclick=()=>{state.period=btn.dataset.period;document.querySelectorAll('[data-period]').forEach(el=>el.classList.toggle('selected',el===btn));renderMapData()});$('categoryFilter').onchange=e=>{state.category=e.target.value;renderMapData()};$('countryFilter').onchange=e=>{state.country=e.target.value;renderMapData()};$('attributionFilter').onchange=e=>{state.attribution=e.target.value;renderMapData()};$('searchInput').oninput=e=>{state.search=e.target.value;renderMapData()};$('clearFilters').onclick=()=>{Object.assign(state,{category:'all',country:'all',attribution:'all',search:''});renderMapData();$('filtersDialog').close()};$('kindFilter').onchange=e=>{state.kind=e.target.value;renderNews()};$('regionFilter').onchange=e=>{state.region=e.target.value;renderNews()};safeDialogEvents('filtersDialog','closeFilters');safeDialogEvents('aboutDialog','closeAbout');$('closeIncident').onclick=closeIncident;$('incidentDialog').onclose=()=>{state.incident=null;updateURL()};$('incidentDialog').onclick=e=>{if(e.target===$('incidentDialog'))closeIncident()};window.addEventListener('hashchange',()=>{const id=decodeURIComponent(location.hash.substring(1));if(id&&incidents.some(r=>r.id===id)){setTab('map');openIncident(id,false)}else if(!id && $('incidentDialog').open)closeIncident()});
  initMap();
  try{await applyLanguage(state.lang)}catch(err){console.error('Language interface failed; map remains available',err)}

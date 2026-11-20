@@ -1,0 +1,15 @@
+RECOVERY PATCH — 20 NOV 2026
+
+1. First download a backup of your GitHub repository (Code > Download ZIP).
+2. Upload this patch preserving directories and overwrite same-named files.
+3. DO NOT overwrite/delete any data/*.json, especially translation_usage.json.
+4. Workflows changed: the scheduled workflow now runs translations IN THE SAME JOB as discovery, before committing.
+5. translate-after-merge.yml is manual-only. This prevents a duplicate DeepL billing run.
+6. Start Auto-update Black Sea news and incident leads once manually, open logs and check Translate published records.
+7. Force-refresh the site and check markers, BG/RO switch, and news.
+
+Important: The old source finder discovers candidates but does not auto-publish unverified official statements. The scheduler updates candidate leads, validated known incidents, and cached translations. It will not invent a vessel strike point or promote a Google News aggregator URL into a verified official statement.
+
+The DeepL cumulative 900,000-character quota is preserved in data/translation_usage.json. Do not delete or reset it. Translation will pause when accumulated allowance is reached.
+
+The patch has NO data files. If the deployed incidents.json is empty or malformed, upload the actual data file for diagnosis.
