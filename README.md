@@ -36,7 +36,7 @@ Existing records inherited from the previous site are **not retrospectively cert
 - `assets/style.css`: a single stylesheet; `js/app.js`: single application module.
 - `i18n/en.json`, `i18n/bg.json`, `i18n/ro.json`: interface dictionaries.
 - `data/incidents.{ro,bg}.json`, `data/statements.{ro,bg}.json`: cached DeepL translations; DO NOT delete these on upgrades.
-- `data/translation_usage.json`: **shared cumulative DeepL budget**. DO NOT reset it. 900,000-character lifetime cap paced at 10,000/day across 90 days; DeepL's provider-reported quota is authoritative, and other uses of the API key are not visible to this site.
+- `data/translation_usage.json`: **shared cumulative DeepL budget**. DO NOT reset it. 900,000-character lifetime safety cap, no daily limit. Only shortened texts are translated (title up to 200 characters, summary up to 260 in whole sentences, short incident fields); identical strings are translated once and failed requests are refunded. The site links to the original source for full text; DeepL's provider-reported quota is authoritative, and other uses of the API key are not visible to this site.
 - `scripts/migrate_and_enrich.py`: idempotent structured data migration/curated historical records; preserves other live source records.
 - `scripts/validate_data.py` and `schemas/*.json`: publication schema checks.
 - `scripts/generate_feeds.py`: RSS/CSV and last-updated metadata. Run after editing the datasets.
