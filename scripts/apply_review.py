@@ -108,6 +108,33 @@ def build_incident(f, number):
         'reviewed': True, 'sources': sources[:6], 'review_issue': number}
 
 
+def _norm(s):
+    return re.sub(r'[^a-z0-9а-я]+', '', (s or '').lower())
+
+
+def find_duplicate(target, record, rows):
+    """Describe an existing record that is probably the same event, or return None."""
+    from datetime import date as _d
+    if target == 'statements.json':
+        url = record['url'].split('?')[0].rstrip('/')
+        for r in rows:
+            if r.get('url', '').split('?')[0].rstrip('/') == url or _norm(r.get('title')) == _norm(record['title']):
+                return f"{r.get('title')} ({r.get('date')})"
+        return None
+    day = _d.fromisoformat(record['date'])
+    name = _norm(record['vessel'])
+    unnamed = record['vessel'].lower().startswith('unnamed')
+    for r in rows:
+        try:
+            gap = abs((_d.fromisoformat(r.get('date', '')) - day).days)
+        except ValueError:
+            continue
+        same_name = not unnamed and name and (name in _norm(r.get('vessel')) or _norm(r.get('vessel')) in name) and len(name) > 3
+        if (same_name and gap <= 30) or (unnamed and r.get('country') == record['country'] and gap <= 1):
+            return f"{r.get('vessel')} ({r.get('date')}, {r.get('country')})"
+    return None
+
+
 def main():
     number = int(os.environ['ISSUE_NUMBER'])
     label = os.environ.get('LABEL', '').lower()
@@ -136,6 +163,19 @@ def main():
         sys.exit(0)
 
     rows = load_json(target, [])
+    if fields.get('duplicate', '').strip().lower() not in ('yes', 'да', 'y'):
+        dup = find_duplicate(target, record, rows)
+        if dup:
+            gh('POST', f'/issues/{number}/comments', {'body': (
+                f'⚠️ Not published: this looks like a duplicate of **{dup}**, already on the site.\n\n'
+                'If it really is a different event (e.g. a second strike on the same ship), add the line `duplicate: yes` '
+                'to the review block and add **approve** again. Otherwise add **reject**.\n'
+                'Похоже на дубль. Если это другое событие, добавь строку `duplicate: yes` и снова поставь **approve**, иначе **reject**.')})
+            try:
+                gh('DELETE', f'/issues/{number}/labels/approve')
+            except Exception:
+                pass
+            sys.exit(0)
     ids = {r.get('id') for r in rows}
     if record['id'] in ids:
         record['id'] = record['id'] + '-' + short_id(number)

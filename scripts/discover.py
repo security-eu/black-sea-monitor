@@ -159,8 +159,17 @@ for country, query, lang in INCIDENT_QUERIES:
 clusters = defaultdict(list)
 for item in raw:
     name = vessel_name(item['title'])
-    if name and any(name in k or k in name for k in known_names if len(k) > 3):
-        remember([item['url']])  # already on the map
+    def same_ship_recent(n, day):
+        for _, k, d in known:
+            try:
+                gap = abs((date.fromisoformat(d) - day).days)
+            except ValueError:
+                continue
+            if len(k) > 3 and (n in k or k in n) and gap <= 30:
+                return True
+        return False
+    if name and same_ship_recent(name, item['date'].date()):
+        remember([item['url']])  # already on the map; a new strike weeks later still gets reviewed
         continue
     if name:
         key = (item['country'], name)
@@ -209,7 +218,19 @@ def incident_issue(lead):
         'attribution: undetermined', 'attribution_details: ', f"summary: {lead['title']}", 'sources:', *lines,
     ])
     body = [f"**Possible incident near {lead['country']}** · {len(lead['publishers'])} outlet(s)", '',
-            '**Headlines:**', *[f'- {h}' for h in lead['headlines']], '']
+            '**Headlines:**', *[f'- {h}' for h in lead['headlines']], '',
+            '> 📅 `date` is when the first report was **published**. Set the actual date of the incident; '
+            'old incidents reported late are welcome, just with their real date. / Укажи реальную дату инцидента, а не дату публикации.', '']
+    nearby = []
+    for r in incidents:
+        try:
+            gap = abs((date.fromisoformat(r.get('date', '')) - date.fromisoformat(lead['date'])).days)
+        except ValueError:
+            continue
+        if r.get('country') == lead['country'] and gap <= 7:
+            nearby.append(f"- {r.get('vessel')} · {r.get('date')} · {r.get('location', '')}")
+    if nearby:
+        body += ['**Already on the map nearby in time (possible duplicates) / Уже на карте в эти дни:**', *nearby[:8], '']
     title = f"[Incident] {lead['vessel'] or 'Unnamed vessel'} · {lead['country']} · {lead['date']}"
     return title, body, block
 
