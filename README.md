@@ -39,3 +39,7 @@ In GitHub Settings → Actions → General, allow workflows to create pull reque
 ## Expanded political archive
 
 The political statements archive contains 17 sourced records, including Romania-specific statements from AGERPRES and the Romanian Ministry of Internal Affairs, plus EU institutional releases. Entries are summaries, not verbatim quotations. The RSS workflow generates review candidates, not automatic publication. Editorial verification remains required.
+
+## Always-visible political statements
+
+Desktop: statements occupy a fixed right-hand column next to the interactive map. Mobile: statements appear directly below the map in a permanently visible scrollable feed. Existing scheduled review workflow is unchanged.
