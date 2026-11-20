@@ -1,4 +1,4 @@
-"""Discover candidate official statements; never publish unverified text."""
+"""Index recent Black Sea news headlines directly; never call them verified quotations."""
 import json, re, urllib.parse, urllib.request, xml.etree.ElementTree as ET
 from pathlib import Path
 from datetime import datetime, timezone
@@ -11,7 +11,6 @@ QUERIES = {
 }
 existing = json.loads((BASE/'data/statements.json').read_text())
 known = {x['url'].split('?')[0].rstrip('/') for x in existing}
-queue=[]
 seen_titles={(x.get('region',''),x.get('title','').lower()) for x in existing}
 added=0
 now=datetime.now(timezone.utc)
@@ -46,15 +45,10 @@ for region, query in QUERIES.items():
               'url':link})
             known.add(link.split('?')[0].rstrip('/'))
             added+=1
-            queue.append({'region':region,'title':title,'discovery_url':link,'published_raw':item.findtext('pubDate'),'status':'Needs source and date verification'})
     except Exception as exc:
         print(f'{region}: RSS retrieval unavailable: {exc}')
-# Google News links are discovery leads, not evidence of official publication.
-# Avoid duplicate candidate headlines; review each original official statement manually.
-unique={ (x['region'],x['title'].lower()):x for x in queue }
+# Google News links are news-discovery leads, not proof of an official statement.
 existing.sort(key=lambda x:x.get('date',''),reverse=True)
-(BASE/'data/statements.json').write_text(json.dumps(existing,ensure_ascii=False,indent=2)+'\n')
+if added:
+    (BASE/'data/statements.json').write_text(json.dumps(existing,ensure_ascii=False,indent=2)+'\n')
 print('New automatically indexed headlines:',added)
-path=BASE/'data/statement_candidates.json'
-path.write_text(json.dumps({'checked_at':datetime.now(timezone.utc).isoformat(),'candidates':list(unique.values())[:80]},ensure_ascii=False,indent=2)+'\n')
-print('Candidate statements:',len(unique))
