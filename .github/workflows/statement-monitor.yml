@@ -1,28 +1,34 @@
-name: Discover Black Sea official statements
+name: Auto-update Black Sea news
 on:
   schedule:
     - cron: '17 */6 * * *'
   workflow_dispatch:
 permissions:
   contents: write
-  pull-requests: write
+concurrency:
+  group: auto-update-black-sea-news
+  cancel-in-progress: false
 jobs:
-  discover:
+  update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Discover candidate statements
+      - name: Fetch and index recent headlines
         run: python scripts/update_statements.py
-      - name: Open review pull request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: automation/statement-candidates
-          delete-branch: true
-          commit-message: 'Update statement discovery candidates'
-          title: 'Review newly discovered Black Sea statements'
-          body: 'Discovery leads only. Verify each original official source, exact date, speaker and summary before adding it to data/statements.json. The public feed is not auto-edited.'
-          add-paths: data/statement_candidates.json
+      - name: Translate all new or changed statements
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+          DEEPL_API_URL: ${{ vars.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate' }}
+        run: python scripts/translate_statements.py
+      - name: Commit and publish new headlines
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/statements.json data/statements.bg.json data/statements.ro.json data/statements.uk.json data/translation_usage.json data/statement_candidates.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update Black Sea news feed"
+            git push
+          fi
