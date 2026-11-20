@@ -1,0 +1,42 @@
+name: Translate published Black Sea records
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/incidents.json'
+      - 'data/statements.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: black-sea-deepl-budget
+  cancel-in-progress: false
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refresh latest cache and cumulative spending counter
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+      - name: Translate new content into Romanian and Bulgarian
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+          DEEPL_API_URL: ${{ vars.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate' }}
+        run: python scripts/translate_statements.py
+      - name: Preserve cached translations and shared budget
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/statements.bg.json data/statements.ro.json data/incidents.bg.json data/incidents.ro.json data/translation_usage.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update cached BG/RO translations and DeepL budget'
+            git push origin HEAD:main
+          fi

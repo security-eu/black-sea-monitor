@@ -1,4 +1,4 @@
-name: Auto-update Black Sea news
+name: Auto-update Black Sea news and incident leads
 on:
   schedule:
     - cron: '17 */6 * * *'
@@ -6,31 +6,39 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: auto-update-black-sea-news
+  group: black-sea-auto-publish
   cancel-in-progress: false
 jobs:
-  update:
+  discover-and-publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Fetch and index recent headlines
+      - name: Install schema validator
+        run: python -m pip install --disable-pip-version-check 'jsonschema==4.23.0'
+      - name: Merge legacy records and add sourced historical entries
+        run: python scripts/migrate_and_enrich.py
+      - name: Discover press and official-statement leads
         run: python scripts/update_statements.py
-      - name: Discover corroborated vessel attack reports near Romania and Bulgaria
+      - name: Discover maritime incident leads (do not map unsupported positions)
         run: python scripts/discover_incidents.py
-      - name: Translate new statements and incident cards
-        env:
-          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
-          DEEPL_API_URL: ${{ vars.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate' }}
-        run: python scripts/translate_statements.py
-      - name: Commit and publish new headlines
+      - name: Validate all published records against JSON schemas
+        run: python scripts/validate_data.py
+      - name: Refresh metadata, RSS and CSV
+        run: python scripts/generate_feeds.py
+      - name: Commit updates directly to main (no Pull Request)
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/statements.json data/statements.bg.json data/statements.ro.json data/incidents.json data/incidents.bg.json data/incidents.ro.json data/incident_candidates.json data/translation_usage.json data/statement_candidates.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Auto-update Black Sea news feed"
-            git push
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/ rss.xml
+          if git diff --cached --quiet; then
+            echo 'No new or changed records.'
+          else
+            git commit -m 'Auto-publish validated Black Sea updates and discovery leads'
+            git push origin HEAD:main
           fi
