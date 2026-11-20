@@ -1,50 +1,132 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e2638">
-<title>EU Black Sea / Maritime Security Monitor</title>
-<meta name="description" content="Independent documentation of maritime incidents, mine threats and official security statements concerning Romania and Bulgaria on the Black Sea coast.">
-<link rel="canonical" href="https://security-eu.github.io/">
-<link rel="alternate" hreflang="en" href="https://security-eu.github.io/?lang=en">
-<link rel="alternate" hreflang="bg" href="https://security-eu.github.io/?lang=bg">
-<link rel="alternate" hreflang="ro" href="https://security-eu.github.io/?lang=ro">
-<link rel="alternate" hreflang="x-default" href="https://security-eu.github.io/">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EU Black Sea Maritime Security Monitor">
-<meta property="og:title" content="EU Black Sea / Maritime Security Monitor">
-<meta property="og:description" content="Documented maritime incidents, coast security and sourced statements from Romania, Bulgaria and EU institutions.">
-<meta property="og:url" content="https://security-eu.github.io/"><meta property="og:image" content="https://security-eu.github.io/assets/og-preview.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08141f">
+<title>EU Black Sea Monitor · Maritime security on the Romanian and Bulgarian coast</title>
+<meta name="description" content="Independent, source-linked record of attacks on vessels, drifting sea mines, drone debris and official statements affecting the EU Black Sea coast of Romania and Bulgaria.">
+<link rel="canonical" href="https://security-eu.github.io/black-sea-monitor/">
+<link rel="alternate" hreflang="en" href="https://security-eu.github.io/black-sea-monitor/?lang=en">
+<link rel="alternate" hreflang="bg" href="https://security-eu.github.io/black-sea-monitor/?lang=bg">
+<link rel="alternate" hreflang="ro" href="https://security-eu.github.io/black-sea-monitor/?lang=ro">
+<link rel="alternate" hreflang="x-default" href="https://security-eu.github.io/black-sea-monitor/">
+<link rel="alternate" type="application/rss+xml" title="EU Black Sea Monitor" href="rss.xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EU Black Sea Monitor">
+<meta property="og:title" content="EU Black Sea Monitor">
+<meta property="og:description" content="Source-linked map of maritime incidents, sea mines and official statements on the Romanian and Bulgarian Black Sea coast.">
+<meta property="og:url" content="https://security-eu.github.io/black-sea-monitor/">
+<meta property="og:image" content="https://security-eu.github.io/black-sea-monitor/assets/og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="icon" href="favicon.ico">
-<link rel="stylesheet" href="assets/style.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoWAG6Qv8DdlA=" crossorigin="anonymous">
-<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
-<script type="module" src="js/app.js"></script>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="assets/style.css?v=4">
+<script defer src="assets/vendor/leaflet/leaflet.js"></script>
+<script type="module" src="js/app.js?v=4"></script>
 </head>
 <body>
-<header class="site-header">
- <div class="brand"><a href="?lang=en" class="brand-link">EU BLACK SEA <span class="brand-sep">/</span> MARITIME SECURITY MONITOR</a><p data-i18n="subtitle">Maritime risks, documented incidents and EU coastal security</p></div>
- <nav class="language-switch" aria-label="Languages"><button type="button" data-switch="en" lang="en">EN</button><button type="button" data-switch="bg" lang="bg">BG</button><button type="button" data-switch="ro" lang="ro">RO</button></nav>
- <div class="header-actions"><button id="aboutButton" class="ghost" type="button" data-i18n="about">About &amp; methodology</button><button id="filterButton" class="ghost" type="button" aria-haspopup="dialog" data-i18n="filters">Filters</button></div>
-</header>
-<nav id="mobileTabs" class="mobile-tabs" aria-label="Main sections"><button type="button" class="active" data-tab="map" data-i18n="map">Map</button><button type="button" data-tab="statements" data-i18n="statements">Statements</button></nav>
-<main class="layout" id="layout">
- <section class="statements-panel" id="statementPanel" aria-labelledby="newsTitle">
-  <div class="statement-heading"><div class="eyebrow" data-i18n="political">POLITICAL &amp; INSTITUTIONAL RECORD</div><h2 id="newsTitle">EU Black Sea · Political statements</h2><p data-i18n="statementExplainer">Verified official records first. Press reports and automated discoveries are clearly labelled.</p>
-   <div class="news-controls"><label><span data-i18n="show">Show</span><select id="kindFilter"><option value="official" data-i18n="officialOnly">Official records</option><option value="all" data-i18n="allKinds">All kinds</option><option value="news" data-i18n="pressNews">Press reports</option><option value="auto" data-i18n="autoNews">Auto discoveries</option></select></label><label><span data-i18n="region">Region</span><select id="regionFilter"><option value="all" data-i18n="all">All</option><option value="Romania">Romania</option><option value="Bulgaria">Bulgaria</option><option value="EU">EU</option></select></label></div>
+<a class="skip" href="#incidentList">Skip to incident list</a>
+
+<header class="topbar">
+  <a class="brand" href="./" id="brandLink">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".5"/><circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".8"/><circle cx="16" cy="16" r="3.2" fill="currentColor"/><path d="M16 1v6M16 25v6M1 16h6M25 16h6" stroke="currentColor" stroke-width="1.6"/></svg>
+    <span class="brand-text"><strong data-i18n="siteName">EU Black Sea Monitor</strong><small data-i18n="tagline">Maritime security on the Romanian and Bulgarian coast</small></span>
+  </a>
+  <div class="topbar-right">
+    <nav class="lang" aria-label="Language">
+      <button type="button" data-lang="en" lang="en">EN</button><button type="button" data-lang="bg" lang="bg">BG</button><button type="button" data-lang="ro" lang="ro">RO</button>
+    </nav>
+    <a class="link-btn" href="about.html" id="aboutLink"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span data-i18n="about">About &amp; methodology</span></a>
   </div>
-  <div id="newsList" class="news-list" aria-live="polite"></div>
-  <div class="news-footer"><span id="lastUpdated"></span><a href="rss.xml" data-i18n="rss">RSS</a></div>
- </section>
- <section class="map-column" id="mapColumn" aria-label="Incidents map">
-  <div class="map-toolbar" aria-label="Period"><div id="periodBar" class="period-bar"><button type="button" data-period="7" data-i18n="week">7 days</button><button type="button" data-period="30" data-i18n="month">30 days</button><button type="button" data-period="365" data-i18n="year">Year</button><button type="button" data-period="all" class="selected" data-i18n="allTime">All time</button></div><div class="map-tools"><select id="categoryFilter" aria-label="Incident category"><option value="all" data-i18n="allCategories">All categories</option><option value="vessel_strike" data-i18n="vesselStrike">Vessel strikes</option><option value="mine" data-i18n="mines">Sea mines</option><option value="drone_debris" data-i18n="debris">Drone debris</option><option value="port_attack" data-i18n="port">Port attacks</option><option value="mine_action" data-i18n="response">Mine-response operations</option></select><button type="button" id="fitMap" class="ghost" data-i18n="fitMap">Fit markers</button></div></div>
-  <div id="map"></div><div class="map-info"><span id="mapCount"></span><span data-i18n="approx">Approximate markers · not navigational coordinates</span></div>
-  <section class="archive" id="archive"><button type="button" id="archiveToggle" aria-expanded="false"><strong data-i18n="archive">Incident archive</strong><span id="archiveCount"></span><span id="archiveChevron">⌃</span></button><div class="archive-body" id="archiveBody" hidden><div id="archiveList"></div></div></section>
- </section>
+</header>
+
+<section class="kpis" aria-label="Summary">
+  <div class="kpi"><span class="kpi-value" id="kpiTotal">–</span><span class="kpi-label" data-i18n="kpiTotal">Documented incidents</span></div>
+  <div class="kpi"><span class="kpi-value" id="kpi30">–</span><span class="kpi-label" data-i18n="kpi30">Last 30 days</span></div>
+  <div class="kpi"><span class="kpi-value" id="kpiRo">–</span><span class="kpi-label"><i class="cdot ro"></i><span data-i18n="Romania">Romania</span></span></div>
+  <div class="kpi"><span class="kpi-value" id="kpiBg">–</span><span class="kpi-label"><i class="cdot bg"></i><span data-i18n="Bulgaria">Bulgaria</span></span></div>
+  <div class="kpi"><span class="kpi-value" id="kpiMines">–</span><span class="kpi-label" data-i18n="kpiMines">Sea mines</span></div>
+  <div class="kpi kpi-updated"><span class="kpi-label" data-i18n="updated">Updated</span><span id="updatedAt">–</span></div>
+</section>
+
+<nav class="mtabs" aria-label="Sections">
+  <button type="button" data-mtab="map" data-i18n="map">Map</button>
+  <button type="button" data-mtab="incidents" data-i18n="incidents">Incidents</button>
+  <button type="button" data-mtab="statements" data-i18n="statements">Statements</button>
+</nav>
+
+<main class="app" id="app" data-view="map" data-pane="incidents">
+  <aside class="panel" aria-label="Records">
+    <div class="ptabs" role="tablist">
+      <button type="button" role="tab" id="tabIncidents" data-pane-btn="incidents" aria-controls="paneIncidents"><span data-i18n="incidents">Incidents</span><span class="count" id="countIncidents"></span></button>
+      <button type="button" role="tab" id="tabStatements" data-pane-btn="statements" aria-controls="paneStatements"><span data-i18n="statements">Statements</span><span class="count" id="countStatements"></span></button>
+    </div>
+
+    <section class="pane" id="paneIncidents" role="tabpanel" aria-labelledby="tabIncidents">
+      <div class="filters">
+        <div class="seg" id="periodSeg" role="group" aria-label="Period">
+          <button type="button" data-period="30" data-i18n="p30">30 days</button><button type="button" data-period="90" data-i18n="p90">90 days</button><button type="button" data-period="365" data-i18n="p365">Year</button><button type="button" data-period="all" data-i18n="pAll">All</button>
+        </div>
+        <div class="filter-grid">
+          <label><span data-i18n="category">Category</span><select id="fCategory"></select></label>
+          <label><span data-i18n="country">Country</span><select id="fCountry"></select></label>
+          <label><span data-i18n="status">Attribution</span><select id="fStatus"></select></label>
+          <label class="search"><span data-i18n="search">Search</span><input id="fSearch" type="search" autocomplete="off"></label>
+        </div>
+        <div class="filter-foot"><span id="resultCount" aria-live="polite"></span><button type="button" class="text-btn" id="resetFilters" data-i18n="reset">Reset</button></div>
+      </div>
+      <ol class="list" id="incidentList"></ol>
+    </section>
+
+    <section class="pane" id="paneStatements" role="tabpanel" aria-labelledby="tabStatements" hidden>
+      <div class="filters">
+        <p class="note" data-i18n="statementsNote"></p>
+        <div class="seg" id="kindSeg" role="group" aria-label="Source type">
+          <button type="button" data-kind="official" data-i18n="kindOfficial">Official</button><button type="button" data-kind="news" data-i18n="kindNews">Press</button><button type="button" data-kind="all" data-i18n="kindAll">All</button>
+        </div>
+        <div class="filter-grid one">
+          <label><span data-i18n="region">Region</span><select id="fRegion"></select></label>
+        </div>
+      </div>
+      <ol class="list" id="newsList"></ol>
+      <div class="pane-foot"><a href="rss.xml"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5a14 14 0 0 1 14 14M5 11a8 8 0 0 1 8 8"/><circle cx="6" cy="18" r="1.5"/></svg><span data-i18n="rss">RSS feed</span></a></div>
+    </section>
+  </aside>
+
+  <section class="mapwrap" aria-label="Map">
+    <div id="map"></div>
+    <div class="map-legend" id="legend" aria-label="Legend"></div>
+    <button type="button" class="map-fit" id="fitMap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span data-i18n="fitMap">Show all</span></button>
+    <p class="map-note" data-i18n="approx"></p>
+
+    <aside class="detail" id="detail" hidden aria-labelledby="detailTitle" tabindex="-1">
+      <button type="button" class="detail-close" id="detailClose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span class="sr" data-i18n="close">Close</span></button>
+      <div id="detailBody"></div>
+    </aside>
+  </section>
 </main>
-<section class="analytics" aria-labelledby="chartTitle"><div class="analytics-heading"><div><div class="eyebrow" data-i18n="trend">TRENDS</div><h2 id="chartTitle" data-i18n="chart">Incidents by month and country</h2><p data-i18n="chartNote">Documented incidents only. Response operations excluded; incomplete reporting should not be read as absence of incidents.</p></div><div class="exports"><a href="data/incidents.csv" download data-i18n="csv">CSV</a><a href="data/incidents.json" download data-i18n="json">JSON</a></div></div><div id="chart" class="chart" role="img" aria-label="Monthly incident counts"></div><div class="chart-legend"><span class="rom-dot"></span>Romania <span class="bg-dot"></span>Bulgaria</div></section>
-<footer class="footer"><span>© EU Black Sea Maritime Security Monitor · <span data-i18n="independent">Independent research project, not an EU institution</span></span><a href="about.html" id="footerMethod" data-i18n="methodology">Methodology</a><a href="about.html" id="contactLink" data-i18n="corrections">Corrections</a></footer>
-<dialog id="incidentDialog" class="incident-dialog" aria-label="Incident details"><div id="incidentContent"></div><button class="close-round" type="button" id="closeIncident" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18"/></svg></button></dialog>
-<dialog id="filtersDialog" class="filters-dialog"><div class="dialog-header"><h2 data-i18n="filters">Filters</h2><button type="button" class="close-round" id="closeFilters" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18"/></svg></button></div><label data-i18n="country">Country</label><select id="countryFilter"><option value="all" data-i18n="all">All</option><option value="Romania">Romania</option><option value="Bulgaria">Bulgaria</option></select><label data-i18n="search">Search</label><input id="searchInput" type="search" placeholder="Vessel or description"><label data-i18n="attribution">Attribution</label><select id="attributionFilter"><option value="all" data-i18n="all">All</option><option value="claimed" data-i18n="claimed">Claimed by a party</option><option value="authority_confirmed" data-i18n="confirmed">Confirmed by authorities</option><option value="undetermined" data-i18n="undetermined">Undetermined</option></select><button type="button" id="clearFilters" class="primary" data-i18n="clear">Clear filters</button></dialog>
-<dialog id="aboutDialog" class="about-dialog"><div class="dialog-header"><h2 data-i18n="about">About &amp; methodology</h2><button type="button" class="close-round" id="closeAbout" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18"/></svg></button></div><div id="aboutText"></div></dialog>
-</body></html>
+<div class="scrim" id="scrim" hidden></div>
+
+<section class="trends" aria-labelledby="trendsTitle">
+  <div class="trends-head">
+    <div><p class="eyebrow" data-i18n="trends">Trends</p><h2 id="trendsTitle" data-i18n="chartTitle">Incidents by month</h2><p class="note" data-i18n="chartNote"></p></div>
+    <div class="downloads"><span data-i18n="downloads">Download data</span><a href="data/incidents.csv" download>CSV</a><a href="data/incidents.json" download>JSON</a><a href="rss.xml">RSS</a></div>
+  </div>
+  <div class="chart" id="chart" role="img" aria-label="Incidents by month"></div>
+  <div class="chart-legend"><span><i class="cdot ro"></i><span data-i18n="Romania">Romania</span></span><span><i class="cdot bg"></i><span data-i18n="Bulgaria">Bulgaria</span></span></div>
+</section>
+
+<footer class="footer">
+  <span data-i18n="footerIndependent">Independent research project.</span>
+  <a href="about.html" id="footerAbout" data-i18n="methodology">Methodology</a>
+</footer>
+<div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

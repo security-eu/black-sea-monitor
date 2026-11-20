@@ -53,7 +53,14 @@ Existing records inherited from the previous site are **not retrospectively cert
 
 ### Third-party map assets
 
-The map uses OpenStreetMap tiles and **Leaflet 1.9.4 with pinned Subresource Integrity (SRI)** on the CDN. The CSS/JS files are not yet locally vendored because they could not be downloaded in the build environment. This is the remaining dependency to eliminate if offline resilience is required. A future vendor update should also package the default Leaflet control marker images. OSM usage is subject to its tile-use policy; large traffic should use a suitable tile provider or self-hosting.
+Leaflet 1.9.4 is vendored in `assets/vendor/leaflet/` (BSD-2 licence included), so the site no longer depends on unpkg. Map tiles come from OpenStreetMap and are shown with a dark CSS filter; OSM usage is subject to its tile-use policy, so heavy traffic should move to a tile provider or self-hosting. The Inter font is loaded from Google Fonts with a system-font fallback.
+
+### Frontend layout (November 2026 redesign)
+
+- Desktop: summary figures under the header; left panel with **Incidents** (period, category, country, attribution, search) and **Statements** (Official / Press / All, region) tabs; map on the right; incident details open in a side card; monthly chart below.
+- Mobile: three tabs (Map / Incidents / Statements); incident details open as a bottom sheet.
+- Every incident has a permanent link `#<id>`; language is `?lang=en|bg|ro` and is remembered.
+- Public URL is `https://security-eu.github.io/black-sea-monitor/`. Canonical, Open Graph, `sitemap.xml`, `robots.txt`, `config.json` and `scripts/generate_feeds.py` use this address.
 
 ### Test and translation limitations
 

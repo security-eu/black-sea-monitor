@@ -5,7 +5,7 @@ from email.utils import format_datetime
 ROOT=Path(__file__).resolve().parents[1];DATA=ROOT/'data'
 statements=json.loads((DATA/'statements.json').read_text(encoding='utf8'))
 incidents=json.loads((DATA/'incidents.json').read_text(encoding='utf8'))
-BASE='https://security-eu.github.io/'
+BASE='https://security-eu.github.io/black-sea-monitor/'
 def esc(v):return html.escape(str(v),quote=True)
 def item(s,kind):
  if kind=='incident':

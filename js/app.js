@@ -1,88 +1,379 @@
+// EU Black Sea Monitor — single application module for EN / BG / RO.
 const $ = id => document.getElementById(id);
-const qs = new URLSearchParams(location.search);
-const allowed = ['en','bg','ro'];
-const state = {
- lang: allowed.includes(qs.get('lang')) ? qs.get('lang') : (allowed.includes(localStorage.getItem('eu-black-sea-lang')) ? localStorage.getItem('eu-black-sea-lang') : 'en'),
- tab: sessionStorage.getItem('eu-bs-tab')==='statements'?'statements':'map',
- period:'all',category:'all',country:'all',attribution:'all',search:'',kind:'official',region:'all',incident:null,
- map:null,markers:[],mapViews:null,newsScroll:0,showArchive:false
-};
-let i18n={}, incidents=[], news=[], translations={incidents:{},statements:{}}, updated={};
-const E = s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
-const t = k => i18n[k] || k;
+const LANGS = ['en', 'bg', 'ro'];
+const LOCALE = { en: 'en-GB', bg: 'bg-BG', ro: 'ro-RO' };
+const COUNTRIES = ['Romania', 'Bulgaria'];
+const CATEGORIES = ['vessel_strike', 'mine', 'drone_debris', 'port_attack', 'mine_action'];
+const STATUSES = ['claimed', 'authority_confirmed', 'undetermined'];
+const CAT_COLOR = { vessel_strike: '#ff6b5b', mine: '#f4b740', drone_debris: '#b48cff', port_attack: '#ff9548', mine_action: '#8193a6' };
+const DEFAULT_VIEW = { center: [43.6, 29.0], zoom: 7 };
+const mqMobile = window.matchMedia('(max-width:900px)');
 
-const localeCode={en:'en-GB',bg:'bg-BG',ro:'ro-RO'};
-function dateString(s){try {return new Date(s+'T12:00:00Z').toLocaleDateString(localeCode[state.lang],{day:'2-digit',month:'short',year:'numeric'})}catch{return s}}
-function fmtCategory(x){return t(({vessel_strike:'vesselStrike',mine:'mines',drone_debris:'debris',port_attack:'port',mine_action:'response'})[x]||'incident')}
-function fmtStatus(x){return t(({claimed:'claimed',authority_confirmed:'confirmed',undetermined:'undetermined'})[x]||'undetermined')}
-async function getJson(path,fallback){try{let r=await fetch(path+'?v=3',{cache:'no-cache'});if(!r.ok)throw Error(r.status);return await r.json()}catch(e){console.warn('Data load',path,e);return fallback}}
-function translatedIncident(row){const saved=translations.incidents[state.lang]?.get(row.id);if(!saved||!saved._translated)return row;return {...row,...Object.fromEntries(['type','method','location','summary','locationPrecision','attribution_details'].filter(k=>saved[k]).map(k=>[k,saved[k]]))}}
-function translatedStatement(row){const saved=translations.statements[state.lang]?.get(row.url)||translations.statements[state.lang]?.get(row.id);return saved&&saved._translated?{...row,title:saved.title||row.title,summary:saved.summary||row.summary}:row}
-function updateURL(){let url=new URL(location.href);url.searchParams.set('lang',state.lang);if(state.incident)url.hash=encodeURIComponent(state.incident);else url.hash='';history.replaceState(null,'',url)}
-async function applyLanguage(lang){if(!allowed.includes(lang))return;const oldScroll=$('newsList').scrollTop;state.lang=lang;localStorage.setItem('eu-black-sea-lang',lang);const dict=await getJson(`i18n/${lang}.json`,{});i18n=dict;document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});document.querySelectorAll('[data-switch]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.switch===lang)));document.title='EU Black Sea / Maritime Security Monitor';renderNews();renderMapData();renderChart();renderArchive();renderAbout();if(state.incident)openIncident(state.incident,false);setTab(state.tab);$('newsList').scrollTop=oldScroll;updateURL()}
-function selectOptions(){const k=$('kindFilter');const r=$('regionFilter');k.value=state.kind;r.value=state.region;$('categoryFilter').value=state.category;$('countryFilter').value=state.country;$('attributionFilter').value=state.attribution;$('searchInput').value=state.search}
-function filterIncidents(){const today=Date.now();return incidents.filter(r=>{
- if(!['Romania','Bulgaria'].includes(r.country))return false;
- if(state.country!=='all'&&r.country!==state.country)return false;
- if(state.category!=='all'&&r.category!==state.category)return false;
- if(state.attribution!=='all'&&r.attribution_status!==state.attribution)return false;
- if(state.period!=='all'&&today-new Date(r.date+'T00:00:00Z').getTime()>Number(state.period)*864e5)return false;
- if(state.search&&!JSON.stringify(r).toLowerCase().includes(state.search.toLowerCase()))return false;
- return true;
- })}
-function isMappable(r){
- const lat=Number(r.lat),lon=Number(r.lon);
- return r.lat!=null&&r.lon!=null&&Number.isFinite(lat)&&Number.isFinite(lon)&&lat>=-90&&lat<=90&&lon>=-180&&lon<=180&&r.position_status!=='unlocated'&&!r.auto_discovered
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* private mode */ } }
+};
+const params = new URLSearchParams(location.search);
+const state = {
+  lang: LANGS.includes(params.get('lang')) ? params.get('lang') : (LANGS.includes(store.get('bsm-lang')) ? store.get('bsm-lang') : 'en'),
+  pane: 'incidents', view: 'map',
+  period: 'all', category: 'all', country: 'all', status: 'all', search: '',
+  kind: 'official', region: 'all',
+  selected: null
+};
+let dict = {}, incidents = [], statements = [], updated = {};
+const tr = { incidents: {}, statements: {} };
+let map = null; const markers = new Map();
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const t = (k, vars) => { let s = dict[k] ?? k; if (vars) for (const [a, b] of Object.entries(vars)) s = s.replace('{' + a + '}', b); return s; };
+const fmtDate = d => { try { return new Date(d + 'T12:00:00Z').toLocaleDateString(LOCALE[state.lang], { day: 'numeric', month: 'short', year: 'numeric' }); } catch { return d; } };
+const isIncident = r => r.event_kind !== 'response';
+const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
+
+async function getJson(path, fallback) {
+  try {
+    const r = await fetch(path, { cache: 'no-cache' });
+    if (!r.ok) throw new Error(r.status);
+    return await r.json();
+  } catch (e) { console.warn('Could not load', path, e); return fallback; }
 }
-function markerColor(r){if(r.category==='mine_action')return '#7b8391';if(r.category==='mine')return '#a16e37';if(r.category==='drone_debris')return '#985e98';return r.country==='Romania'?'#1683a4':'#d2a149'}
-function renderMapData(){if(!state.map)return;state.markers.forEach(m=>state.map.removeLayer(m));state.markers=[];const rows=filterIncidents(),mappable=rows.filter(isMappable);for(const r of mappable){const marker=L.circleMarker([Number(r.lat),Number(r.lon)],{radius:r.category==='mine_action'?6:7,fillColor:markerColor(r),color:'#ffffff',weight:2.2,fillOpacity:.94,interactive:true});marker.addTo(state.map).on('click',()=>openIncident(r.id));marker.bindTooltip(E(r.vessel||r.title||r.id),{direction:'top'});state.markers.push(marker)}
- if(!mappable.length){console.warn('No mappable incidents. Data rows:',incidents.length,'matched:',rows.length,'country values:',[...new Set(incidents.map(x=>x.country))]);}
- $('mapCount').textContent=`${rows.filter(r=>r.event_kind!=='response').length} ${t('pressCount')}`;renderArchive();selectOptions()}
-function zoomMarkers(){if(!state.map)return;const pts=filterIncidents().filter(isMappable);if(!pts.length){state.map.setView([43.25,29.2],7);return}const b=L.latLngBounds(pts.map(r=>[r.lat,r.lon]));state.map.fitBounds(b.pad(.14),{maxZoom:9,animate:true})}
-function normalizeStatement(r){if(r.kind)return r;let host='';try{host=new URL(r.url).hostname}catch{};
- const official=['consilium.europa.eu','ec.europa.eu','eeas.europa.eu','mfa.bg','mai.gov.ro','mae.ro','gov.ro','government.bg','presidency.ro'].some(d=>host===d||host.endsWith('.'+d));
- const auto=host==='news.google.com'||(r.summary||'').includes('News headline from the linked source');
- return {...r,kind:auto?'auto':official?'official':'news',reviewed:!auto&&official}}
-function renderNews(){let list=news.filter(r=>r.region===state.region||state.region==='all').filter(r=>state.kind==='all'||(r.kind===state.kind&&(state.kind!=='official'||r.reviewed)));list.sort((a,b)=>b.date.localeCompare(a.date));$('newsList').innerHTML=list.length?list.map(row=>{const r=translatedStatement(row);const kind=['official','news','auto'].includes(row.kind)?row.kind:'auto';return `<article class="news-item"><div class="news-meta"><span>${E(dateString(r.date))}</span><span>· ${E(r.region)}</span><span class="kind ${kind}">${E(t(kind))}</span></div><h3>${E(r.title)}</h3><p>${E(r.summary)}</p>${kind==='auto'?`<p><em>${E(t('notVerified'))}</em></p>`:''}<a target="_blank" rel="noopener noreferrer" href="${E(r.url)}">${E(t('readSource'))} ↗</a></article>`}).join(''):`<p class="empty">${E(t('noNews'))}</p>`;$('lastUpdated').textContent=`${t('lastUpdated')}: ${updated.updated_at?new Date(updated.updated_at).toLocaleString(localeCode[state.lang]):'—'}`;selectOptions()}
-function renderArchive(){const rows=filterIncidents();$('archiveCount').textContent=`(${rows.length})`;$('archiveList').innerHTML=rows.length?rows.map(r=>`<button class="archive-item" type="button" data-open-incident="${E(r.id)}"><span><strong>${E(r.vessel||r.title||r.id)}</strong><small>${E(dateString(r.date))} · ${E(r.country)} · ${E(fmtCategory(r.category))}</small></span><span class="category-dot" style="background:${markerColor(r)}" aria-hidden="true"></span></button>`).join(''):`<p class="empty">${E(t('noIncidents'))}</p>`;$('archiveList').querySelectorAll('[data-open-incident]').forEach(btn=>btn.onclick=()=>openIncident(btn.dataset.openIncident));$('archiveBody').hidden=!state.showArchive;$('archiveToggle').setAttribute('aria-expanded',String(state.showArchive));$('archiveChevron').textContent=state.showArchive?'⌄':'⌃'}
-function renderChart(){const counted=new Map();for(const r of incidents){if(!['Romania','Bulgaria'].includes(r.country)||r.event_kind==='response')continue;const m=r.date.slice(0,7);if(!/^\d{4}-\d{2}$/.test(m))continue;const curr=counted.get(m)||{Romania:0,Bulgaria:0};curr[r.country]++;counted.set(m,curr)}
- if(!counted.size){$('chart').textContent='No incident records';return}
- const months=[];let first=[...counted.keys()].sort()[0];let [y,m]=first.split('-').map(Number);const end=new Date();while(y<end.getUTCFullYear()||(y===end.getUTCFullYear()&&m<=end.getUTCMonth()+1)){const k=y+'-'+String(m).padStart(2,'0');months.push([k,counted.get(k)||{Romania:0,Bulgaria:0}]);m++;if(m===13){m=1;y++}if(months.length>180)break}
- const max=Math.max(1,...months.map(([,v])=>v.Romania+v.Bulgaria));$('chart').innerHTML=months.map(([month,v])=>`<div class="chart-month" title="${E(month)}: Romania ${v.Romania}, Bulgaria ${v.Bulgaria}"><div class="chart-bars"><span style="height:${Math.round(v.Romania/max*110)}px;background:#1683a4"></span><span style="height:${Math.round(v.Bulgaria/max*110)}px;background:#d2a149"></span></div><div class="chart-label">${E(month.slice(2))}</div></div>`).join('')}
-function cardHtml(orig){let r=translatedIncident(orig);let links=(r.sources||[]).filter(s=>/^https:\/\//.test(s.url)).map(s=>`<a href="${E(s.url)}" target="_blank" rel="noopener noreferrer">${E(s.label||new URL(s.url).hostname)} ↗</a>`).join('');return `<div class="card-head"><div class="date">${E(dateString(r.date))} · ${E(t('incident'))}</div><h2>${E(r.vessel||r.title||r.id)}</h2><p>${E(r.location||r.country)}</p><span class="country-pill ${E(r.country)}">${E(r.country)}</span></div><div class="card-body"><div class="facts"><div><small>${E(t('vesselType'))}</small><strong>${E(r.type||'—')}</strong></div><div><small>${E(t('incidentType'))}</small><strong>${E(fmtCategory(r.category))}</strong></div></div>${r.event_kind==='response'?`<div class="card-section"><strong>${E(t('responseLabel'))}</strong></div>`:''}<section class="card-section"><h3>${E(t('overview'))}</h3><p>${E(r.summary||'—')}</p></section><section class="card-section"><div class="attribution-row"><small>${E(t('attribution'))}</small><span class="status">${E(fmtStatus(r.attribution_status))}</span></div><p>${E(r.attribution_details||t('sourceNotice'))}</p><div class="precision">ⓘ ${E(t('precision'))}: ${E(r.locationPrecision||r.location_precision||t('locationApprox'))}</div></section><section class="card-section"><h3>${E(t('sources'))}</h3><div class="sources">${links||'—'}</div></section><div class="card-section"><a href="#${encodeURIComponent(r.id)}" id="permalink" style="color:#087b9b" >${E(t('permalink'))} ↗</a></div></div>`}
-function openIncident(id,writeHistory=true){const r=incidents.find(r=>r.id===id);if(!r)return;state.incident=id;$('incidentContent').innerHTML=cardHtml(r);if(!$('incidentDialog').open)$('incidentDialog').showModal();if(writeHistory)updateURL();$('permalink').onclick=e=>{e.preventDefault();navigator.clipboard?.writeText(new URL('#'+encodeURIComponent(r.id),location.href).href).catch(()=>{});history.replaceState(null,'','#'+encodeURIComponent(r.id))}}
-function closeIncident(){if($('incidentDialog').open)$('incidentDialog').close();state.incident=null;updateURL()}
-function setTab(tab){state.tab=tab;sessionStorage.setItem('eu-bs-tab',tab);$('layout').classList.toggle('mobile-statements',tab==='statements');document.querySelectorAll('[data-tab]').forEach(btn=>{const selected=btn.dataset.tab===tab;btn.classList.toggle('active',selected);btn.setAttribute('aria-selected',String(selected))});if(tab==='map'&&state.map)requestAnimationFrame(()=>state.map.invalidateSize())}
-function renderAbout(){const sections=[['aboutEditor','aboutEditorText'],['aboutScope','aboutScopeText'],['aboutEvidence','aboutEvidenceText'],['aboutLocation','aboutLocationText'],['aboutUpdates','aboutUpdatesText']];$('aboutText').innerHTML=`<p>${E(t('aboutIntro'))}</p>${sections.map(([a,b])=>`<h3>${E(t(a))}</h3><p>${E(t(b))}</p>`).join('')}`}
-function openAbout(){renderAbout();$('aboutDialog').showModal()}
-function safeDialogEvents(id,closeId){$(closeId).onclick=()=>$(id).close();$(id).onclick=ev=>{if(ev.target===$(id))$(id).close()}}
-function initMap(){if(typeof L==='undefined'){$('map').textContent='Map library unavailable; archive remains accessible.';return}state.map=L.map('map',{zoomControl:false,scrollWheelZoom:true}).setView([43.25,29.2],7);L.control.zoom({position:'bottomright'}).addTo(state.map);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(state.map);state.map.whenReady(()=>{renderMapData();requestAnimationFrame(()=>state.map.invalidateSize())})}
-async function init(){const initialHash=decodeURIComponent(location.hash.substring(1));const data=await Promise.all([getJson('data/incidents.json',[]),getJson('data/statements.json',[]),getJson('data/incidents.bg.json',[]),getJson('data/incidents.ro.json',[]),getJson('data/statements.bg.json',[]),getJson('data/statements.ro.json',[]),getJson('data/updated.json',{})]);[incidents,news]=data;
- if(!Array.isArray(incidents))incidents=[];
- if(!Array.isArray(news))news=[];
- incidents=incidents.map(r=>{
-   let lat=r.lat??r.latitude??r.coordinates?.lat;
-   let lon=r.lon??r.lng??r.longitude??r.coordinates?.lon??r.coordinates?.lng;
-   if(Array.isArray(r.coordinates)&&r.coordinates.length>=2){lon??=r.coordinates[0];lat??=r.coordinates[1]}
-   if(Array.isArray(r.geometry?.coordinates)&&r.geometry.coordinates.length>=2){lon??=r.geometry.coordinates[0];lat??=r.geometry.coordinates[1]}
-   if(typeof lat==='string') lat=Number(lat.trim().replace(',','.'));
-   if(typeof lon==='string') lon=Number(lon.trim().replace(',','.'));
-   let country=r.country;
-   if(['RO','ROU','România','Румъния'].includes(country))country='Romania';
-   if(['BG','BGR','България'].includes(country))country='Bulgaria';
-   return {...r,country,lat,lon,category:r.category||'vessel_strike',event_kind:r.event_kind||'incident',attribution_status:r.attribution_status||'undetermined',position_status:r.position_status||'approximate'};
- });
- news=news.map(normalizeStatement);const rows=v=>Array.isArray(v)?v:Array.isArray(v?.items)?v.items:[];
- translations.incidents.bg=new Map(rows(data[2]).filter(r=>r?.id).map(r=>[r.id,r]));
- translations.incidents.ro=new Map(rows(data[3]).filter(r=>r?.id).map(r=>[r.id,r]));
- translations.statements.bg=new Map(rows(data[4]).filter(r=>r?.url||r?.id).flatMap(r=>[[r.url,r],[r.id,r]].filter(x=>x[0])));
- translations.statements.ro=new Map(rows(data[5]).filter(r=>r?.url||r?.id).flatMap(r=>[[r.url,r],[r.id,r]].filter(x=>x[0])));
- updated=data[6]||{};
- document.querySelectorAll('[data-switch]').forEach(btn=>btn.onclick=()=>applyLanguage(btn.dataset.switch));document.querySelectorAll('[data-tab]').forEach(btn=>btn.onclick=()=>setTab(btn.dataset.tab));$('filterButton').onclick=()=>{$('filtersDialog').showModal()};$('aboutButton').onclick=()=>{location.href='about.html?lang='+state.lang};$('footerMethod').onclick=e=>{e.preventDefault();location.href='about.html?lang='+state.lang};$('contactLink').onclick=e=>{e.preventDefault();location.href='about.html?lang='+state.lang};$('archiveToggle').onclick=()=>{state.showArchive=!state.showArchive;renderArchive()};$('fitMap').onclick=zoomMarkers;document.querySelectorAll('[data-period]').forEach(btn=>btn.onclick=()=>{state.period=btn.dataset.period;document.querySelectorAll('[data-period]').forEach(el=>el.classList.toggle('selected',el===btn));renderMapData()});$('categoryFilter').onchange=e=>{state.category=e.target.value;renderMapData()};$('countryFilter').onchange=e=>{state.country=e.target.value;renderMapData()};$('attributionFilter').onchange=e=>{state.attribution=e.target.value;renderMapData()};$('searchInput').oninput=e=>{state.search=e.target.value;renderMapData()};$('clearFilters').onclick=()=>{Object.assign(state,{category:'all',country:'all',attribution:'all',search:''});renderMapData();$('filtersDialog').close()};$('kindFilter').onchange=e=>{state.kind=e.target.value;renderNews()};$('regionFilter').onchange=e=>{state.region=e.target.value;renderNews()};safeDialogEvents('filtersDialog','closeFilters');safeDialogEvents('aboutDialog','closeAbout');$('closeIncident').onclick=closeIncident;$('incidentDialog').onclose=()=>{state.incident=null;updateURL()};$('incidentDialog').onclick=e=>{if(e.target===$('incidentDialog'))closeIncident()};window.addEventListener('hashchange',()=>{const id=decodeURIComponent(location.hash.substring(1));if(id&&incidents.some(r=>r.id===id)){setTab('map');openIncident(id,false)}else if(!id && $('incidentDialog').open)closeIncident()});
- initMap();
- try{await applyLanguage(state.lang)}catch(err){console.error('Language interface failed; map remains available',err)}
- renderMapData();
- requestAnimationFrame(()=>{if(state.map){state.map.invalidateSize();renderMapData()}});
- const hash=initialHash;if(hash&&incidents.some(r=>r.id===hash)){setTab('map');openIncident(hash,false)};if(!hash)setTab(state.tab);
+const rows = v => Array.isArray(v) ? v : Array.isArray(v?.items) ? v.items : [];
+
+/* ---------- data normalisation ---------- */
+function normIncident(r) {
+  let lat = r.lat ?? r.latitude, lon = r.lon ?? r.lng ?? r.longitude;
+  lat = typeof lat === 'string' ? Number(lat.replace(',', '.')) : lat;
+  lon = typeof lon === 'string' ? Number(lon.replace(',', '.')) : lon;
+  return {
+    ...r, lat, lon,
+    category: CATEGORIES.includes(r.category) ? r.category : 'vessel_strike',
+    event_kind: r.event_kind || (r.category === 'mine_action' ? 'response' : 'incident'),
+    attribution_status: STATUSES.includes(r.attribution_status) ? r.attribution_status : 'undetermined'
+  };
 }
-init().catch(e=>{console.error(e);$('newsList').textContent='Site data unavailable. Please check JSON data files.'});
+function normStatement(r) {
+  if (['official', 'news', 'auto'].includes(r.kind)) return r;
+  const h = host(r.url);
+  const auto = h === 'news.google.com' || /News headline from the linked source/.test(r.summary || '');
+  return { ...r, kind: auto ? 'auto' : 'news', reviewed: false };
+}
+const mappable = r => Number.isFinite(r.lat) && Number.isFinite(r.lon) && r.position_status !== 'unlocated' && !r.auto_discovered;
+
+function localIncident(r) {
+  const s = tr.incidents[state.lang]?.get(r.id);
+  if (!s || !s._translated) return { ...r, _orig: state.lang !== 'en' };
+  const out = { ...r };
+  for (const k of ['type', 'method', 'location', 'summary', 'locationPrecision', 'attribution_details']) if (s[k]) out[k] = s[k];
+  return out;
+}
+function localStatement(r) {
+  const m = tr.statements[state.lang];
+  const s = m?.get(r.url) || m?.get(r.id);
+  if (!s || !s._translated) return { ...r, _orig: state.lang !== 'en' };
+  return { ...r, title: s.title || r.title, summary: s.summary || r.summary };
+}
+
+/* ---------- filtering ---------- */
+function visibleIncidents() {
+  const now = Date.now(), q = state.search.trim().toLowerCase();
+  return incidents.filter(r => {
+    if (state.country !== 'all' && r.country !== state.country) return false;
+    if (state.category !== 'all' && r.category !== state.category) return false;
+    if (state.status !== 'all' && r.attribution_status !== state.status) return false;
+    if (state.period !== 'all' && now - Date.parse(r.date + 'T00:00:00Z') > Number(state.period) * 864e5) return false;
+    if (q) {
+      const l = localIncident(r);
+      const hay = [r.vessel, r.title, r.summary, l.summary, r.location, l.location, r.type, r.flag, r.country, t(r.country)].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+function visibleStatements() {
+  return statements
+    .filter(r => state.region === 'all' || r.region === state.region)
+    .filter(r => state.kind === 'all' || r.kind === state.kind)
+    .sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/* ---------- rendering ---------- */
+function fillSelect(el, allKey, values, labelFn, current) {
+  el.innerHTML = `<option value="all">${esc(t(allKey))}</option>` + values.map(v => `<option value="${esc(v)}">${esc(labelFn(v))}</option>`).join('');
+  el.value = current;
+}
+function renderStatic() {
+  document.documentElement.lang = state.lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  $('fSearch').placeholder = t('searchPh');
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === state.lang)));
+  const about = 'about.html?lang=' + state.lang;
+  $('aboutLink').href = about; $('footerAbout').href = about; $('brandLink').href = './?lang=' + state.lang;
+  const usedCats = CATEGORIES.filter(c => incidents.some(r => r.category === c));
+  fillSelect($('fCategory'), 'allCategories', usedCats, c => t('cat_' + c), state.category);
+  fillSelect($('fCountry'), 'allCountries', COUNTRIES, c => t(c), state.country);
+  fillSelect($('fStatus'), 'allStatuses', STATUSES, s => t('st_' + s), state.status);
+  fillSelect($('fRegion'), 'allRegions', ['Romania', 'Bulgaria', 'EU'], c => t(c), state.region);
+  $('fRegion').querySelector('option[value="all"]').textContent = t('allRegions');
+  $('legend').innerHTML = usedCats.map(c => `<span><i style="background:${CAT_COLOR[c]}" class="${c === 'mine_action' ? 'ring' : ''}"></i>${esc(t('cat_' + c))}</span>`).join('');
+  document.title = `${t('siteName')} · ${t('tagline')}`;
+}
+function renderKpis() {
+  const inc = incidents.filter(isIncident), now = Date.now();
+  $('kpiTotal').textContent = inc.length;
+  $('kpi30').textContent = inc.filter(r => now - Date.parse(r.date + 'T00:00:00Z') <= 30 * 864e5).length;
+  $('kpiRo').textContent = inc.filter(r => r.country === 'Romania').length;
+  $('kpiBg').textContent = inc.filter(r => r.country === 'Bulgaria').length;
+  $('kpiMines').textContent = inc.filter(r => r.category === 'mine').length;
+  const u = updated.updated_at ? new Date(updated.updated_at) : null;
+  $('updatedAt').textContent = u && !isNaN(u) ? u.toLocaleString(LOCALE[state.lang], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '–';
+}
+function renderIncidents() {
+  const list = visibleIncidents();
+  $('countIncidents').textContent = list.length;
+  $('resultCount').textContent = t('results', { n: list.length, total: incidents.length });
+  document.querySelectorAll('[data-period]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.period === state.period)));
+  $('incidentList').innerHTML = list.length ? list.map(r => {
+    const chip = r.event_kind === 'response' ? `<span class="chip response">${esc(t('responseNote').replace(/\.$/, ''))}</span>`
+      : r.attribution_status !== 'undetermined' ? `<span class="chip ${r.attribution_status}">${esc(t('st_' + r.attribution_status))}</span>` : '';
+    return `<li><button type="button" class="row" data-id="${esc(r.id)}" aria-current="${r.id === state.selected}">
+      <span class="dot" style="background:${CAT_COLOR[r.category]}"></span>
+      <span><span class="row-title">${esc(r.vessel || r.title || r.id)}</span>
+      <span class="row-meta"><span>${esc(fmtDate(r.date))}</span><span class="sep">·</span><span>${esc(t(r.country))}</span><span class="sep">·</span><span>${esc(t('cat_' + r.category))}</span>${chip}</span></span>
+    </button></li>`;
+  }).join('') : `<li class="empty">${esc(t('noIncidents'))}</li>`;
+  $('incidentList').querySelectorAll('[data-id]').forEach(b => b.onclick = () => select(b.dataset.id, { fly: true }));
+  renderMarkers(list);
+}
+function renderStatements() {
+  const list = visibleStatements();
+  $('countStatements').textContent = list.length;
+  document.querySelectorAll('[data-kind]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.kind === state.kind)));
+  const kindLabel = { official: 'kindOfficial', news: 'kindNews', auto: 'kindAuto' };
+  $('newsList').innerHTML = list.length ? list.map(raw => {
+    const r = localStatement(raw);
+    return `<li class="news"><div class="news-meta"><span class="chip ${esc(r.kind)}">${esc(t(kindLabel[r.kind]))}</span><span>${esc(t(r.region))}</span><span>·</span><time datetime="${esc(r.date)}">${esc(fmtDate(r.date))}</time>${r.kind === 'official' && !r.reviewed ? `<span class="chip pending">${esc(t('awaitingReview'))}</span>` : ''}</div>
+      <h3>${esc(r.title)}</h3>${r.summary ? `<p>${esc(r.summary)}</p>` : ''}${r.kind === 'auto' ? `<p class="warn">${esc(t('autoNote'))}</p>` : ''}
+      <a class="src" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${esc(r.source || host(r.url))} ↗</a>${r._orig ? `<br><span class="untranslated">${esc(t('untranslated'))}</span>` : ''}</li>`;
+  }).join('') : `<li class="empty">${esc(t('noNews'))}</li>`;
+}
+function renderChart() {
+  const months = new Map();
+  for (const r of incidents) {
+    if (!isIncident(r) || !/^\d{4}-\d{2}/.test(r.date)) continue;
+    const k = r.date.slice(0, 7), v = months.get(k) || { Romania: 0, Bulgaria: 0 };
+    if (r.country in v) v[r.country]++;
+    months.set(k, v);
+  }
+  if (!months.size) { $('chart').innerHTML = ''; return; }
+  const keys = [...months.keys()].sort();
+  let [y, m] = keys[0].split('-').map(Number);
+  const end = new Date(), series = [];
+  while ((y < end.getUTCFullYear() || (y === end.getUTCFullYear() && m <= end.getUTCMonth() + 1)) && series.length < 240) {
+    const k = `${y}-${String(m).padStart(2, '0')}`;
+    series.push([k, months.get(k) || { Romania: 0, Bulgaria: 0 }]);
+    if (++m > 12) { m = 1; y++; }
+  }
+  const max = Math.max(1, ...series.map(([, v]) => v.Romania + v.Bulgaria));
+  const monthName = k => new Date(k + '-15T12:00:00Z').toLocaleDateString(LOCALE[state.lang], { month: 'long', year: 'numeric' });
+  $('chart').innerHTML = series.map(([k, v], i) => {
+    const label = `${monthName(k)}: ${t('Romania')} ${v.Romania}, ${t('Bulgaria')} ${v.Bulgaria}`;
+    const yr = k.endsWith('-01') || i === 0 ? `<span class="yr">${k.slice(0, 4)}</span>` : '';
+    return `<div class="bar" title="${esc(label)}"><span class="r" style="height:${v.Romania / max * 100}%"></span><span class="b" style="height:${v.Bulgaria / max * 100}%"></span>${yr}</div>`;
+  }).join('');
+  $('chart').setAttribute('aria-label', t('chartTitle'));
+  $('chart').scrollLeft = $('chart').scrollWidth;
+}
+
+/* ---------- map ---------- */
+function initMap() {
+  if (typeof L === 'undefined') { $('map').innerHTML = `<div class="map-msg">${esc(t('mapUnavailable'))}</div>`; return; }
+  map = L.map('map', { zoomControl: false, worldCopyJump: false, minZoom: 5 }).setView(DEFAULT_VIEW.center, DEFAULT_VIEW.zoom);
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+}
+function markerStyle(r, active) {
+  const resp = r.category === 'mine_action';
+  return { radius: active ? 11 : 7, color: active ? '#ffffff' : resp ? CAT_COLOR.mine_action : '#ffffff', weight: active ? 3 : 2, fillColor: CAT_COLOR[r.category], fillOpacity: resp ? 0.15 : 0.95 };
+}
+function renderMarkers(list) {
+  if (!map) return;
+  markers.forEach(m => m.remove()); markers.clear();
+  const seen = new Map();
+  for (const r of list.filter(mappable)) {
+    // Spread exactly overlapping markers slightly so each one stays clickable.
+    const key = r.lat.toFixed(3) + ',' + r.lon.toFixed(3), n = seen.get(key) || 0; seen.set(key, n + 1);
+    const pos = n ? [r.lat + 0.04 * Math.sin(n * 2.1), r.lon + 0.05 * Math.cos(n * 2.1)] : [r.lat, r.lon];
+    const m = L.circleMarker(pos, markerStyle(r, r.id === state.selected)).addTo(map);
+    m.bindTooltip(esc(r.vessel || r.title || r.id), { direction: 'top', offset: [0, -8], className: 'tip' });
+    m.on('click', () => select(r.id, { fly: false }));
+    markers.set(r.id, m);
+  }
+  markers.get(state.selected)?.bringToFront();
+}
+function fitAll() {
+  if (!map) return;
+  const pts = visibleIncidents().filter(mappable).map(r => [r.lat, r.lon]);
+  if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.15), { maxZoom: 9 });
+  else map.setView(DEFAULT_VIEW.center, DEFAULT_VIEW.zoom);
+}
+
+/* ---------- detail card ---------- */
+function detailHtml(raw) {
+  const r = localIncident(raw);
+  const src = (r.sources || []).filter(s => /^https:\/\//.test(s.url || ''));
+  const facts = [
+    ['vesselType', r.type], ['country', t(r.country)],
+    ...(r.flag && !/^(see source|not verified)$/i.test(r.flag) ? [['flag', r.flag]] : []),
+    ['category', t('cat_' + r.category)]
+  ].filter(([, v]) => v);
+  return `<header class="d-head">
+      <span class="d-cat" style="color:${CAT_COLOR[r.category]}"><i style="background:${CAT_COLOR[r.category]}"></i>${esc(t('cat_' + r.category))}</span>
+      <h2 id="detailTitle">${esc(r.vessel || r.title || r.id)}</h2>
+      <div class="d-sub">${esc(fmtDate(r.date))}${r.location ? ' · ' + esc(r.location) : ''}</div>
+    </header>
+    <div class="d-body">
+      <dl class="facts">${facts.map(([k, v]) => `<div><dt>${esc(t(k))}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+      ${r.event_kind === 'response' ? `<div class="d-callout">${esc(t('responseNote'))}</div>` : ''}
+      <section class="d-section"><h3>${esc(t('overview'))}</h3><p>${esc(r.summary || '—')}</p>${r._orig ? `<span class="untranslated">${esc(t('untranslated'))}</span>` : ''}</section>
+      <section class="d-section"><div class="d-status"><h3>${esc(t('attribution'))}</h3><span class="chip ${r.attribution_status}">${esc(t('st_' + r.attribution_status))}</span></div>${r.attribution_details ? `<p>${esc(r.attribution_details)}</p>` : ''}</section>
+      <section class="d-section"><h3>${esc(t('precision'))}</h3><p>${esc(r.locationPrecision || r.location_precision || t('approx'))}</p>${mappable(r) ? '' : `<div class="d-callout">${esc(t('archiveOnly'))}</div>`}</section>
+      <section class="d-section"><h3>${esc(t('sources'))}</h3><ul class="d-sources">${src.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer"><span>${esc(s.label || host(s.url))}</span><small>${esc(host(s.url))} ↗</small></a></li>`).join('') || '<li>—</li>'}</ul></section>
+      <div class="d-actions"><button type="button" class="btn" id="copyLink"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>${esc(t('permalink'))}</button></div>
+    </div>`;
+}
+let lastFocus = null;
+function select(id, { fly = false, push = true } = {}) {
+  const r = incidents.find(x => x.id === id);
+  if (!r) return;
+  const prev = state.selected; state.selected = id;
+  if (prev && markers.get(prev)) markers.get(prev).setStyle(markerStyle(incidents.find(x => x.id === prev), false)).setRadius(7);
+  const m = markers.get(id);
+  if (m) { m.setStyle(markerStyle(r, true)); m.setRadius(11); m.bringToFront(); }
+  document.querySelectorAll('.row[aria-current="true"]').forEach(el => el.setAttribute('aria-current', 'false'));
+  document.querySelector(`.row[data-id="${CSS.escape(id)}"]`)?.setAttribute('aria-current', 'true');
+  if (fly && map && mappable(r)) {
+    const z = Math.max(map.getZoom(), 8);
+    if (mqMobile.matches) map.setView([r.lat, r.lon], z); else map.flyTo([r.lat, r.lon], z, { duration: 0.6 });
+  }
+  lastFocus = document.activeElement;
+  $('detailBody').innerHTML = detailHtml(r);
+  $('detailBody').scrollTop = 0;
+  $('detail').hidden = false;
+  $('scrim').hidden = !mqMobile.matches;
+  $('detail').focus({ preventScroll: true });
+  $('copyLink').onclick = copyLink;
+  if (push) syncUrl();
+}
+function closeDetail() {
+  if ($('detail').hidden) return;
+  const prev = state.selected; state.selected = null;
+  if (prev && markers.get(prev)) markers.get(prev).setStyle(markerStyle(incidents.find(x => x.id === prev), false)).setRadius(7);
+  document.querySelectorAll('.row[aria-current="true"]').forEach(el => el.setAttribute('aria-current', 'false'));
+  $('detail').hidden = true; $('scrim').hidden = true;
+  syncUrl();
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+}
+async function copyLink() {
+  const url = new URL(location.href); url.hash = state.selected || '';
+  try { await navigator.clipboard.writeText(url.href); toast(t('copied')); } catch { prompt('URL', url.href); }
+}
+let toastTimer;
+function toast(msg) { const el = $('toast'); el.textContent = msg; el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 1800); }
+
+/* ---------- navigation ---------- */
+function syncUrl() {
+  const url = new URL(location.href);
+  if (state.lang === 'en') url.searchParams.delete('lang'); else url.searchParams.set('lang', state.lang);
+  url.hash = state.selected ? encodeURIComponent(state.selected) : '';
+  history.replaceState(null, '', url.pathname + url.search + url.hash);
+}
+function setPane(p) {
+  state.pane = p;
+  $('app').dataset.pane = p;
+  $('paneIncidents').hidden = p !== 'incidents';
+  $('paneStatements').hidden = p !== 'statements';
+  $('tabIncidents').setAttribute('aria-selected', String(p === 'incidents'));
+  $('tabStatements').setAttribute('aria-selected', String(p === 'statements'));
+  syncMobileTabs();
+}
+function setView(v) {
+  state.view = v; $('app').dataset.view = v; syncMobileTabs();
+  if (v === 'map' && map) requestAnimationFrame(() => map.invalidateSize());
+}
+function syncMobileTabs() {
+  const active = state.view === 'map' ? 'map' : state.pane;
+  document.querySelectorAll('[data-mtab]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mtab === active)));
+}
+async function setLang(lang) {
+  if (!LANGS.includes(lang)) return;
+  state.lang = lang; store.set('bsm-lang', lang);
+  dict = await getJson(`i18n/${lang}.json`, dict);
+  renderAll();
+  if (state.selected) select(state.selected, { push: false });
+  syncUrl();
+}
+function renderAll() { renderStatic(); renderKpis(); renderIncidents(); renderStatements(); renderChart(); }
+
+function bind() {
+  document.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => setLang(b.dataset.lang));
+  document.querySelectorAll('[data-pane-btn]').forEach(b => b.onclick = () => setPane(b.dataset.paneBtn));
+  document.querySelectorAll('[data-mtab]').forEach(b => b.onclick = () => {
+    if (b.dataset.mtab === 'map') setView('map'); else { setPane(b.dataset.mtab); setView('list'); }
+  });
+  document.querySelectorAll('[data-period]').forEach(b => b.onclick = () => { state.period = b.dataset.period; renderIncidents(); });
+  document.querySelectorAll('[data-kind]').forEach(b => b.onclick = () => { state.kind = b.dataset.kind; renderStatements(); });
+  $('fCategory').onchange = e => { state.category = e.target.value; renderIncidents(); };
+  $('fCountry').onchange = e => { state.country = e.target.value; renderIncidents(); };
+  $('fStatus').onchange = e => { state.status = e.target.value; renderIncidents(); };
+  $('fRegion').onchange = e => { state.region = e.target.value; renderStatements(); };
+  let timer; $('fSearch').oninput = e => { clearTimeout(timer); timer = setTimeout(() => { state.search = e.target.value; renderIncidents(); }, 120); };
+  $('resetFilters').onclick = () => {
+    Object.assign(state, { period: 'all', category: 'all', country: 'all', status: 'all', search: '' });
+    $('fSearch').value = ''; $('fCategory').value = $('fCountry').value = $('fStatus').value = 'all';
+    renderIncidents(); fitAll();
+  };
+  $('fitMap').onclick = fitAll;
+  $('detailClose').onclick = closeDetail;
+  $('scrim').onclick = closeDetail;
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+  window.addEventListener('hashchange', () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (id && id !== state.selected && incidents.some(r => r.id === id)) select(id, { fly: true, push: false });
+    else if (!id) closeDetail();
+  });
+  mqMobile.addEventListener('change', () => {
+    if (!$('detail').hidden) $('scrim').hidden = !mqMobile.matches;
+    if (map) requestAnimationFrame(() => map.invalidateSize());
+  });
+}
+
+async function init() {
+  bind();
+  setPane('incidents');
+  const [inc, st, ibg, iro, sbg, sro, upd, d] = await Promise.all([
+    getJson('data/incidents.json', null), getJson('data/statements.json', []),
+    getJson('data/incidents.bg.json', []), getJson('data/incidents.ro.json', []),
+    getJson('data/statements.bg.json', []), getJson('data/statements.ro.json', []),
+    getJson('data/updated.json', {}), getJson(`i18n/${state.lang}.json`, null)
+  ]);
+  dict = d || await getJson('i18n/en.json', {});
+  if (!Array.isArray(inc)) {
+    renderStatic();
+    $('incidentList').innerHTML = `<li class="empty">${esc(t('dataError'))}</li>`;
+    return;
+  }
+  incidents = inc.map(normIncident).filter(r => COUNTRIES.includes(r.country)).sort((a, b) => b.date.localeCompare(a.date));
+  statements = rows(st).map(normStatement);
+  tr.incidents.bg = new Map(rows(ibg).filter(r => r?.id).map(r => [r.id, r]));
+  tr.incidents.ro = new Map(rows(iro).filter(r => r?.id).map(r => [r.id, r]));
+  const smap = v => new Map(rows(v).flatMap(r => [[r.url, r], [r.id, r]].filter(x => x[0])));
+  tr.statements.bg = smap(sbg); tr.statements.ro = smap(sro);
+  updated = upd || {};
+  const id = decodeURIComponent(location.hash.slice(1));
+  initMap();
+  renderAll();
+  syncUrl();
+  if (id && incidents.some(r => r.id === id)) select(id, { fly: true, push: false });
+}
+init().catch(err => { console.error(err); $('incidentList').innerHTML = `<li class="empty">${esc(t('dataError'))}</li>`; });
