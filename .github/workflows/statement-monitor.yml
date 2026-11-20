@@ -6,39 +6,43 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: black-sea-auto-publish
+  group: black-sea-single-update
   cancel-in-progress: false
 jobs:
-  discover-and-publish:
+  update:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Install schema validator
         run: python -m pip install --disable-pip-version-check 'jsonschema==4.23.0'
-      - name: Merge legacy records and add sourced historical entries
+      - name: Prepare and retain historical data
         run: python scripts/migrate_and_enrich.py
-      - name: Discover press and official-statement leads
+      - name: Discover new news and statement leads
         run: python scripts/update_statements.py
-      - name: Discover maritime incident leads (do not map unsupported positions)
+      - name: Discover incident leads
         run: python scripts/discover_incidents.py
-      - name: Validate all published records against JSON schemas
+      - name: Validate all published data
         run: python scripts/validate_data.py
-      - name: Refresh metadata, RSS and CSV
+      - name: Translate published records with existing shared DeepL budget
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+          DEEPL_API_URL: ${{ vars.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate' }}
+        run: python scripts/translate_statements.py
+      - name: Generate public feeds and updated timestamp
         run: python scripts/generate_feeds.py
-      - name: Commit updates directly to main (no Pull Request)
+      - name: Commit published data, translations and quota together
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data/ rss.xml
           if git diff --cached --quiet; then
-            echo 'No new or changed records.'
+            echo 'No changes'
           else
-            git commit -m 'Auto-publish validated Black Sea updates and discovery leads'
+            git commit -m 'Update Black Sea data and cached translations'
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
