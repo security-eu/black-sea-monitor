@@ -98,3 +98,6 @@ This version caps DeepL calls to **900,000 source characters total** and release
 
 ## Map tiles fix
 Replaced CARTO tile layers that displayed API KEY REQUIRED with the standard OpenStreetMap tile endpoint. OSM standard tiles do not require a key for reasonable use; comply with its tile usage policy (attribution, caching, no bulk downloads). Country highlight overlays still use external GeoJSON CDN.
+
+## Map borders fix
+Romania and Bulgaria country boundaries are bundled in `data/eu-coast-borders.geojson` (Natural Earth low-resolution country geometry, via the pyogrio test fixture). No third-party borders API is needed. The GeoJSON file must be uploaded alongside the HTML pages. Clear browser cache after deployment.
