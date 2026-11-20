@@ -101,3 +101,6 @@ Replaced CARTO tile layers that displayed API KEY REQUIRED with the standard Ope
 
 ## Map borders fix
 Romania and Bulgaria country boundaries are bundled in `data/eu-coast-borders.geojson` (Natural Earth low-resolution country geometry, via the pyogrio test fixture). No third-party borders API is needed. The GeoJSON file must be uploaded alongside the HTML pages. Clear browser cache after deployment.
+
+## Map change
+Removed all custom country boundary polygons, country fills and boundary GeoJSON. The standard OpenStreetMap base layer and incident markers remain.
