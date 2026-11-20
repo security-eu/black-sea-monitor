@@ -1,10 +1,565 @@
 [
-{"id":"aya-2024","vessel":"AYA","date":"2024-09-11","country":"Romania","attribution":"reported","flag":"Saint Kitts and Nevis","type":"Bulk carrier","method":"Air-launched missile","summary":"Grain carrier damaged in Romania's exclusive economic zone. Ukraine attributed the strike to Russia; no casualties reported. Date is the reported time of impact (publicly announced September 12).","location":"Romanian EEZ, western Black Sea","locationPrecision":"Approximate offshore area; not the verified impact coordinates","lat":44.62,"lon":30.12,"sources":[{"label":"Reuters","url":"https://www.reuters.com/world/europe/russian-missile-hits-civilian-ship-with-ukrainian-grain-black-sea-zelenskiy-says-2024-09-12/"},{"label":"Naval News","url":"https://www.navalnews.com/naval-news/2024/09/civilian-grain-ship-hit-by-russian-kh-22-missile-in-black-sea/"}]},
-{"id":"golden-lion-2024","vessel":"Unidentified Antigua-flagged vessel (possibly GOLDEN LION)","date":"2024-09-20","country":"Ukraine","attribution":"reported","flag":"Antigua and Barbuda","type":"Cargo vessel","method":"Missile strike / debris","summary":"Regional officials reported damage to an Antigua-flagged civilian ship in Odesa. Reuters identified Golden Lion as a vessel present in port, but did not confirm it was the ship hit.","location":"Port of Odesa","locationPrecision":"Port-level approximate marker","lat":46.495,"lon":30.746,"sources":[{"label":"Reuters via gCaptain","url":"https://gcaptain.com/antigua-flagged-vessel-damaged-in-russian-attack-on-odesa-port/"}]},
-{"id":"paresa-2024","vessel":"PARESA","date":"2024-10-06","country":"Ukraine","attribution":"confirmed","flag":"Saint Kitts and Nevis","type":"Bulk carrier","method":"Missile strike","summary":"Corn-carrying civilian vessel damaged in a Russian strike at Pivdennyi port. Some maritime reports date the incident October 5; Reuters reports October 6.","location":"Port of Pivdennyi","locationPrecision":"Port-level approximate marker","lat":46.611,"lon":31.007,"sources":[{"label":"Reuters report","url":"https://www.investing.com/news/commodities-news/russian-missile-attack-on-ukraines-odesa-port-region-kills-six-governor-says-3656430"},{"label":"Neptune P2P maritime report","url":"https://neptunep2pgroup.com/wp-content/uploads/2024/11/20241101-NeptuneP2P-Monthly-Maritime-Incident-Report-October-2024.pdf"}]},
-{"id":"optima-2024-10-07","vessel":"OPTIMA","date":"2024-10-07","country":"Ukraine","attribution":"confirmed","flag":"Palau","type":"Cargo vessel","method":"Ballistic missile","summary":"Vessel struck at Odesa port; one Ukrainian port worker was killed and five foreign crew members injured, according to Ukrainian officials.","location":"Port of Odesa","locationPrecision":"Port-level approximate marker","lat":46.497,"lon":30.744,"sources":[{"label":"Maritime casualty register","url":"https://partner-ship.org/war-risk-watch/register?month=2024-10"},{"label":"Financial Times","url":"https://www.ft.com/content/241de013-2398-43f5-863c-d3352de004a8"}]},
-{"id":"shui-spirit-2024","vessel":"SHUI SPIRIT","date":"2024-10-09","country":"Ukraine","attribution":"confirmed","flag":"Panama","type":"Container ship","method":"Ballistic missile","summary":"Container ship damaged in a Russian missile attack on Chornomorsk port, according to Ukrainian officials. Six people were reported killed in the wider port attack; not necessarily aboard the ship.","location":"Port of Chornomorsk","locationPrecision":"Port-level approximate marker","lat":46.304,"lon":30.657,"sources":[{"label":"Reuters","url":"https://www.investing.com/news/commodities-news/russian-missile-attack-on-ukraines-odesa-port-region-kills-six-governor-says-3656430"}]},
-{"id":"optima-2024-10-14","vessel":"OPTIMA (second strike)","date":"2024-10-14","country":"Ukraine","attribution":"confirmed","flag":"Palau","type":"Cargo vessel","method":"Missile strike","summary":"OPTIMA was damaged for the second time in a week during another strike on Odesa port. Casualties reported for the wider strike should not be attributed to this vessel alone.","location":"Port of Odesa","locationPrecision":"Port-level approximate marker","lat":46.496,"lon":30.747,"sources":[{"label":"Reuters via gCaptain","url":"https://gcaptain.com/new-russian-attack-damages-civilian-vessels-in-ukraines-odesa/"}]},
-{"id":"ns-moon-2024","vessel":"NS MOON","date":"2024-10-14","country":"Ukraine","attribution":"confirmed","flag":"Belize","type":"Cargo vessel","method":"Missile strike","summary":"Belize-flagged cargo vessel damaged alongside OPTIMA in the attack on Odesa port.","location":"Port of Odesa","locationPrecision":"Port-level approximate marker","lat":46.494,"lon":30.744,"sources":[{"label":"Maritime casualty register","url":"https://partner-ship.org/war-risk-watch/register?month=2024-10"},{"label":"Reuters via gCaptain","url":"https://gcaptain.com/new-russian-attack-damages-civilian-vessels-in-ukraines-odesa/"}]},
-{"id":"orinda-2025","vessel":"ORINDA","date":"2025-11-17","country":"Ukraine","attribution":"confirmed","flag":"Türkiye","type":"LPG carrier","method":"Drone strike","summary":"Turkish-flagged LPG tanker hit while unloading at Izmail; fire broke out and all 16 crew evacuated. Romanian villages nearby were evacuated as a precaution.","location":"Port of Izmail, Danube","locationPrecision":"Port-level approximate marker; river port, not open sea","lat":45.344,"lon":28.84,"sources":[{"label":"Associated Press","url":"https://apnews.com/article/ea4ef368e58ef0936d24b27cd56073af"},{"label":"The Maritime Executive","url":"https://maritime-executive.com/article/fire-extinguished-on-lpg-carrier-hit-during-russian-attack-on-ukraine"}]}
+  {
+    "id": "aya-2024",
+    "vessel": "AYA",
+    "date": "2024-09-11",
+    "country": "Romania",
+    "attribution": "reported",
+    "flag": "Saint Kitts and Nevis",
+    "type": "Bulk carrier",
+    "method": "Air-launched missile",
+    "summary": "Grain carrier damaged in Romania's exclusive economic zone. Ukraine attributed the strike to Russia; no casualties reported. Date is the reported time of impact (publicly announced September 12).",
+    "location": "Romanian EEZ, western Black Sea",
+    "locationPrecision": "Approximate offshore area; not the verified impact coordinates",
+    "lat": 44.62,
+    "lon": 30.12,
+    "sources": [
+      {
+        "label": "Reuters",
+        "url": "https://www.reuters.com/world/europe/russian-missile-hits-civilian-ship-with-ukrainian-grain-black-sea-zelenskiy-says-2024-09-12/"
+      },
+      {
+        "label": "Naval News",
+        "url": "https://www.navalnews.com/naval-news/2024/09/civilian-grain-ship-hit-by-russian-kh-22-missile-in-black-sea/"
+      }
+    ]
+  },
+  {
+    "id": "golden-lion-2024",
+    "vessel": "Unidentified Antigua-flagged vessel (possibly GOLDEN LION)",
+    "date": "2024-09-20",
+    "country": "Ukraine",
+    "attribution": "reported",
+    "flag": "Antigua and Barbuda",
+    "type": "Cargo vessel",
+    "method": "Missile strike / debris",
+    "summary": "Regional officials reported damage to an Antigua-flagged civilian ship in Odesa. Reuters identified Golden Lion as a vessel present in port, but did not confirm it was the ship hit.",
+    "location": "Port of Odesa",
+    "locationPrecision": "Port-level approximate marker",
+    "lat": 46.495,
+    "lon": 30.746,
+    "sources": [
+      {
+        "label": "Reuters via gCaptain",
+        "url": "https://gcaptain.com/antigua-flagged-vessel-damaged-in-russian-attack-on-odesa-port/"
+      }
+    ]
+  },
+  {
+    "id": "paresa-2024",
+    "vessel": "PARESA",
+    "date": "2024-10-06",
+    "country": "Ukraine",
+    "attribution": "confirmed",
+    "flag": "Saint Kitts and Nevis",
+    "type": "Bulk carrier",
+    "method": "Missile strike",
+    "summary": "Corn-carrying civilian vessel damaged in a Russian strike at Pivdennyi port. Some maritime reports date the incident October 5; Reuters reports October 6.",
+    "location": "Port of Pivdennyi",
+    "locationPrecision": "Port-level approximate marker",
+    "lat": 46.611,
+    "lon": 31.007,
+    "sources": [
+      {
+        "label": "Reuters report",
+        "url": "https://www.investing.com/news/commodities-news/russian-missile-attack-on-ukraines-odesa-port-region-kills-six-governor-says-3656430"
+      },
+      {
+        "label": "Neptune P2P maritime report",
+        "url": "https://neptunep2pgroup.com/wp-content/uploads/2024/11/20241101-NeptuneP2P-Monthly-Maritime-Incident-Report-October-2024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "optima-2024-10-07",
+    "vessel": "OPTIMA",
+    "date": "2024-10-07",
+    "country": "Ukraine",
+    "attribution": "confirmed",
+    "flag": "Palau",
+    "type": "Cargo vessel",
+    "method": "Ballistic missile",
+    "summary": "Vessel struck at Odesa port; one Ukrainian port worker was killed and five foreign crew members injured, according to Ukrainian officials.",
+    "location": "Port of Odesa",
+    "locationPrecision": "Port-level approximate marker",
+    "lat": 46.497,
+    "lon": 30.744,
+    "sources": [
+      {
+        "label": "Maritime casualty register",
+        "url": "https://partner-ship.org/war-risk-watch/register?month=2024-10"
+      },
+      {
+        "label": "Financial Times",
+        "url": "https://www.ft.com/content/241de013-2398-43f5-863c-d3352de004a8"
+      }
+    ]
+  },
+  {
+    "id": "shui-spirit-2024",
+    "vessel": "SHUI SPIRIT",
+    "date": "2024-10-09",
+    "country": "Ukraine",
+    "attribution": "confirmed",
+    "flag": "Panama",
+    "type": "Container ship",
+    "method": "Ballistic missile",
+    "summary": "Container ship damaged in a Russian missile attack on Chornomorsk port, according to Ukrainian officials. Six people were reported killed in the wider port attack; not necessarily aboard the ship.",
+    "location": "Port of Chornomorsk",
+    "locationPrecision": "Port-level approximate marker",
+    "lat": 46.304,
+    "lon": 30.657,
+    "sources": [
+      {
+        "label": "Reuters",
+        "url": "https://www.investing.com/news/commodities-news/russian-missile-attack-on-ukraines-odesa-port-region-kills-six-governor-says-3656430"
+      }
+    ]
+  },
+  {
+    "id": "optima-2024-10-14",
+    "vessel": "OPTIMA (second strike)",
+    "date": "2024-10-14",
+    "country": "Ukraine",
+    "attribution": "confirmed",
+    "flag": "Palau",
+    "type": "Cargo vessel",
+    "method": "Missile strike",
+    "summary": "OPTIMA was damaged for the second time in a week during another strike on Odesa port. Casualties reported for the wider strike should not be attributed to this vessel alone.",
+    "location": "Port of Odesa",
+    "locationPrecision": "Port-level approximate marker",
+    "lat": 46.496,
+    "lon": 30.747,
+    "sources": [
+      {
+        "label": "Reuters via gCaptain",
+        "url": "https://gcaptain.com/new-russian-attack-damages-civilian-vessels-in-ukraines-odesa/"
+      }
+    ]
+  },
+  {
+    "id": "ns-moon-2024",
+    "vessel": "NS MOON",
+    "date": "2024-10-14",
+    "country": "Ukraine",
+    "attribution": "confirmed",
+    "flag": "Belize",
+    "type": "Cargo vessel",
+    "method": "Missile strike",
+    "summary": "Belize-flagged cargo vessel damaged alongside OPTIMA in the attack on Odesa port.",
+    "location": "Port of Odesa",
+    "locationPrecision": "Port-level approximate marker",
+    "lat": 46.494,
+    "lon": 30.744,
+    "sources": [
+      {
+        "label": "Maritime casualty register",
+        "url": "https://partner-ship.org/war-risk-watch/register?month=2024-10"
+      },
+      {
+        "label": "Reuters via gCaptain",
+        "url": "https://gcaptain.com/new-russian-attack-damages-civilian-vessels-in-ukraines-odesa/"
+      }
+    ]
+  },
+  {
+    "id": "orinda-2025",
+    "vessel": "ORINDA",
+    "date": "2025-11-17",
+    "country": "Ukraine",
+    "attribution": "confirmed",
+    "flag": "Türkiye",
+    "type": "LPG carrier",
+    "method": "Drone strike",
+    "summary": "Turkish-flagged LPG tanker hit while unloading at Izmail; fire broke out and all 16 crew evacuated. Romanian villages nearby were evacuated as a precaution.",
+    "location": "Port of Izmail, Danube",
+    "locationPrecision": "Port-level approximate marker; river port, not open sea",
+    "lat": 45.344,
+    "lon": 28.84,
+    "sources": [
+      {
+        "label": "Associated Press",
+        "url": "https://apnews.com/article/ea4ef368e58ef0936d24b27cd56073af"
+      },
+      {
+        "label": "The Maritime Executive",
+        "url": "https://maritime-executive.com/article/fire-extinguished-on-lpg-carrier-hit-during-russian-attack-on-ukraine"
+      }
+    ]
+  },
+  {
+    "id": "royad-mammadov-2026",
+    "vessel": "Royad Mammadov",
+    "date": "2026-10-05",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Cargo ship",
+    "method": "Reported drone / maritime incident",
+    "summary": "Struck offshore; two crew members reported killed.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 44.7,
+    "lon": 29.9,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "alfa-watan-2026",
+    "vessel": "Alfa Watan",
+    "date": "2026-10-06",
+    "country": "Bulgaria",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Cargo ship",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported drone strike east of Byala; vessel sank.",
+    "location": "Offshore Bulgaria (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 42.8,
+    "lon": 29.4,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "able-2026",
+    "vessel": "Able",
+    "date": "2026-10-06",
+    "country": "Bulgaria",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Cargo ship",
+    "method": "Reported drone / maritime incident",
+    "summary": "Damaged in reported attack near Alfa Watan.",
+    "location": "Offshore Bulgaria (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 42.9,
+    "lon": 29.3,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "chelsea-3-2026",
+    "vessel": "Chelsea 3",
+    "date": "2026-10-13",
+    "country": "Bulgaria",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Grain carrier",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported struck by multiple drones; crew rescued.",
+    "location": "Offshore Bulgaria (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 43.1,
+    "lon": 28.9,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "hs-dignity-2026",
+    "vessel": "HS Dignity",
+    "date": "2026-10-13",
+    "country": "Bulgaria",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Cargo ship",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported sinking offshore near Shabla/Krapets.",
+    "location": "Offshore Bulgaria (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 43.6,
+    "lon": 29.0,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "yara-j-2026",
+    "vessel": "Yara J",
+    "date": "2026-10-14",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Tanker",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported fire following incident near Sulina.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 45.0,
+    "lon": 29.8,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "wine-trader-2026",
+    "vessel": "Wine Trader",
+    "date": "2026-10-15",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Tanker",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported attack offshore near Sulina.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 44.9,
+    "lon": 29.9,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "khoryv-2026",
+    "vessel": "Khoryv",
+    "date": "2026-10-23",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Cargo ship",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported struck offshore near Constanța.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 44.2,
+    "lon": 29.3,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "contship-jet-2026",
+    "vessel": "Contship Jet",
+    "date": "2026-10-28",
+    "country": "Bulgaria",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Container ship",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported naval-drone attack and sinking offshore.",
+    "location": "Offshore Bulgaria (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 43.3,
+    "lon": 28.9,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "larissa-1-2026",
+    "vessel": "Larissa 1",
+    "date": "2026-11-13",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Cargo ship",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported damage near Sfântu Gheorghe.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 44.8,
+    "lon": 29.8,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "evia-petrol-v-2026",
+    "vessel": "Evia Petrol V",
+    "date": "2026-11-14",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Tanker",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported drone strike near Sulina; crew controlled fire.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 45.05,
+    "lon": 29.85,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "ali-najafov-2026",
+    "vessel": "Ali Najafov",
+    "date": "2026-11-14",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Tanker",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported drone incident near Sulina; date varies by source.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 44.97,
+    "lon": 29.8,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "marsol-2026",
+    "vessel": "Marsol",
+    "date": "2026-11-14",
+    "country": "Romania",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Bulk carrier",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported strike near Sulina; fire extinguished.",
+    "location": "Offshore Romania (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 44.95,
+    "lon": 29.88,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "betul-8-2026",
+    "vessel": "Betul 8",
+    "date": "2026-11-16",
+    "country": "Bulgaria",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "Bulk carrier",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported sinking off Cape Kaliakra; crew rescued.",
+    "location": "Offshore Bulgaria (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 43.1,
+    "lon": 29.1,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  },
+  {
+    "id": "gas-husky-2026",
+    "vessel": "Gas Husky",
+    "date": "2026-11-17",
+    "country": "Bulgaria",
+    "attribution": "unknown",
+    "flag": "See source",
+    "type": "LPG carrier",
+    "method": "Reported drone / maritime incident",
+    "summary": "Reported sinking east of Byala; cause not conclusively established.",
+    "location": "Offshore Bulgaria (schematic position)",
+    "locationPrecision": "Illustrative area marker only — NOT a verified strike coordinate",
+    "lat": 42.8,
+    "lon": 29.5,
+    "sources": [
+      {
+        "label": "Reuters factbox",
+        "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/17/factbox-how-nato-states-on-the-black-sea-are-being-drawn-into-ukraine-war-escalation"
+      },
+      {
+        "label": "BGNES",
+        "url": "https://www.bgnes.com/conflicts/putin-takes-responsibility-for-black-sea-attacks-near-bulgaria-and-romania"
+      }
+    ]
+  }
 ]
