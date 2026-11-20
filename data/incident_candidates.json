@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-20T14:50:24.282422+00:00",
+  "checked_at": "2026-11-20T15:19:12.803246+00:00",
   "candidates": [
     {
       "country": "Romania",
@@ -51,6 +51,17 @@
       "discovery_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNUWQyNHZ1RHNzeUZCWXJtcnZUWG9YMWFwZUhmdmVMRzVlQ3JORjUyTEpidS1WVVNHMWxHdmlFVk5GQ0hWSEZIOWlBX1lVWl9JbnFETUZYajVBQTllYXJQNkxsSXlvbER6R3pNYVRBMEdfTnRNVkkwdTlnVTJaVFUxMXYwelhNQk9TS1l1Vi1Cc1dRSWpLZW11MGxxZ2dBNU1NUk4tSw?oc=5",
       "publisher": "Odessa Journal",
       "publication_date": "2026-11-16",
+      "incident_date": null,
+      "coordinates": null,
+      "actor_attribution": null,
+      "status": "Unverified lead; verify direct sources, event date and location manually"
+    },
+    {
+      "country": "Romania",
+      "headline": "Romania slams ‘unacceptable’ drone strikes on Black Sea ships - POLITICO.eu",
+      "discovery_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOSVg2YVp5TTVyWHlNOVdqa2NmOUJMbnAtU3lDVnJucXo0dnZoNkZBM2ZpbksxS2FQcEdmMFF2NFFOclZublJjVmZKZHdCSkhlaVNFMXZ0eUR3SVpMeEhaNWdvZktnOFNYQlZJVV9JSS14QV9BR19MTXk2dk01TUE2LTliMk5RbjAtQmxrMVk2WlBQRVNXOFByQWEzVWI?oc=5",
+      "publisher": "POLITICO.eu",
+      "publication_date": "2026-11-15",
       "incident_date": null,
       "coordinates": null,
       "actor_attribution": null,
@@ -150,17 +161,6 @@
       "discovery_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOdlVYSGg4d0RPajJ3N2dSSTNLMUZ4eHkzX2JLRmtWU180SlBPY3UwV09scXFGZ1pueWRXZy14djc5YzdrbGZ2em5sWWs3aHBTbEJfUkpmTDhoTGwxdU5UU09sRHF3NjBOeGZkTlZ6RkQ4VmZTU2hab05EVXFLRENHeFc2LW1fTHdsT01sOGhGZnJ1OFVpYjNmbXZzcDFINEVfRFZiQjVhTjRzc2hyY2JoQzlHWl9ZZUZhZzV0REJXbi1TU3c2MkIwdWRmQ1pPRDFGY3c?oc=5",
       "publisher": "Novinite.com",
       "publication_date": "2026-11-20",
-      "incident_date": null,
-      "coordinates": null,
-      "actor_attribution": null,
-      "status": "Unverified lead; verify direct sources, event date and location manually"
-    },
-    {
-      "country": "Romania",
-      "headline": "Ukraine-Russia war latest: Power cuts in Kyiv as vital bridges struck in massive Russian ballistic missile attack - Newswav",
-      "discovery_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNeWhic0lWVlpnQXhpbExSc1ZlcGhUNDdYVzB6V0NpM3RQWmdxbzQwZ2FMNTNGWmJzRlR3WU1kbzQ2V3FFeXZIZnV3T3ZNZnQ4a0pYT1k1VzZWVTgzazkwM285WmdHZ3YwQzJKU2ZydVBzbXY4NDBybXdPei1LSUY5RnJycWdMV2xNdUxKaTI2ZDVub0cxZjdacEtkTi16MDhGQ2lXZExGQnVzLXMyaXhwRFY2Z3VrQWs?oc=5",
-      "publisher": "Newswav",
-      "publication_date": "2026-11-17",
       "incident_date": null,
       "coordinates": null,
       "actor_attribution": null,
@@ -322,17 +322,6 @@
     },
     {
       "country": "Bulgaria",
-      "headline": "Танкер с газ потъна, поразен от дронове в български води - Новини СЕГА",
-      "discovery_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOUnFsMG9hcWtiS1JrYzJyTlZmVkxaeHJzZ05CT1hIT2lJVlJLVHBwWjAwanAwa2dWbW8yX3dlNU9DYVBzb2kyTDBnNnVxZEFhMnE2eTFyMW1VUkk3OHphRnVOcnhBV05YV29feGtaQTUtT1lJaWFwTGJ2R0dNUFpvcUNhQ1hTUFRoQXllNnRvMXFtZExoN1VrTw?oc=5",
-      "publisher": "Новини СЕГА",
-      "publication_date": "2026-11-17",
-      "incident_date": null,
-      "coordinates": null,
-      "actor_attribution": null,
-      "status": "Unverified lead; verify direct sources, event date and location manually"
-    },
-    {
-      "country": "Bulgaria",
       "headline": "Шест седмици атаки в Черно море: 15 са засегнатите кораби край България и Румъния - Frognews",
       "discovery_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNYU5xbHk0bjZvcUI4X0ZyMVl6SEZRRVVzUVVfLXFmTGt3eUZxZXAtc1lKbnJzdzBYT3pHZ2pzZS03RGJxWUdCdnRPNzVBcXp1S3ZZclZBTzYxbnpUNEExd3IwZTBHcmF6STlBN29CZmU5NV9Za1NmLURsYVNIVlN4RUt2YWhKd3FJNDRXQ0xMbWpMMHIyUlFjLUlFMHQ2Uy1CSmdQandfSEU0MXNkTWZr?oc=5",
       "publisher": "Frognews",
@@ -344,9 +333,9 @@
     },
     {
       "country": "Bulgaria",
-      "headline": "Путин призна за атаките в Черно море край България и Румъния - Фактор",
-      "discovery_url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNVzBuYmtRaElGVEpRLUphbGttSWlhVVRWTnl5RUo2WGpXNUczZVl4bDZCRVRjVVBfdk5aMU42LWhEZVlyYkljeDRmLUlHaFlaSmhnR1FMNFZ4aU9tQmhSSEdYTVVIWGNNd1d0T0k4VjEwRVpfUkNuSkxnNl9HM2gyd3l0WVFzdw?oc=5",
-      "publisher": "Фактор",
+      "headline": "Юрист по морско право: България има пълното право да унищожава анонимни дронове в открито море - Maritime.bg - Морският портал",
+      "discovery_url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE8wb1BoZ3lwSmxXQm00bk9BZ3pTbW1mWHdhMDF2c2xZalZuVVJySDlVd1JpTmZUTGlfclB2YnVadWllNkxRN3c?oc=5",
+      "publisher": "Maritime.bg - Морският портал",
       "publication_date": "2026-11-19",
       "incident_date": null,
       "coordinates": null,
@@ -355,9 +344,9 @@
     },
     {
       "country": "Bulgaria",
-      "headline": "Юрист по морско право: България има пълното право да унищожава анонимни дронове в открито море - Maritime.bg - Морският портал",
-      "discovery_url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE8wb1BoZ3lwSmxXQm00bk9BZ3pTbW1mWHdhMDF2c2xZalZuVVJySDlVd1JpTmZUTGlfclB2YnVadWllNkxRN3c?oc=5",
-      "publisher": "Maritime.bg - Морският портал",
+      "headline": "Путин призна за атаките в Черно море край България и Румъния - Фактор",
+      "discovery_url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNVzBuYmtRaElGVEpRLUphbGttSWlhVVRWTnl5RUo2WGpXNUczZVl4bDZCRVRjVVBfdk5aMU42LWhEZVlyYkljeDRmLUlHaFlaSmhnR1FMNFZ4aU9tQmhSSEdYTVVIWGNNd1d0T0k4VjEwRVpfUkNuSkxnNl9HM2gyd3l0WVFzdw?oc=5",
+      "publisher": "Фактор",
       "publication_date": "2026-11-19",
       "incident_date": null,
       "coordinates": null,
@@ -425,6 +414,17 @@
       "discovery_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNQlp6MkYtM3ZRYTNyaFJ1cHdTNWRxT004MTk5X3BZT0JfX3djdTJNYUdxcGViY0tkZFpsU2NNVWNZd1VJdlVYbThLRkNrU2d5WjlzMFZFRmZmaUE0c3ZzWWJZWjQxMXFGbjVqdEFVY3ZSWFNKbklhYWpGTjVyUWROekFmVXdWSkYtVkNyVnFvWHRDaGttYlFEVHN4MVc3ajg2M0liX0EtSlNOZGVob2tQT2VQc09YVEZBeWJBVDR3X2hndF9aNGZlSXZjNUlibGxRQ2c?oc=5",
       "publisher": "DarikNews.bg",
       "publication_date": "2026-11-18",
+      "incident_date": null,
+      "coordinates": null,
+      "actor_attribution": null,
+      "status": "Unverified lead; verify direct sources, event date and location manually"
+    },
+    {
+      "country": "Bulgaria",
+      "headline": "ЗА СТОКИТЕ, ВНЕСЕНИ ПО МОРЕ: €1 такса дрон в цените! - Telegraph.bg",
+      "discovery_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPb2VVeGpiSDVvdzhPUEVFNmEyU2tid3ZXUTJ2SkZMRVhPSUgyZkViQi1TV0NMTnVqQ3cxajJuUWdoZ1FrbUs0bEkycGFjclZpYzloV0VZTXdRUGwxbmhVVUh0bE5xN3pYOWVHbWF2azJLUklkMUFZRW1EQmc2a3h5alBCYVFsV2FGWW5IS2lvSHpMd1NpSDNPZXpBek5GM2FteVAzOF9fZGgwWHhob2tLRHg4bmw1ZmJLbWlXLVoxSXpVR1NJdHVPdFV6d1AyZHVUblhaQTBjR0ozejJ5azhqbHBrWHE?oc=5",
+      "publisher": "Telegraph.bg",
+      "publication_date": "2026-11-19",
       "incident_date": null,
       "coordinates": null,
       "actor_attribution": null,

@@ -534,7 +534,8 @@
         "url": "https://english.mapn.ro/cpresa/6542_Romania-has-taken-over-command-of-the-MCM-Black-Sea-Task-Group"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Port-level approximate location for the command ceremony"
   },
   {
     "id": "optima-2024-10-14",
@@ -771,7 +772,8 @@
         "url": "https://english.mapn.ro/cpresa/6290_The-Bulgarian%2C-Romanian-and-Turkish-Naval-Forces-work-together-to-counter-the-mine-threat-in-the-Black-Sea-"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Symbolic Bulgarian coastal marker for a multinational operation; not the site of an incident"
   },
   {
     "id": "mine-pasha-dere-2024-05-14",
@@ -796,7 +798,8 @@
         "url": "https://bnt.bg/news/bulgarian-navy-defused-naval-mine-off-the-bulgarian-black-sea-coast-328940news.html"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate coastal position from the stated area, not exact coordinates"
   },
   {
     "id": "drone-plauru-2023-09-05",
@@ -821,7 +824,8 @@
         "url": "https://english.mapn.ro/cpresa/6041_press-information"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate locality marker on the Danube, NOT a maritime strike coordinate"
   },
   {
     "id": "mine-sf-gheorghe-2023-01-26",
@@ -846,7 +850,8 @@
         "url": "https://www.navy.ro/comunicat.php?id=679"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate beach area, not the EOD detonation point"
   },
   {
     "id": "mine-kochan-2023-01-24",
@@ -871,7 +876,8 @@
         "url": "https://old-news.bnr.bg/horizont/post/101769244/voenni-ot-vms-otnovo-unishtojiha-mina-plavashti-krai-balgarskia-brag"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate coast-area marker from media reporting; location must not be used for navigation"
   },
   {
     "id": "mine-constanta-2022-12-10",
@@ -896,7 +902,8 @@
         "url": "https://www.navy.ro/comunicat.php?id=670"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate offshore location from relative distance reported by the navy"
   },
   {
     "id": "mine-eforie-2022-07-31",
@@ -921,7 +928,8 @@
         "url": "https://www.navy.ro/comunicat.php?id=622"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate area, source gives distance but no impact coordinates"
   },
   {
     "id": "mine-varna-2022-06-30",
@@ -946,7 +954,8 @@
         "url": "https://www.bta.bg/en/news/bulgaria/290913-bisspetsialisti-ot-vms-sa-unishtozhili-plavashta-mina"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate regional map marker only, not reported exact mine position"
   },
   {
     "id": "mine-capu-midia-2022-03-28",
@@ -971,6 +980,7 @@
         "url": "https://www.navy.ro/comunicat.php?id=567"
       }
     ],
-    "reviewed": true
+    "reviewed": true,
+    "location_precision": "Approximate offshore zone based on reported distance; not an exact mine coordinate"
   }
 ]
