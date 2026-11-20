@@ -30,9 +30,14 @@ function filterIncidents(){const today=Date.now();return incidents.filter(r=>{
  if(state.search&&!JSON.stringify(r).toLowerCase().includes(state.search.toLowerCase()))return false;
  return true;
  })}
-function isMappable(r){return Number.isFinite(Number(r.lat))&&Number.isFinite(Number(r.lon)) && r.position_status!=='unlocated' && !r.auto_discovered}
+function isMappable(r){
+ const lat=Number(r.lat),lon=Number(r.lon);
+ return r.lat!=null&&r.lon!=null&&Number.isFinite(lat)&&Number.isFinite(lon)&&lat>=-90&&lat<=90&&lon>=-180&&lon<=180&&r.position_status!=='unlocated'&&!r.auto_discovered
+}
 function markerColor(r){if(r.category==='mine_action')return '#7b8391';if(r.category==='mine')return '#a16e37';if(r.category==='drone_debris')return '#985e98';return r.country==='Romania'?'#1683a4':'#d2a149'}
-function renderMapData(){if(!state.map)return;state.markers.forEach(m=>state.map.removeLayer(m));state.markers=[];const rows=filterIncidents(),mappable=rows.filter(isMappable);for(const r of mappable){const marker=L.circleMarker([r.lat,r.lon],{radius:r.category==='mine_action'?6:7,fillColor:markerColor(r),color:'#ffffff',weight:2.2,fillOpacity:.94,interactive:true});marker.addTo(state.map).on('click',()=>openIncident(r.id));marker.bindTooltip(E(r.vessel||r.title||r.id),{direction:'top'});state.markers.push(marker)}$('mapCount').textContent=`${rows.filter(r=>r.event_kind!=='response').length} ${t('pressCount')}`;renderArchive();selectOptions()}
+function renderMapData(){if(!state.map)return;state.markers.forEach(m=>state.map.removeLayer(m));state.markers=[];const rows=filterIncidents(),mappable=rows.filter(isMappable);for(const r of mappable){const marker=L.circleMarker([Number(r.lat),Number(r.lon)],{radius:r.category==='mine_action'?6:7,fillColor:markerColor(r),color:'#ffffff',weight:2.2,fillOpacity:.94,interactive:true});marker.addTo(state.map).on('click',()=>openIncident(r.id));marker.bindTooltip(E(r.vessel||r.title||r.id),{direction:'top'});state.markers.push(marker)}
+ if(!mappable.length){console.warn('No mappable incidents. Check data/incidents.json, coordinates, and map filters.');}
+ $('mapCount').textContent=`${rows.filter(r=>r.event_kind!=='response').length} ${t('pressCount')}`;renderArchive();selectOptions()}
 function zoomMarkers(){if(!state.map)return;const pts=filterIncidents().filter(isMappable);if(!pts.length){state.map.setView([43.25,29.2],7);return}const b=L.latLngBounds(pts.map(r=>[r.lat,r.lon]));state.map.fitBounds(b.pad(.14),{maxZoom:9,animate:true})}
 function normalizeStatement(r){if(r.kind)return r;let host='';try{host=new URL(r.url).hostname}catch{};
  const official=['consilium.europa.eu','ec.europa.eu','eeas.europa.eu','mfa.bg','mai.gov.ro','mae.ro','gov.ro','government.bg','presidency.ro'].some(d=>host===d||host.endsWith('.'+d));
@@ -51,19 +56,22 @@ function setTab(tab){state.tab=tab;sessionStorage.setItem('eu-bs-tab',tab);$('la
 function renderAbout(){const sections=[['aboutEditor','aboutEditorText'],['aboutScope','aboutScopeText'],['aboutEvidence','aboutEvidenceText'],['aboutLocation','aboutLocationText'],['aboutUpdates','aboutUpdatesText']];$('aboutText').innerHTML=`<p>${E(t('aboutIntro'))}</p>${sections.map(([a,b])=>`<h3>${E(t(a))}</h3><p>${E(t(b))}</p>`).join('')}`}
 function openAbout(){renderAbout();$('aboutDialog').showModal()}
 function safeDialogEvents(id,closeId){$(closeId).onclick=()=>$(id).close();$(id).onclick=ev=>{if(ev.target===$(id))$(id).close()}}
-function initMap(){if(typeof L==='undefined'){$('map').textContent='Map library unavailable; archive remains accessible.';return}state.map=L.map('map',{zoomControl:false,scrollWheelZoom:true}).setView([43.25,29.2],7);L.control.zoom({position:'bottomright'}).addTo(state.map);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(state.map);state.map.whenReady(()=>renderMapData())}
-async function init(){const initialHash=decodeURIComponent(location.hash.substring(1));const data=await Promise.all([getJson('data/incidents.json',[]),getJson('data/statements.json',[]),getJson('data/incidents.bg.json',[]),getJson('data/incidents.ro.json',[]),getJson('data/statements.bg.json',[]),getJson('data/statements.ro.json',[]),getJson('data/updated.json',{})]);[incidents,news]=data;news=news.map(normalizeStatement);translations.incidents.bg=new Map(data[2].map(r=>[r.id,r]));translations.incidents.ro=new Map(data[3].map(r=>[r.id,r]));translations.statements.bg=new Map(data[4].map(r=>[r.url,r]));translations.statements.ro=new Map(data[5].map(r=>[r.url,r]));updated=data[6];
+function initMap(){if(typeof L==='undefined'){$('map').textContent='Map library unavailable; archive remains accessible.';return}state.map=L.map('map',{zoomControl:false,scrollWheelZoom:true}).setView([43.25,29.2],7);L.control.zoom({position:'bottomright'}).addTo(state.map);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(state.map);state.map.whenReady(()=>{renderMapData();requestAnimationFrame(()=>state.map.invalidateSize())})}
+async function init(){const initialHash=decodeURIComponent(location.hash.substring(1));const data=await Promise.all([getJson('data/incidents.json',[]),getJson('data/statements.json',[]),getJson('data/incidents.bg.json',[]),getJson('data/incidents.ro.json',[]),getJson('data/statements.bg.json',[]),getJson('data/statements.ro.json',[]),getJson('data/updated.json',{})]);[incidents,news]=data;
+ if(!Array.isArray(incidents))incidents=[];
+ if(!Array.isArray(news))news=[];
+ incidents=incidents.map(r=>{
+   let lat=r.lat??r.latitude??r.coordinates?.lat;
+   let lon=r.lon??r.lng??r.longitude??r.coordinates?.lon??r.coordinates?.lng;
+   if(Array.isArray(r.coordinates)&&r.coordinates.length>=2){lon??=r.coordinates[0];lat??=r.coordinates[1]}
+   return {...r,lat,lon};
+ });
+ news=news.map(normalizeStatement);translations.incidents.bg=new Map(data[2].map(r=>[r.id,r]));translations.incidents.ro=new Map(data[3].map(r=>[r.id,r]));translations.statements.bg=new Map(data[4].map(r=>[r.url,r]));translations.statements.ro=new Map(data[5].map(r=>[r.url,r]));updated=data[6];
  document.querySelectorAll('[data-switch]').forEach(btn=>btn.onclick=()=>applyLanguage(btn.dataset.switch));document.querySelectorAll('[data-tab]').forEach(btn=>btn.onclick=()=>setTab(btn.dataset.tab));$('filterButton').onclick=()=>{$('filtersDialog').showModal()};$('aboutButton').onclick=()=>{location.href='about.html?lang='+state.lang};$('footerMethod').onclick=e=>{e.preventDefault();location.href='about.html?lang='+state.lang};$('contactLink').onclick=e=>{e.preventDefault();location.href='about.html?lang='+state.lang};$('archiveToggle').onclick=()=>{state.showArchive=!state.showArchive;renderArchive()};$('fitMap').onclick=zoomMarkers;document.querySelectorAll('[data-period]').forEach(btn=>btn.onclick=()=>{state.period=btn.dataset.period;document.querySelectorAll('[data-period]').forEach(el=>el.classList.toggle('selected',el===btn));renderMapData()});$('categoryFilter').onchange=e=>{state.category=e.target.value;renderMapData()};$('countryFilter').onchange=e=>{state.country=e.target.value;renderMapData()};$('attributionFilter').onchange=e=>{state.attribution=e.target.value;renderMapData()};$('searchInput').oninput=e=>{state.search=e.target.value;renderMapData()};$('clearFilters').onclick=()=>{Object.assign(state,{category:'all',country:'all',attribution:'all',search:''});renderMapData();$('filtersDialog').close()};$('kindFilter').onchange=e=>{state.kind=e.target.value;renderNews()};$('regionFilter').onchange=e=>{state.region=e.target.value;renderNews()};safeDialogEvents('filtersDialog','closeFilters');safeDialogEvents('aboutDialog','closeAbout');$('closeIncident').onclick=closeIncident;$('incidentDialog').onclose=()=>{state.incident=null;updateURL()};$('incidentDialog').onclick=e=>{if(e.target===$('incidentDialog'))closeIncident()};window.addEventListener('hashchange',()=>{const id=decodeURIComponent(location.hash.substring(1));if(id&&incidents.some(r=>r.id===id)){setTab('map');openIncident(id,false)}else if(!id && $('incidentDialog').open)closeIncident()});
- await applyLanguage(state.lang);initMap();const hash=initialHash;if(hash&&incidents.some(r=>r.id===hash)){setTab('map');openIncident(hash,false)};if(!hash)setTab(state.tab);
+ initMap();
+ try{await applyLanguage(state.lang)}catch(err){console.error('Language interface failed; map remains available',err)}
+ renderMapData();
+ requestAnimationFrame(()=>{if(state.map){state.map.invalidateSize();renderMapData()}});
+ const hash=initialHash;if(hash&&incidents.some(r=>r.id===hash)){setTab('map');openIncident(hash,false)};if(!hash)setTab(state.tab);
 }
 init().catch(e=>{console.error(e);$('newsList').textContent='Site data unavailable. Please check JSON data files.'});
-
-
-// hero CTA buttons
-document.querySelectorAll('[data-hero-tab]').forEach(btn=>btn.addEventListener('click',()=>{
-  const tab = btn.dataset.heroTab==='statements' ? 'statements' : 'map';
-  setTab(tab);
-  const layout = document.getElementById('layout');
-  if(layout) layout.scrollIntoView({behavior:'smooth', block:'start'});
-}));
-

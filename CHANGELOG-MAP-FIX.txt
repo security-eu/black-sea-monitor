@@ -1,0 +1,7 @@
+Map repair / hero removal (20 Nov 2026)
+
+- Removes hero banner from the webpage; Open Graph social-preview image remains in assets.
+- Restores map rendering after initialization and after language changes; supports older latitude/longitude field names.
+- Preserves all current data in the repository: do not replace data/*.json.
+- Upload index.html, js/app.js and assets/style.css while keeping their folders.
+- For missing points, check browser console and data/incidents.json on the deployed site.
