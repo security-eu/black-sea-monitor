@@ -1,5 +1,20 @@
 [
   {
+    "id": "statement-6fec7fe9f5",
+    "date": "2026-11-20",
+    "region": "EU",
+    "source": "European Climate, Infrastructure and Environment Executive Agency",
+    "title": "Strategia Atlanticului, Inițiativa WestMED și Agenda maritimă comună pentru Marea Neagră",
+    "summary": "",
+    "url": "https://cinea.ec.europa.eu/document/download/87948232-1733-4a86-9ad8-964257629471_en?filename=atlantic%20strategy%20westmed%20initiative%20and%20common%20maritime-HZ0126154ENN.pdf",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "7102b858c38d51fbce5734f7a159c91c412d864e4ccee7e38d4a5d98d78f1026",
+    "_translated": true
+  },
+  {
     "date": "2026-11-19",
     "region": "Romania",
     "source": "AGERPRES — President Nicușor Dan",
@@ -70,6 +85,21 @@
     "source_type": "press",
     "review_issue": 11,
     "_source_hash": "924e13a10f6965701e83da1de7442155afa98baaff0378e5d016e31043d12492",
+    "_translated": true
+  },
+  {
+    "id": "statement-d195a80c74",
+    "date": "2026-11-16",
+    "region": "Bulgaria",
+    "source": "Министерство на транспорта и съобщенията",
+    "title": "Incident cu o navă de marfă în zona economică a Bulgariei din Marea Neagră",
+    "summary": "La ora 09:15, Centrul de Coordonare a Salvării Maritime din Varna a primit un semnal de urgență din partea echipajului navei de marfă BETUL 8, aflată în zona economică exclusivă a Bulgariei din Marea Neagră, la aproximativ 40 de mile marine sud-est de Capul Kaliakra.",
+    "url": "https://www.mtc.government.bg/en/category/1/incident-cargo-ship-bulgarias-economic-zone-black-sea",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "49e38a1efac0a74f5793453d3465f88f70962de3e3f345ee9360a952133fa145",
     "_translated": true
   },
   {

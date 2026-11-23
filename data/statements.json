@@ -1,5 +1,18 @@
 [
   {
+    "id": "statement-6fec7fe9f5",
+    "date": "2026-11-20",
+    "region": "EU",
+    "source": "European Climate, Infrastructure and Environment Executive Agency",
+    "title": "Atlantic Strategy, WestMED Initiative and Common Maritime Agenda for the Black Sea",
+    "summary": "",
+    "url": "https://cinea.ec.europa.eu/document/download/87948232-1733-4a86-9ad8-964257629471_en?filename=atlantic%20strategy%20westmed%20initiative%20and%20common%20maritime-HZ0126154ENN.pdf",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true
+  },
+  {
     "date": "2026-11-19",
     "region": "Romania",
     "source": "AGERPRES — President Nicușor Dan",
@@ -61,6 +74,19 @@
     "reviewed": true,
     "source_type": "press",
     "review_issue": 11
+  },
+  {
+    "id": "statement-d195a80c74",
+    "date": "2026-11-16",
+    "region": "Bulgaria",
+    "source": "Министерство на транспорта и съобщенията",
+    "title": "Incident with a Cargo Ship in Bulgaria’s Economic Zone of the Black Sea",
+    "summary": "At 09:15, the Maritime Rescue Coordination Centre – Varna received a distress signal from the crew of the cargo ship BETUL 8 in Bulgaria’s exclusive economic zone of the Black Sea, approximately 40 nautical miles southeast of Cape Kaliakra.",
+    "url": "https://www.mtc.government.bg/en/category/1/incident-cargo-ship-bulgarias-economic-zone-black-sea",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true
   },
   {
     "id": "statement-1894284df7",
