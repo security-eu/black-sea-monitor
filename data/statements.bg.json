@@ -1,5 +1,35 @@
 [
   {
+    "id": "statement-6c998b89ab",
+    "date": "2026-11-25",
+    "region": "Bulgaria",
+    "source": "Министерство на външните работи",
+    "title": "Посланик Гергана Караджова участва в заседанието на Съвета за сигурност на ООН, посветено на защитата на критичната енергийна инфраструктура и коридорите по Черно море",
+    "summary": "Страница за зареждане.",
+    "url": "https://www.mfa.bg/en/embassies/usapr/news/49806",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "2fecb5562f46ac9dcf6b05b3a9aff4e37d9c9cd7eb985805179045e26409de38",
+    "_translated": true
+  },
+  {
+    "id": "statement-c7c1abc086",
+    "date": "2026-11-23",
+    "region": "Bulgaria",
+    "source": "Министерство на земеделието и храните",
+    "title": "Министър Абровски: Сигурността в Черно море трябва да бъде част от европейската визия за рибарството до 2040 г.",
+    "summary": "Визията на Европейския съюз за рибарството до 2040 г. трябва да отчита геополитическата обстановка и рисковете за сигурността в …",
+    "url": "https://www.mzh.government.bg/en/press-center/news/minister-abrovsky-security-black-sea-must-be-part/",
+    "kind": "official",
+    "reviewed": false,
+    "source_type": "institution",
+    "auto_published": true,
+    "_source_hash": "e8874778a8550a2c728b62c0a3f81157e190fd12cf3cf24c4138039ac0a1792a",
+    "_translated": true
+  },
+  {
     "id": "statement-6fec7fe9f5",
     "date": "2026-11-20",
     "region": "EU",
